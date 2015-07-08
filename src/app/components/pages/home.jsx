@@ -1,7 +1,6 @@
 let React = require('react');
 let Router = require('react-router');
 let { Mixins, RaisedButton, Styles } = require('material-ui');
-let HomeFeature = require('./home-feature');
 let FullWidthSection = require('../full-width-section');
 
 let { StylePropable, StyleResizable } = Mixins;
@@ -14,7 +13,11 @@ let HomePage = React.createClass({
   mixins: [StylePropable, StyleResizable],
 
   contextTypes: {
-    router: React.PropTypes.func
+    router: React.PropTypes.func,
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
   },
 
   render() {
@@ -26,10 +29,23 @@ let HomePage = React.createClass({
       <div style={style}>
         {this._getHomePageHero()}
         {this._getHomePurpose()}
-        {this._getHomeFeatures()}
         {this._getHomeContribute()}
       </div>
     );
+  },
+
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
+  componentWillMount() {
+    ThemeManager.setComponentThemes({
+      raisedButton: {
+        color: '#3b5998'
+      }
+    });
   },
 
   _getHomePageHero() {
@@ -48,17 +64,15 @@ let HomePage = React.createClass({
         maxWidth: '575px'
       },
       label: {
-        color: ThemeManager.palette.primary1Color,
+        color: Colors.white,
       },
-      githubStyle: {
-        margin: '16px 32px 0px 8px'
-      },
-      demoStyle: {
-        margin: '16px 32px 0px 32px'
+      facebookStyle: {
+        margin: '16px 32px 0px 32px',
       },
       h1: {
         color: Colors.darkWhite,
         fontWeight: Typography.fontWeightLight,
+        lineHeight: '1.25em'
       },
       h2: {
         //.mui-font-style-title
@@ -96,27 +110,16 @@ let HomePage = React.createClass({
 
     return (
       <FullWidthSection style={styles.root}>
-          <img style={styles.svgLogo} src="images/material-ui-logo.svg" />
           <div style={styles.tagline}>
-            <h1 style={styles.h1}>material ui</h1>
+            <h1 style={styles.h1}>EasyLearn</h1>
             <h2 style={styles.h2}>
-              A Set of React Components <span style={styles.nowrap}>
-              that Implement</span> <span style={styles.nowrap}>
-              Google&apos;s Material Design</span>
+              結合社群網路、集體智慧與行動學習概念<br />提供互動式的社群行動學習平台
             </h2>
             <RaisedButton
-              className="demo-button"
-              label="Demo"
+              label="Login With Facebook"
               onTouchTap={this._onDemoClick}
               linkButton={true}
-              style={styles.demoStyle}
-              labelStyle={styles.label}/>
-            <RaisedButton
-              className="github-button"
-              label="GitHub"
-              linkButton={true}
-              href="https://github.com/callemall/material-ui"
-              style={styles.githubStyle}
+              style={styles.facebookStyle}
               labelStyle={styles.label}/>
           </div>
       </FullWidthSection>
@@ -144,21 +147,7 @@ let HomePage = React.createClass({
 
     return (
       <FullWidthSection style={styles.root} useContent={true} contentStyle={styles.content} contentType="p" className="home-purpose">
-        Material-UI came about from our love of&nbsp;
-        <a href="http://facebook.github.io/react/">React</a> and&nbsp;
-        <a href="https://www.google.com/design/spec/material-design/introduction.html">
-          Google's Material Design
-        </a>. We're currently using it on a project at&nbsp;
-        <a href="https://www.call-em-all.com/">Call-Em-All</a> and plan on adding to it
-        and making it better in the coming months.
-      </FullWidthSection>
-    );
-  },
-
-  _getHomeFeatures() {
-    let styles = {maxWidth: '906px'};
-    return (
-      <FullWidthSection useContent={true} contentStyle={styles}>
+        建構一個可便利建立、分享、閱讀、討論、更新懶人包的行動應用軟體，將特定主題的知識藉由社群的共筆、註解、評論等方式達成知識的吸收與散佈，建立一個新型態的行動學習模式。
       </FullWidthSection>
     );
   },

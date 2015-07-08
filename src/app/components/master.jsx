@@ -7,6 +7,7 @@ let DirectionsWalk = require('../svg-icons/directions-walk');
 let FolderStore = require('../stores/folder-store.jsx');
 let UserStore = require('../stores/user-store.jsx');
 let EasyLearnActions = require('../action/easylearn-actions.jsx');
+let Home = require('./pages/home.jsx');
 let {
   AppBar,
   AppCanvas,
@@ -126,20 +127,22 @@ var Master = React.createClass({
       </div>
     );
 
-    let contnet = (<AppMenuWithContent folderItems={this.state.folder} folderTitle={folderTitle} menuItems={menuItems}/>);
+    let content = (<AppMenuWithContent folderItems={this.state.folder} folderTitle={folderTitle} menuItems={menuItems}/>);
 
-    //display login page
+    let zDepth = 1;
     if(this.state.userId === ''){
-      contnet = (<IconButton>
-        <DirectionsWalk color="green"/></IconButton>);
+      content = (<Home />);
+      zDepth = 0;
+      title = '';
     }
+
 
     return (
       <AppCanvas>
 
-        <AppBar iconElementLeft={homeIcon} iconElementRight={logoutBtn} title={title} zDepth={1}/>
+        <AppBar iconElementLeft={homeIcon} iconElementRight={logoutBtn} title={title} zDepth={zDepth}/>
 
-        {contnet}
+        {content}
 
       </AppCanvas>
     );
