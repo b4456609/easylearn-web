@@ -2,9 +2,14 @@ let FolderStore = require('../stores/folder-store.jsx');
 let UserStore = require('../stores/user-store.jsx');
 let PackStore = require('../stores/pack-store.jsx');
 
-const SERVER_URL = 'http://140.121.197.135:11116/';
+//const SERVER_URL = 'http://140.121.197.135:11116/';
+const SERVER_URL = 'http://localhost:8080/';
 
 let Sync = {
+  getServerUrl:function () {
+    return SERVER_URL;
+  },
+
   sync: function(success, fail) {
     console.log('[sync]Start');
 
@@ -24,6 +29,7 @@ let Sync = {
       method: "POST",
       url: SERVER_URL + 'easylearn/sync',
       contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      crossDomain :true,
       data: {
         sync_data: JSON.stringify(sendData)
       }

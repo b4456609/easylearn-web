@@ -2,11 +2,19 @@ let React = require('react');
 let Router = require('react-router');
 let { Mixins, RaisedButton, Styles } = require('material-ui');
 let FullWidthSection = require('../full-width-section');
+let Fb = require('../../api/facebook-api.js');
+let UserStore = require('../../stores/user-store.jsx');
+let EasyLearnActions = require('../../action/easylearn-actions.jsx')
 
 let { StylePropable, StyleResizable } = Mixins;
 let { Colors, Spacing, Typography } = Styles;
 let ThemeManager = new Styles.ThemeManager().getCurrentTheme();
 
+function getState() {
+  return {
+    userId : UserStore.getUserId()
+  }
+}
 
 let HomePage = React.createClass({
 
@@ -20,7 +28,24 @@ let HomePage = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
-  render() {
+  getInitialState: function() {
+    return getState();
+  },
+
+  componentDidMount: function() {
+    console.log('[HomePage] ' + this.state.userId);
+    UserStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function() {
+    UserStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function() {
+    this.setState(getState());
+  },
+
+  render: function() {
     let style = {
       paddingTop: Spacing.desktopKeylineIncrement
     };
@@ -34,21 +59,22 @@ let HomePage = React.createClass({
     );
   },
 
-  getChildContext() {
+  getChildContext: function() {
     return {
       muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
-  componentWillMount() {
+  componentWillMount: function() {
     ThemeManager.setComponentThemes({
       raisedButton: {
-        color: '#3b5998'
+        color: '#3b5998',
+        secondaryColor: Colors.white
       }
     });
   },
 
-  _getHomePageHero() {
+  _getHomePageHero: function() {
     let styles = {
       root: {
         backgroundColor: Colors.cyan500,
@@ -65,6 +91,12 @@ let HomePage = React.createClass({
       },
       label: {
         color: Colors.white,
+      },
+      startBtnLable: {
+        fontSize: '1.25em',
+        fontWeight: 'bold',
+        fontFamily: '"Roboto", sans-serif, "微軟正黑體", "Microsoft JhengHei"',
+        color: Colors.cyan500,
       },
       facebookStyle: {
         margin: '16px 32px 0px 32px',
@@ -108,6 +140,25 @@ let HomePage = React.createClass({
       styles.h2 = this.mergeStyles(styles.h2, styles.h2WhenLarge);
     }
 
+    let homeBtn = (<RaisedButton
+      label="開始使用"
+      secondary={true}
+      onTouchTap={this._onStartClick}
+      style={styles.facebookStyle}
+      labelStyle={styles.startBtnLable}/>);
+
+
+    console.log('[HOME]' + this.state.userId);
+
+    if(this.state.userId === ''){
+      homeBtn = (<RaisedButton
+        label="Login With Facebook"
+        onTouchTap={this._onFBClick}
+        linkButton={true}
+        style={styles.facebookStyle}
+        labelStyle={styles.label}/>);
+    }
+
     return (
       <FullWidthSection style={styles.root}>
           <div style={styles.tagline}>
@@ -115,18 +166,13 @@ let HomePage = React.createClass({
             <h2 style={styles.h2}>
               結合社群網路、集體智慧與行動學習概念<br />提供互動式的社群行動學習平台
             </h2>
-            <RaisedButton
-              label="Login With Facebook"
-              onTouchTap={this._onDemoClick}
-              linkButton={true}
-              style={styles.facebookStyle}
-              labelStyle={styles.label}/>
+            {homeBtn}
           </div>
       </FullWidthSection>
     );
   },
 
-  _getHomePurpose() {
+  _getHomePurpose: function() {
     let styles = {
       root: {
         backgroundColor: Colors.grey200
@@ -152,7 +198,7 @@ let HomePage = React.createClass({
     );
   },
 
-  _getHomeContribute() {
+  _getHomeContribute: function() {
     let styles = {
       root: {
         backgroundColor: Colors.grey200,
@@ -179,8 +225,13 @@ let HomePage = React.createClass({
     );
   },
 
-  _onDemoClick() {
-    this.context.router.transitionTo('components');
+  _onFBClick: function() {
+    EasyLearnActions.fbLogin();
+  },
+
+  _onStartClick: function() {
+    EasyLearnActions.folderView('allPackId');
+    this.context.router.transitionTo('folder-list');
   }
 });
 

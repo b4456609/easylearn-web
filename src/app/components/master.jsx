@@ -8,6 +8,8 @@ let FolderStore = require('../stores/folder-store.jsx');
 let UserStore = require('../stores/user-store.jsx');
 let EasyLearnActions = require('../action/easylearn-actions.jsx');
 let Home = require('./pages/home.jsx');
+
+var Navigation = Router.Navigation;
 let {
   AppBar,
   AppCanvas,
@@ -32,6 +34,10 @@ function getState() {
 }
 
 var Master = React.createClass({
+  mixins: [
+    Router.State, Navigation
+  ],
+
   contextTypes: {
     router: React.PropTypes.func
   },
@@ -56,10 +62,12 @@ var Master = React.createClass({
 
   componentDidMount: function() {
     console.log('[master] componentDidMount');
+    console.log(this.state.userId);
     if (this.state.userId === '') {
-      //fb.componentDidMount();
-      //EasyLearnActions.sync();
+      this.transitionTo('home');
+      EasyLearnActions.fbInit();
     }
+
     FolderStore.addChangeListener(this._onChange);
     UserStore.addChangeListener(this._onChange);
   },
@@ -108,6 +116,9 @@ var Master = React.createClass({
     );
     let menuItems = [
       {
+        route: 'home',
+        text: '首頁'
+      }, {
         route: 'new-pack',
         text: '新增懶人包'
       }, {
@@ -127,15 +138,19 @@ var Master = React.createClass({
       </div>
     );
 
-    let content = (<AppMenuWithContent folderItems={this.state.folder} folderTitle={folderTitle} menuItems={menuItems}/>);
+    let content = (
+      <AppMenuWithContent folderItems={this.state.folder} folderTitle={folderTitle} menuItems={menuItems}/>
+    );
 
     let zDepth = 1;
-    if(this.state.userId === ''){
-      content = (<Home />);
+
+    if (this.isActive('home') || this.isActive('/')) {
+      content = (
+        <Home/>
+      );
       zDepth = 0;
       title = '';
     }
-
 
     return (
       <AppCanvas>
