@@ -1,15 +1,9 @@
 let FolderStore = require('../stores/folder-store.jsx');
 let UserStore = require('../stores/user-store.jsx');
-import PackStore from '../stores/pack-store.jsx';
-
-//const SERVER_URL = 'http://140.121.197.135:11116/';
-const SERVER_URL = 'http://localhost:8080/';
+let PackStore = require('../stores/pack-store.jsx');
+let EasylearnConfig = require('../api/easylearn-config.js');
 
 let Sync = {
-  getServerUrl:function () {
-    return SERVER_URL;
-  },
-
   sync: function(success, fail) {
     console.log('[sync]Start');
 
@@ -27,7 +21,7 @@ let Sync = {
 
     var syncAjax = $.ajax({
       method: "POST",
-      url: SERVER_URL + 'easylearn/sync',
+      url: EasylearnConfig.SERVER_URL + 'easylearn/sync',
       contentType: "application/x-www-form-urlencoded; charset=UTF-8",
       crossDomain :true,
       data: {
@@ -52,4 +46,5 @@ let Sync = {
     });
   }
 }
-export default Sync;
+
+module.exports = Sync;

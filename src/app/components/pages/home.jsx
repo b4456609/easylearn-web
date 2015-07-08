@@ -4,7 +4,7 @@ let { Mixins, RaisedButton, Styles } = require('material-ui');
 let FullWidthSection = require('../full-width-section');
 let Fb = require('../../api/facebook-api.js');
 let UserStore = require('../../stores/user-store.jsx');
-let EasyLearnActions = require('../../action/easylearn-actions.jsx')
+let EasyLearnActions = require('../../action/easylearn-actions.jsx');
 
 let { StylePropable, StyleResizable } = Mixins;
 let { Colors, Spacing, Typography } = Styles;

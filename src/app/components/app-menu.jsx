@@ -110,7 +110,7 @@ let PageWithNav = React.createClass({
     let folderItems = this.props.folderItems;
     let currentItem;
 
-    if(!this.context.router.isActive(folderItems[0].route)){
+    if(!this.context.router.isActive('folder-list')){
       return;
     }
 

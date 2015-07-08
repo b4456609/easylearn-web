@@ -2,7 +2,7 @@ var AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
 var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-import EasyLearnApi from '../api/easylearn-api.jsx';
+let EasylearnConfig = require('../api/easylearn-config.js');
 
 const CHANGE_EVENT = 'change';
 
@@ -49,7 +49,7 @@ function setVersionToLatest() {
 }
 
 function replaceImgPath(content, packId) {
-  var url = EasyLearnApi.getServerUrl() + 'easylearn/download?pack_id=' + viewPackId + '&filename=';
+  var url = EasylearnConfig.SERVER_URL + 'easylearn/download?pack_id=' + packId + '&filename=';
   var find = 'FILE_STORAGE_PATH' + packId + '/';
   var re = new RegExp(find, 'g');
 
@@ -57,7 +57,6 @@ function replaceImgPath(content, packId) {
   return content;
 }
 
-console.log(EasyLearnApi);
 
 var PackStore = assign({}, EventEmitter.prototype, {
 
@@ -66,10 +65,17 @@ var PackStore = assign({}, EventEmitter.prototype, {
     for (let i in packIdArray) {
       for (let j in _packs) {
         if (packIdArray[i] == _packs[j].id) {
+          //set img
+          let img = 'img/light102.png';
+          if (_packs[j].cover_filename !== ""){
+            img =  EasylearnConfig.SERVER_URL + 'easylearn/download?filename=' + _packs[j].cover_filename + '&pack_id=' + _packs[j].id;
+          }
+
           let item = {
             id: _packs[j].id,
             title: _packs[j].name,
-            description: _packs[j].description
+            description: _packs[j].description,
+            img: img
           }
           list.push(item);
           break;
@@ -134,4 +140,4 @@ AppDispatcher.register(function(action) {
   }
 });
 
-export default PackStore;
+module.exports = PackStore;

@@ -7,7 +7,6 @@ let {
   Paper,
   ClearFix
 } = require('material-ui');
-let EasyLearnApi = require('../../api/easylearn-api.jsx');
 
 let DesktopGutter = Styles.Spacing.desktopGutter;
 let FolderStore = require('../../stores/folder-store.jsx');
@@ -83,16 +82,12 @@ var FolderList = React.createClass({
     let styles = this.getStyles();
 
     var packNodes = this.state.packArray.map(function(pack) {
-      let imgSrc = 'img/light102.png';
-      if (pack.cover_filename !== ""){
-        let imgSrc =  EasyLearnApi.getServerUrl() + 'easylearn/download?filename=' + pack.cover_filename + '&pack_id=' + pack.id;
-      }
       return (
         <Paper onClick={self._onClick.bind(self, pack.id)} style={styles.paper} zDepth={1}>
           <div style={styles.root}>
             <ClearFix>
               <div style={styles.left}>
-                <img src={imgSrc} style={styles.img}/></div>
+                <img src={pack.img} style={styles.img}/></div>
                 <div style={styles.right}>
                   <h1 style={styles.title}>
                     {pack.title}
