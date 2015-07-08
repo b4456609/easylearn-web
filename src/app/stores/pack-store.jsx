@@ -2,7 +2,7 @@ var AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
 var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-let EasyLearnApi = require('../api/easylearn-api.jsx');
+import EasyLearnApi from '../api/easylearn-api.jsx';
 
 const CHANGE_EVENT = 'change';
 
@@ -57,7 +57,7 @@ function replaceImgPath(content, packId) {
   return content;
 }
 
-console.log(EasyLearnApi.getServerUrl);
+console.log(EasyLearnApi);
 
 var PackStore = assign({}, EventEmitter.prototype, {
 
@@ -134,4 +134,4 @@ AppDispatcher.register(function(action) {
   }
 });
 
-module.exports = PackStore;
+export default PackStore;

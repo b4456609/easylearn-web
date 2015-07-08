@@ -1,6 +1,6 @@
 let FolderStore = require('../stores/folder-store.jsx');
 let UserStore = require('../stores/user-store.jsx');
-let PackStore = require('../stores/pack-store.jsx');
+import PackStore from '../stores/pack-store.jsx';
 
 //const SERVER_URL = 'http://140.121.197.135:11116/';
 const SERVER_URL = 'http://localhost:8080/';
@@ -52,4 +52,4 @@ let Sync = {
     });
   }
 }
-module.exports = Sync;
+export default Sync;
