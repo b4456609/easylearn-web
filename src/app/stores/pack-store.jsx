@@ -2,6 +2,7 @@ var AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
 var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+let EasyLearnApi = require('../api/easylearn-api.jsx');
 
 const CHANGE_EVENT = 'change';
 
@@ -47,6 +48,17 @@ function setVersionToLatest() {
   }
 }
 
+function replaceImgPath(content, packId) {
+  var url = EasyLearnApi.getServerUrl() + 'easylearn/download?pack_id=' + viewPackId + '&filename=';
+  var find = 'FILE_STORAGE_PATH' + packId + '/';
+  var re = new RegExp(find, 'g');
+
+  content = content.replace(re, url);
+  return content;
+}
+
+console.log(EasyLearnApi.getServerUrl);
+
 var PackStore = assign({}, EventEmitter.prototype, {
 
   getFolderList: function(packIdArray) {
@@ -76,6 +88,7 @@ var PackStore = assign({}, EventEmitter.prototype, {
   },
 
   getViewVersion: function() {
+    _version.content = replaceImgPath(_version.content, _packId);
     return {
       version: _version,
       title: _pack.name
