@@ -50,6 +50,12 @@ var newPack = React.createClass({
       },
       editor: {
         marginTop: 30
+      },
+      left: {
+        float: 'left'
+      },
+      submitBtn:{
+        float:'right'
       }
     };
 
@@ -69,13 +75,23 @@ var newPack = React.createClass({
       <ClearFix>
         <Paper zDepth={1}>
           <div style={styles.block}>
+            <div style={styles.left}>
             <TextField floatingLabelText="標題" style={styles.textfield}/>
             <TextField floatingLabelText="描述" multiLine={true} style={styles.textfield}/>
             <TextField floatingLabelText="標籤" style={styles.textfield}/>
-            <TextField floatingLabelText="懶人包標題" style={styles.textfield}/>
             <Checkbox label="公開懶人包" name="checkboxName1" style={styles.checkbox} value="checkboxValue1"/>
             <RaisedButton label="選擇封面照片" secondary={true} style={styles.button}/>
-            <div id="eg-basic" style={styles.editor}/></div>
+            </div>
+
+            <ClearFix>
+            <RaisedButton label="完成" primary={true} style={styles.submitBtn}/>
+            </ClearFix>
+
+            <ClearFix>
+            <div id="eg-basic" style={styles.editor}></div>
+            </ClearFix>
+
+          </div>
         </Paper>
       </ClearFix>
     );

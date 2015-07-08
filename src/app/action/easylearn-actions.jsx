@@ -5,9 +5,14 @@ var FBApi = require('../api/facebook-api.js');
 
 var EasyLearnActions = {
 
-/**
-   * @param  {string} packId
-   */
+
+  appInit: function () {
+    console.log('[Action]appInit');
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.APP_INIT
+    });
+  },
+
   packView: function(packId) {
     console.log('[Action]packView packId: ' + packId);
     AppDispatcher.dispatch({

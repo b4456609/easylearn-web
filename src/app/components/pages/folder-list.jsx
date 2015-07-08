@@ -72,8 +72,8 @@ var FolderList = React.createClass({
         fontFamily: '"Roboto", sans-serif, "微軟正黑體", "Microsoft JhengHei"'
       },
       img: {
-        maxWidth: '150px',
-        maxHeight: '150px'
+        maxWidth: '100px',
+        maxHeight: '100px'
       }
     };
   },

@@ -67,6 +67,9 @@ var Master = React.createClass({
       this.transitionTo('home');
       EasyLearnActions.fbInit();
     }
+    else{
+      EasyLearnActions.sync();      
+    }
 
     FolderStore.addChangeListener(this._onChange);
     UserStore.addChangeListener(this._onChange);

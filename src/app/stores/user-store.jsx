@@ -10,13 +10,37 @@ let _user = {
   id: '',
   name: '遊客',
   "setting": {
-      wifi_sync: true,
-      mobile_network_sync: true,
-      last_sync_time: 1419519614000,
-      version: 0,
-      modified: true
-    }
+    wifi_sync: true,
+    mobile_network_sync: true,
+    last_sync_time: 1419519614000,
+    version: 0,
+    modified: true
+  }
 };
+
+function setLocalStorage() {
+  localStorage.setItem('user', JSON.stringify(_user));
+}
+
+
+function hasUser() {
+  if(_user.id == ''){
+    return false;
+  }
+  return true;
+}
+
+function getLocalStorage() {
+  console.log('[User]getLocalStorage');
+  let user = localStorage.getItem('user');
+  if (user !== null) {
+    _user = JSON.parse(localStorage.getItem('user'));
+  }
+  console.log('[User]hasUser()'+hasUser());
+}
+
+//initial data from localStorage
+getLocalStorage();
 
 var UserStore = assign({}, EventEmitter.prototype, {
 
@@ -25,7 +49,7 @@ var UserStore = assign({}, EventEmitter.prototype, {
   },
 
   getUserId: function() {
-    console.log('[getUserId]'+_user.id);
+    console.log('[getUserId]' + _user.id);
     return _user.id;
   },
 
@@ -57,8 +81,8 @@ AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case EasyLearnConstants.SYNC_SUCCESS:
     _user.setting = action.data.setting;
-    //_user.name = action.data.user.name;
     UserStore.emitChange();
+    setLocalStorage();
     break;
 
   case EasyLearnConstants.LOGIN_SUCCESS:
@@ -67,6 +91,7 @@ AppDispatcher.register(function(action) {
     console.log('[LOGIN_SUCCESS]');
     console.log(_user);
     UserStore.emitChange();
+    setLocalStorage();
     break;
 
   default:
