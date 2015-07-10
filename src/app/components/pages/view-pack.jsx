@@ -66,16 +66,21 @@ var ViewPack = React.createClass({
     }
   },
 
+
   getVersion: function() {
     console.log(this.state.pack.versionInfo);
-    let items = this.state.pack.versionInfo.map(function(item) {
+    let self = this;
+    let items = this.state.pack.versionInfo.map(function(item, i) {
       return (
-        <ListItem primaryText={item}/>
+        <ListItem
+          primaryText={item.text} onClick={self._onVersionTapTouch.bind(self, item.id, item.version)}
+          key={i}/>
       );
     });
 
     let result = (
       <List subheader="懶人包版本">
+        <ListItem primaryText='修改此懶人包'/>
         {items}
       </List>
     );
@@ -110,7 +115,11 @@ var ViewPack = React.createClass({
         </div>
       </ClearFix>
     );
-  }
+  },
+
+  _onVersionTapTouch: function (id, e) {
+    console.log(id);
+  },
 
 });
 

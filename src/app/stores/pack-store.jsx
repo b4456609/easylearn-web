@@ -96,10 +96,25 @@ function replaceImgPath(content, packId) {
   return content;
 }
 
-function getVersionInfo(){
+function getVersionInfo() {
 
   let result = [];
-  for(let item of _pack.version){
+
+  _pack.version.sort(function (a,b) {
+    return b.create_time-a.create_time;
+  });
+
+  for (let item of _pack.version) {
+    //it's backup version
+    if(result.length !== 0 && result[result.length-1].id == item.id){
+      continue;
+    }
+
+    //other people's private version
+    if(item.is_public == false && item.creator_user_id != UserStore.getUserId()){
+      continue
+    }
+
     var time = new Date(item.create_time);
     var timeString = time.toLocaleString("zh-TW", {
       hour: '2-digit',
@@ -108,9 +123,13 @@ function getVersionInfo(){
       month: "numeric",
       year: 'numeric'
     });
-    var userName = item.creator_user_name;
 
-    result.push(timeString + ' ' + userName);
+    let versionInfo = {
+      text: timeString + ' ' + item.creator_user_name,
+      id: item.id
+    };
+
+    result.push(versionInfo);
   }
   return result;
 }
