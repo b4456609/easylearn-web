@@ -25,8 +25,16 @@ var _folder = [
 
 let _viewFolderId = "allfolder";
 
-var FolderStore = assign({}, EventEmitter.prototype, {
+function addPackToAll(packId) {
+  for (let item of _folder) {
+    if (item.id == 'allPackId') {
+      item.pack.push(packId);
+      break;
+    }
+  }
+}
 
+var FolderStore = assign({}, EventEmitter.prototype, {
   getViewFolderId: function() {
     return _viewFolderId;
   },
@@ -89,6 +97,11 @@ AppDispatcher.register(function(action) {
 
   case EasyLearnConstants.SYNC_SUCCESS:
     _folder = action.data.folder;
+    FolderStore.emitChange();
+    break;
+
+  case EasyLearnConstants.NEW_PACK:
+    addPackToAll(action.data.id);
     FolderStore.emitChange();
     break;
 
