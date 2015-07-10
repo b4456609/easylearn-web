@@ -16,12 +16,12 @@ function setPacks(data) {
   _packs = [];
   var keys = Object.keys(data);
 
-  for(let i in keys){
-    if(keys[i].indexOf('pack') != -1){
+  for (let i in keys) {
+    if (keys[i].indexOf('pack') != -1) {
       _packs.push(data[keys[i]]);
 
-      //add pack's id
-      _packs[_packs.length-1].id = keys[i];
+//add pack's id
+      _packs[_packs.length - 1].id = keys[i];
     }
   }
 }
@@ -48,6 +48,21 @@ function setVersionToLatest() {
   }
 }
 
+function newPack(content){
+  var time = new Date().getTime();
+
+  let id = 'pack' + time;
+  let name = '';
+  let description = '';
+  let create_time = '';
+  let tags = '';
+  let is_public = '';
+  let creator_user_id = '';
+  let cover_filename = '';
+  let creator_user_name = '';
+  let version = [];
+}
+
 function replaceImgPath(content, packId) {
   var url = EasylearnConfig.SERVER_URL + 'easylearn/download?pack_id=' + packId + '&filename=';
   var find = 'FILE_STORAGE_PATH' + packId + '/';
@@ -57,7 +72,6 @@ function replaceImgPath(content, packId) {
   return content;
 }
 
-
 var PackStore = assign({}, EventEmitter.prototype, {
 
   getFolderList: function(packIdArray) {
@@ -65,10 +79,10 @@ var PackStore = assign({}, EventEmitter.prototype, {
     for (let i in packIdArray) {
       for (let j in _packs) {
         if (packIdArray[i] == _packs[j].id) {
-          //set img
+//set img
           let img = 'img/light102.png';
-          if (_packs[j].cover_filename !== ""){
-            img =  EasylearnConfig.SERVER_URL + 'easylearn/download?filename=' + _packs[j].cover_filename + '&pack_id=' + _packs[j].id;
+          if (_packs[j].cover_filename !== "") {
+            img = EasylearnConfig.SERVER_URL + 'easylearn/download?filename=' + _packs[j].cover_filename + '&pack_id=' + _packs[j].id;
           }
 
           let item = {
@@ -131,6 +145,11 @@ AppDispatcher.register(function(action) {
     break;
 
   case EasyLearnConstants.SYNC_SUCCESS:
+    setPacks(action.data);
+    PackStore.emitChange();
+    break;
+
+  case EasyLearnConstants.NEW_PACK:
     setPacks(action.data);
     PackStore.emitChange();
     break;

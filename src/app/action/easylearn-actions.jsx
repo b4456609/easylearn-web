@@ -97,6 +97,15 @@ var EasyLearnActions = {
     };
 
     FBApi.login(callback);
+  },
+
+  newPack: function (content) {
+    console.log('[Action]newPack');
+    console.log(content);
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.NEW_PACK,
+      content: content
+    });
   }
 
 };

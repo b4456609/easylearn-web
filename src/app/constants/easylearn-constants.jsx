@@ -5,5 +5,6 @@ module.exports = keyMirror({
   SYNC_SUCCESS: null,
   FOLDER_VIEW: null,
   LOGIN_SUCCESS: null,
-  APP_INIT: null
+  APP_INIT: null,
+  NEW_PACK: null
 });

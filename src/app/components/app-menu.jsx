@@ -79,7 +79,7 @@ let PageWithNav = React.createClass({
             ref="menuItems"
             zDepth={0}
             menuItems={this.props.menuItems}
-            selectedIndex={this._getSelectedIndex()}
+            selectedIndex={this._getSelectedIndex}
             onItemTap={this._onMenuItemClick} />
           <div style={styles.label}>
             {this.props.folderTitle}
@@ -88,7 +88,7 @@ let PageWithNav = React.createClass({
             ref="folderItems"
             zDepth={0}
             menuItems={this.props.folderItems}
-            selectedIndex={this._getFolderSelectedIndex()}
+            selectedIndex={this._getFolderSelectedIndex}
             onItemTap={this._onFolderMenuItemClick}
              autoWidth={false} />
         </div>

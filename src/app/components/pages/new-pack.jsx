@@ -10,26 +10,37 @@ let {
   Checkbox,
   RaisedButton
 } = require('material-ui');
+let Editor = require('../../api/editor-api.js');
+let EasylearnActions = require('../../action/easylearn-actions.jsx');
 
 let {
-  Spacing
+  Spacing,
+  Colors
 } = Styles;
 let {
   StyleResizable
 } = Mixins;
 
-function editor() {
-  $('#eg-basic').editable({
-    inlineMode: false
-  });
-}
+
 var newPack = React.createClass({
 
   mixins: [
     StyleResizable, React.addons.LinkedStateMixin
   ],
 
-  getStyles() {
+  getInitialState: function() {
+    return {
+      errorTitle: '',
+      title: '',
+      description: '',
+      tag: '',
+      is_public: false,
+      cover_filename: '',
+      errorContent: ''
+    };
+  },
+
+  getStyles: function() {
     let styles = {
       block: {
         padding: '8px',
@@ -56,6 +67,9 @@ var newPack = React.createClass({
       },
       submitBtn:{
         float:'right'
+      },
+      errorContent:{
+        color: Colors.red500
       }
     };
 
@@ -64,7 +78,7 @@ var newPack = React.createClass({
 
   componentDidMount: function() {
     if (this.isMounted()) {
-      editor();
+      Editor.init();
     }
   },
 
@@ -76,25 +90,126 @@ var newPack = React.createClass({
         <Paper zDepth={1}>
           <div style={styles.block}>
             <div style={styles.left}>
-            <TextField floatingLabelText="標題" style={styles.textfield}/>
-            <TextField floatingLabelText="描述" multiLine={true} style={styles.textfield}/>
-            <TextField floatingLabelText="標籤" style={styles.textfield}/>
-            <Checkbox label="公開懶人包" name="checkboxName1" style={styles.checkbox} value="checkboxValue1"/>
-            <RaisedButton label="選擇封面照片" secondary={true} style={styles.button}/>
+              <TextField
+                floatingLabelText="標題"
+                style={styles.textfield}
+                errorText={this.state.errorTitle}
+                onChange={this._handleTitleInputChange}/>
+              <TextField
+                floatingLabelText="描述"
+                multiLine={true}
+                style={styles.textfield}
+                onChange={this._handleDesInputChange}/>
+              <TextField
+                floatingLabelText="標籤"
+                style={styles.textfield}
+                onChange={this._handleTagInputChange}/>
+              <Checkbox
+                label="公開懶人包"
+                name="is-pulic"
+                style={styles.checkbox}
+                value="is-pulic-value"
+                onCheck={this._handlePublicChech}/>
+              <RaisedButton
+                label="選擇封面照片"
+                secondary={true}
+                style={styles.button}/>
             </div>
 
             <ClearFix>
-            <RaisedButton label="完成" primary={true} style={styles.submitBtn}/>
+              <RaisedButton
+                label="完成"
+                onTouchTap={this._onSubmit}
+                primary={true}
+                style={styles.submitBtn}/>
             </ClearFix>
 
             <ClearFix>
-            <div id="eg-basic" style={styles.editor}></div>
+              <div style={styles.editor}>
+                <div style={styles.errorContent}>
+                  {this.state.errorContent}
+                </div>
+                <textarea id="editor"/>
+              </div>
             </ClearFix>
 
           </div>
         </Paper>
       </ClearFix>
     );
+  },
+
+  _handleContentChange:function () {
+    this.setState({
+      errorContent: ''
+    });
+  },
+
+  _handlePublicChech:function (event) {
+    console.log(event.target.checked);
+    this.setState({
+      tag: event.target.checked
+    });
+  },
+
+  _handleTagInputChange: function (event) {
+    this.setState({
+      tag: event.target.value.trim()
+    });
+  },
+
+  _handleDesInputChange: function (event) {
+    this.setState({
+      description: event.target.value.trim()
+    });
+  },
+
+  _onSubmit:function () {
+
+    Editor.onContentChange(this._handleContentChange);
+    //check title and content
+    let content = Editor.getContent();
+    let title = this.state.title;
+    let canSubmit = true;
+
+    if(title === ''){
+      this.setState({
+        errorTitle: '標題不能為空白'
+      });
+      canSubmit = false;
+    }
+
+    if(content === ''){
+      this.setState({
+        errorContent: '內容不能為空白'
+      });
+      canSubmit = false;
+    }
+
+    //if no error send submit pack action
+    if(canSubmit == true){
+      EasylearnActions.newPack({
+        title: this.state.title,
+        description: this.state.description,
+        tag: this.state.tag,
+        is_public: this.state.is_public,
+        cover_filename: this.state.cover_filename,
+        content: content
+      });
+    }
+  },
+
+  _handleTitleInputChange:function (event) {
+    let value = event.target.value.trim();
+    let errorText = '';
+    if(value === ''){
+      errorText = '標題不能為空白';
+    }
+
+    this.setState({
+      title: value,
+      errorTitle: errorText
+    });
   }
 
 });
