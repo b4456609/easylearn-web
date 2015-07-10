@@ -103,7 +103,7 @@ var EasyLearnActions = {
     console.log('[Action]newPack');
     // set packid
     var time = new Date().getTime();
-    data.id = 'pack' + time;
+    data['id'] = 'pack' + time;
 
     console.log(data);
     AppDispatcher.dispatch({

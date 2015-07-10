@@ -155,7 +155,7 @@ var newPack = React.createClass({
   _handlePublicChech:function (event) {
     console.log(event.target.checked);
     this.setState({
-      tag: event.target.checked
+      is_public: event.target.checked
     });
   },
 
@@ -203,6 +203,7 @@ var newPack = React.createClass({
         cover_filename: this.state.cover_filename,
         content: content
       });
+      EasylearnActions.sync();
       this.transitionTo('folder-list');
     }
   },

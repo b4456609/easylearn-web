@@ -3,7 +3,8 @@ let {
   Table,
   RaisedButton,
   ClearFix,
-  Paper
+  Paper,
+  Dialog
 } = require('material-ui');
 
 let PackStore = require('../../stores/pack-store.jsx');
@@ -22,9 +23,10 @@ var DeletePack = React.createClass({
       showRowHover: true,
       selectable: true,
       multiSelectable: true,
-      canSelectAll: false,
+      canSelectAll: true,
       deselectOnClickaway: true,
-      rowData: PackStore.getDeleteList()
+      rowData: PackStore.getDeleteList(),
+      selected: []
     };
   },
 
@@ -63,17 +65,22 @@ var DeletePack = React.createClass({
       'name', 'description', 'create_time'
     ];
 
-    let style = {
+    let bottonStyle = {
       float: 'right',
       marginTop: '8px',
       marginRight: '8px'
     };
 
+    let standardActions = [
+      { text: '取消' },
+      { text: '確定', onTouchTap: this._onDialogSubmit, ref: 'submit' }
+    ];
+
     return (
       <Paper>
         <div>
           <ClearFix>
-            <RaisedButton  style={style} primary={true} label="刪除懶人包" />
+            <RaisedButton onTouchTap={this._onDeleteClick} style={bottonStyle} primary={true} label="刪除懶人包" />
           </ClearFix>
           <Table
             headerColumns={headerCols}
@@ -87,10 +94,35 @@ var DeletePack = React.createClass({
             multiSelectable={this.state.multiSelectable}
             canSelectAll={this.state.canSelectAll}
             deselectOnClickaway={this.state.deselectOnClickaway}
+            onCellClick={this._onCellClick}
             onRowSelection={this._onRowSelection} />
         </div>
+        <Dialog
+          ref="confirmDialog"
+          title="Dialog With Standard Actions"
+          actions={standardActions}
+          actionFocus="submit"
+          modal={false}>
+          確定要刪除選擇的懶人包?
+        </Dialog>
       </Paper>
     );
+  },
+
+  _onCellClick: function (owNumber, columnId) {
+    console.log('_onCellClick', owNumber, columnId);
+  },
+
+  _onRowSelection: function (selected) {
+    console.log(selected);
+  },
+
+  _onDeleteClick: function () {
+    this.refs.confirmDialog.show();
+  },
+
+  _onDialogSubmit: function () {
+    console.log(this.state.selected);
   }
 
 });

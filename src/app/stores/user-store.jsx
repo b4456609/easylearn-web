@@ -22,6 +22,9 @@ function setLocalStorage() {
   localStorage.setItem('user', JSON.stringify(_user));
 }
 
+function modified() {
+  _user.setting.modified = true;
+}
 
 function hasUser() {
   if(_user.id == ''){
@@ -41,6 +44,13 @@ function getLocalStorage() {
 
 //initial data from localStorage
 getLocalStorage();
+_user.setting = {
+  wifi_sync: true,
+  mobile_network_sync: true,
+  last_sync_time: 1419519614000,
+  version: 0,
+  modified: true
+};
 
 var UserStore = assign({}, EventEmitter.prototype, {
 
@@ -79,6 +89,10 @@ var UserStore = assign({}, EventEmitter.prototype, {
 // Register callback to handle all updates
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
+  case EasyLearnConstants.NEW_PACK:
+    _user.setting.modified = true;
+    break;
+
   case EasyLearnConstants.SYNC_SUCCESS:
     _user.setting = action.data.setting;
     UserStore.emitChange();
