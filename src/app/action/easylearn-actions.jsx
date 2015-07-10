@@ -38,7 +38,11 @@ var EasyLearnActions = {
       });
     };
 
-    let fail = function() {};
+    let fail = function() {
+      AppDispatcher.dispatch({
+        actionType: EasyLearnConstants.SYNC_FAIL
+      });
+    };
 
     EasyLearnApi.sync(success, fail);
   },

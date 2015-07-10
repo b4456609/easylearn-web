@@ -6,8 +6,10 @@ let ActionHome = require('../svg-icons/action-home');
 let DirectionsWalk = require('../svg-icons/directions-walk');
 let FolderStore = require('../stores/folder-store.jsx');
 let UserStore = require('../stores/user-store.jsx');
+let AppStore = require('../stores/app-store.jsx');
 let EasyLearnActions = require('../action/easylearn-actions.jsx');
 let Home = require('./pages/home.jsx');
+let Fail = require('./pages/fail.jsx');
 
 var Navigation = Router.Navigation;
 let {
@@ -29,7 +31,8 @@ function getState() {
   return {
     folder: FolderStore.getFolderMenu(),
     username: UserStore.getUserName(),
-    userId: UserStore.getUserId()
+    userId: UserStore.getUserId(),
+    syncFail: AppStore.isSyncFail()
   }
 }
 
@@ -66,16 +69,16 @@ var Master = React.createClass({
     if (this.state.userId === '') {
       this.transitionTo('home');
       EasyLearnActions.fbInit();
+    } else {
+      EasyLearnActions.sync();
     }
-    else{
-      EasyLearnActions.sync();      
-    }
-
+    AppStore.addChangeListener(this._onChange);
     FolderStore.addChangeListener(this._onChange);
     UserStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function() {
+    AppStore.removeChangeListener(this._onChange);
     FolderStore.removeChangeListener(this._onChange);
     UserStore.removeChangeListener(this._onChange);
   },
@@ -111,12 +114,8 @@ var Master = React.createClass({
     };
   },
 
-  render: function() {
-    let styles = this.getStyles();
-    let title = 'EasyLearn';
-    let homeIcon = (
-      <div/>
-    );
+  getContent: function() {
+
     let menuItems = [
       {
         route: 'home',
@@ -133,6 +132,32 @@ var Master = React.createClass({
     let folderTitle = (
       <h3>資料夾</h3>
     );
+
+    let content = (
+      <AppMenuWithContent folderItems={this.state.folder} folderTitle={folderTitle} menuItems={menuItems}/>
+    );
+
+    if (this.isActive('home') || this.isActive('/')) {
+      content = (
+        <Home/>
+      );
+    }
+    else if(this.state.syncFail){
+      content = (
+        <Fail/>
+      );
+    }
+
+    return content;
+  },
+
+  render: function() {
+    let styles = this.getStyles();
+    let title = 'EasyLearn';
+    let homeIcon = (
+      <div/>
+    );
+
     let logoutBtn = (
       <div>
         <h3 style={styles.userName}>{this.state.username}</h3>
@@ -140,20 +165,14 @@ var Master = React.createClass({
           <DirectionsWalk color="white"/></IconButton>
       </div>
     );
-
-    let content = (
-      <AppMenuWithContent folderItems={this.state.folder} folderTitle={folderTitle} menuItems={menuItems}/>
-    );
-
     let zDepth = 1;
 
-    if (this.isActive('home') || this.isActive('/')) {
-      content = (
-        <Home/>
-      );
-      zDepth = 0;
+    if (this.isActive('home') || this.isActive('/')){
       title = '';
+      zDepth = 0;
     }
+
+    let content = this.getContent();
 
     return (
       <AppCanvas>

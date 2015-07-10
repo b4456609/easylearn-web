@@ -33,7 +33,6 @@ let HomePage = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log('[HomePage] ' + this.state.userId);
     UserStore.addChangeListener(this._onChange);
   },
 

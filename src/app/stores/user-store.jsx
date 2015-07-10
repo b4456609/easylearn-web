@@ -59,7 +59,6 @@ var UserStore = assign({}, EventEmitter.prototype, {
   },
 
   getUserId: function() {
-    console.log('[getUserId]' + _user.id);
     return _user.id;
   },
 
