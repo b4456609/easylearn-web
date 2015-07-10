@@ -4,6 +4,9 @@ var PackStore = require('../../stores/pack-store');
 let {
   Styles,
   Paper,
+  ClearFix,
+  ListItem,
+  List,
   ClearFix
 } = require('material-ui');
 
@@ -33,32 +36,79 @@ var ViewPack = React.createClass({
 
   getStyles: function() {
     return {
-      root: {
+      contentPaper: {
+        marginRight: '324px',
+        marginBottom: '16px'
+      },
+      contentPadding: {
         padding: '16px'
       },
       title: {
         lineHeight: '1.25em',
         fontSize: '25px',
-        paddingTop: '6px',
+        paddingTop: '6px'
       },
       content: {
         paddingTop: '6px',
         fontSize: '16px'
+      },
+      versionPaper: {
+        float: 'right',
+        width: '100%'
+      },
+      rightBlock: {
+        float: 'right',
+        width: '300px'
+      },
+      root: {
+        maxWidth: '1920px'
       }
     }
   },
 
+  getVersion: function() {
+    console.log(this.state.pack.versionInfo);
+    let items = this.state.pack.versionInfo.map(function(item) {
+      return (
+        <ListItem primaryText={item}/>
+      );
+    });
+
+    let result = (
+      <List subheader="懶人包版本">
+        {items}
+      </List>
+    );
+
+    return result;
+  },
+
   render: function() {
     let styles = this.getStyles();
+    let version = this.getVersion();
     return (
-      <Paper onClick={this._onClick} style={styles.paper} zDepth={1}>
+      <ClearFix>
         <div style={styles.root}>
-          <h1 style={styles.title}>
-            {this.state.pack.title}
-          </h1>
-          <div id="content" dangerouslySetInnerHTML={{__html: this.state.pack.version.content}} style={styles.content}/>
+
+          <div style={styles.rightBlock}>
+            <ClearFix>
+              <Paper style={styles.versionPaper} zDepth={1}>
+                {version}
+              </Paper>
+            </ClearFix>
+          </div>
+
+          <Paper style={styles.contentPaper} zDepth={1}>
+            <div style={styles.contentPadding}>
+              <h1 style={styles.title}>
+                {this.state.pack.title}
+              </h1>
+              <div dangerouslySetInnerHTML={{__html: this.state.pack.version.content}} id="content" style={styles.content}/>
+            </div>
+          </Paper>
+
         </div>
-      </Paper>
+      </ClearFix>
     );
   }
 
