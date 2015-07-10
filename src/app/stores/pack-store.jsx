@@ -112,7 +112,7 @@ function getVersionInfo() {
 
     //other people's private version
     if(item.is_public == false && item.creator_user_id != UserStore.getUserId()){
-      continue
+      continue;
     }
 
     var time = new Date(item.create_time);
@@ -132,6 +132,21 @@ function getVersionInfo() {
     result.push(versionInfo);
   }
   return result;
+}
+
+function checkoutVersion(versionId) {
+  let version = _pack.version;
+
+  version.sort(function (a,b) {
+    return b.create_time-a.create_time;
+  });
+
+  for (let i in version) {
+    if (version[i].id == versionId) {
+      _versonId = versionId;
+      _version = version[i];
+    }
+  }
 }
 
 var PackStore = assign({}, EventEmitter.prototype, {
@@ -243,6 +258,10 @@ AppDispatcher.register(function(action) {
 
   case EasyLearnConstants.NEW_PACK:
     newPack(action.data);
+    PackStore.emitChange();
+    break;
+  case EasyLearnConstants.CHECKOUT_VERSION:
+    checkoutVersion(action.versionId);
     PackStore.emitChange();
     break;
 

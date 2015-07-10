@@ -1,5 +1,6 @@
 var React = require('react');
 var PackStore = require('../../stores/pack-store');
+let EasyLearnActions = require('../../action/easylearn-actions.jsx');
 
 let {
   Styles,
@@ -68,12 +69,11 @@ var ViewPack = React.createClass({
 
 
   getVersion: function() {
-    console.log(this.state.pack.versionInfo);
     let self = this;
     let items = this.state.pack.versionInfo.map(function(item, i) {
       return (
         <ListItem
-          primaryText={item.text} onClick={self._onVersionTapTouch.bind(self, item.id, item.version)}
+          primaryText={item.text} onClick={self._onVersionTapTouch.bind(self, item.id)}
           key={i}/>
       );
     });
@@ -118,7 +118,7 @@ var ViewPack = React.createClass({
   },
 
   _onVersionTapTouch: function (id, e) {
-    console.log(id);
+    EasyLearnActions.checkoutVersion(id);
   },
 
 });

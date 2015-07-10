@@ -114,6 +114,15 @@ var EasyLearnActions = {
       actionType: EasyLearnConstants.NEW_PACK,
       data: data
     });
+  },
+
+  checkoutVersion:function (versionId) {
+    console.log('[Action]checkoutVersion versionId',versionId);
+
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.CHECKOUT_VERSION,
+      versionId: versionId
+    });
   }
 
 };
