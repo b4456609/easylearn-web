@@ -95,7 +95,6 @@ let HomePage = React.createClass({
       startBtnLable: {
         fontSize: '1.25em',
         fontWeight: 'bold',
-        fontFamily: '"Roboto", sans-serif, "微軟正黑體", "Microsoft JhengHei"',
         color: Colors.cyan500,
       },
       facebookStyle: {

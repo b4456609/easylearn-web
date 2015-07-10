@@ -63,12 +63,10 @@ var FolderList = React.createClass({
       title: {
         lineHeight: '1.25em',
         paddingTop: '6px',
-        fontFamily: '"Roboto", sans-serif, "微軟正黑體", "Microsoft JhengHei"'
       },
       des: {
         paddingTop: '16px',
         margin: 0,
-        fontFamily: '"Roboto", sans-serif, "微軟正黑體", "Microsoft JhengHei"'
       },
       img: {
         maxWidth: '100px',

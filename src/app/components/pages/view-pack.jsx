@@ -40,7 +40,6 @@ var ViewPack = React.createClass({
         lineHeight: '1.25em',
         fontSize: '25px',
         paddingTop: '6px',
-        fontFamily: '"Roboto", sans-serif, "微軟正黑體", "Microsoft JhengHei"'
       },
       content: {
         paddingTop: '6px',

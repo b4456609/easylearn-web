@@ -65,19 +65,19 @@ function newPack(data) {
     creator_user_name: UserStore.getUserName(),
     version: [
       {
-        id : "version" + time,
-        content : data.content,
-        create_time : time,
-        is_public : data.is_public,
-        creator_user_id : UserStore.getUserId(),
-        creator_user_name : UserStore.getUserName(),
-        bookmark : [],
-        note : [],
-        file : [],
-        version : 0,
-        modified : false,
-        view_count : 0,
-        user_view_count : 0
+        id: "version" + time,
+        content: data.content,
+        create_time: time,
+        is_public: data.is_public,
+        creator_user_id: UserStore.getUserId(),
+        creator_user_name: UserStore.getUserName(),
+        bookmark: [],
+        note: [],
+        file: [],
+        version: 0,
+        modified: false,
+        view_count: 0,
+        user_view_count: 0
       }
     ]
   };
@@ -97,6 +97,35 @@ function replaceImgPath(content, packId) {
 }
 
 var PackStore = assign({}, EventEmitter.prototype, {
+
+  getDeleteList: function() {
+    let result = [];
+    for (let item of _packs) {
+      let time = new Date(item.create_time);
+      let timeString = time.toLocaleString("zh-TW", {
+        year: 'numeric',
+        hour: '2-digit',
+        minute: 'numeric',
+        day: "numeric",
+        month: "numeric"
+      });
+
+      let pack = {
+        name: {
+          content: item.name
+        },
+        description: {
+          content: item.description
+        },
+        create_time: {
+          content: timeString
+        }
+      };
+
+      result.push(pack);
+    }
+    return result;
+  },
 
   getFolderList: function(packIdArray) {
     var list = [];
