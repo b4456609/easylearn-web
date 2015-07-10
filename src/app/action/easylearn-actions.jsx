@@ -99,12 +99,16 @@ var EasyLearnActions = {
     FBApi.login(callback);
   },
 
-  newPack: function (content) {
+  newPack: function (data) {
     console.log('[Action]newPack');
-    console.log(content);
+    // set packid
+    var time = new Date().getTime();
+    data.id = 'pack' + time;
+
+    console.log(data);
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.NEW_PACK,
-      content: content
+      data: data
     });
   }
 

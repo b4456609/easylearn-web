@@ -3,6 +3,7 @@ var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 let EasylearnConfig = require('../api/easylearn-config.js');
+let UserStore = require('./user-store.jsx');
 
 const CHANGE_EVENT = 'change';
 
@@ -48,19 +49,42 @@ function setVersionToLatest() {
   }
 }
 
-function newPack(content){
+function newPack(data) {
+  console.log('[PackStore]newPack');
   var time = new Date().getTime();
 
-  let id = 'pack' + time;
-  let name = '';
-  let description = '';
-  let create_time = '';
-  let tags = '';
-  let is_public = '';
-  let creator_user_id = '';
-  let cover_filename = '';
-  let creator_user_name = '';
-  let version = [];
+  let newPackItem = {
+    id: data.id,
+    create_time: time,
+    name: data.title,
+    description: data.description,
+    tags: data.tag,
+    is_public: data.is_public,
+    cover_filename: data.cover_filename,
+    creator_user_id: UserStore.getUserId(),
+    creator_user_name: UserStore.getUserName(),
+    version: [
+      {
+        id : "version" + time,
+        content : data.content,
+        create_time : time,
+        is_public : data.is_public,
+        creator_user_id : UserStore.getUserId(),
+        creator_user_name : UserStore.getUserName(),
+        bookmark : [],
+        note : [],
+        file : [],
+        version : 0,
+        modified : false,
+        view_count : 0,
+        user_view_count : 0
+      }
+    ]
+  };
+
+  console.log(newPackItem);
+
+  _packs.push(newPackItem);
 }
 
 function replaceImgPath(content, packId) {
@@ -150,7 +174,7 @@ AppDispatcher.register(function(action) {
     break;
 
   case EasyLearnConstants.NEW_PACK:
-    setPacks(action.data);
+    newPack(action.data);
     PackStore.emitChange();
     break;
 
