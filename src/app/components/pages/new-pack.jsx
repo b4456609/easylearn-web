@@ -1,5 +1,6 @@
 'use strict';
 var React = require('react');
+let Router = require('react-router');
 let FullWidthSection = require('../full-width-section');
 let {
   Mixins,
@@ -21,11 +22,13 @@ let {
   StyleResizable
 } = Mixins;
 
+let Navigation = Router.Navigation;
+
 
 var newPack = React.createClass({
 
   mixins: [
-    StyleResizable, React.addons.LinkedStateMixin
+    StyleResizable, React.addons.LinkedStateMixin, Navigation
   ],
 
   getInitialState: function() {
@@ -74,6 +77,10 @@ var newPack = React.createClass({
     };
 
     return styles;
+  },
+
+  componentWillUnmount: function() {
+    tinymce.remove('#editor');
   },
 
   componentDidMount: function() {
@@ -196,6 +203,7 @@ var newPack = React.createClass({
         cover_filename: this.state.cover_filename,
         content: content
       });
+      this.transitionTo('folder-list');
     }
   },
 

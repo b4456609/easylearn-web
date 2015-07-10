@@ -23,7 +23,7 @@ var _folder = [
   }
 ];
 
-let _viewFolderId = "allfolder";
+let _viewFolderId = "allPackId";
 
 function addPackToAll(packId) {
   for (let item of _folder) {
@@ -32,6 +32,7 @@ function addPackToAll(packId) {
       break;
     }
   }
+  _viewFolderId = "allPackId";
 }
 
 var FolderStore = assign({}, EventEmitter.prototype, {
