@@ -8,7 +8,6 @@ let {
   ClearFix,
   ListItem,
   List,
-  ClearFix
 } = require('material-ui');
 
 function getViewPackState() {
