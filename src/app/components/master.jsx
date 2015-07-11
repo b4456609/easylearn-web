@@ -65,11 +65,11 @@ var Master = React.createClass({
 
   componentDidMount: function() {
     console.log('[master] componentDidMount');
-    console.log(this.state.userId);
     if (this.state.userId === '') {
       this.transitionTo('home');
       EasyLearnActions.fbInit();
     } else {
+      this.transitionTo('folder-list');
       EasyLearnActions.sync();
     }
     AppStore.addChangeListener(this._onChange);
