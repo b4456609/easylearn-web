@@ -35,7 +35,7 @@ let Tooltip = {
 
   destroy: function () {
     $('.note').unbind( "mouseover" );
-    $('.note').unbind( "mouseover" );
+    $('.note').unbind( "click" );
     $('.note').tooltipster('destroy');
   }
 };
