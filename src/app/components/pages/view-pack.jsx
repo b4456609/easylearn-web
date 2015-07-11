@@ -13,6 +13,9 @@ let {
   ClearFix,
   ListItem,
   List,
+  Dialog,
+  TextField,
+  RaisedButton
 } = require('material-ui');
 
 function getViewPackState() {
@@ -22,24 +25,28 @@ function getViewPackState() {
 }
 
 var ViewPack = React.createClass({
-  mixins: [
-    Navigation
-  ],
+  mixins: [Navigation],
 
   getInitialState: function() {
-    return getViewPackState();
+    return {
+      noteText: '',
+      note: {},
+      pack: PackStore.getViewVersion()
+    };
   },
 
   componentDidUpdate: function(prevProps, prevState) {
-    Tooltip.init(this.state.pack.version.note);
+    Tooltip.destroy();
+    Tooltip.init(this.state.pack.version.note, this._onClickNote);
   },
 
   componentDidMount: function() {
-    Tooltip.init(this.state.pack.version.note);
+    Tooltip.init(this.state.pack.version.note, this._onClickNote);
     PackStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function() {
+    Tooltip.destroy();
     PackStore.removeChangeListener(this._onChange);
   },
 
@@ -75,24 +82,137 @@ var ViewPack = React.createClass({
       },
       root: {
         maxWidth: '1920px'
+      },
+      divider: {
+        margin: 0,
+        marginTop: '-1px',
+        marginLeft: '0',
+        height: '1px',
+        border: 'none',
+        backgroundColor: '#e0e0e0'
+      },
+      commentHeader: {
+        marginTop: 16
+      },
+      commentUser: {
+        fontWeight: 'bold'
+      },
+      commentTime: {
+        float: 'right'
+      },
+      commentContent: {
+        fontSize: 13,
+        marginTop: 8
+      },
+      commentItem: {
+        marginTop: 8
+      },
+      commentUserBlock: {
+        marginTop: 8
+      },
+      textField: {
+        width: '100%'
+      },
+      submitBtn: {
+        width: 100
       }
     }
   },
 
+  _onClickNote: function(noteText, note) {
+    this.setState({
+      noteText: noteText,
+      note: note
+    });
+    this.refs.noteDialog.show();
+  },
+
+  getNote: function() {
+    let styles = this.getStyles();
+
+    if (Object.keys(this.state.note).length === 0) {
+      return null;
+    }
+    let content = (
+      <h3>{this.state.note.content}</h3>
+    );
+
+    let comment = (this.state.note.comment.map(function(item) {
+      var time = new Date(item.create_time);
+      var timeString = time.toLocaleString("zh-TW", {
+        hour: '2-digit',
+        minute: 'numeric',
+        day: "numeric",
+        month: "numeric",
+        year: 'numeric'
+      });
+      return (
+        <div style={styles.commentItem}>
+          <hr style={styles.divider}/>
+          <div style={styles.commentUserBlock}>
+            <span style={styles.commentUser}>
+              {item.user_name}
+            </span>
+            <span style={styles.commentTime}>
+              {timeString}
+            </span>
+          </div>
+          <span style={styles.commentContent}>{item.content}</span>
+        </div>
+      );
+    }));
+
+    let userInput = (
+      <div>
+        <table>
+          <tr>
+            <td style={styles.textField}>
+              <TextField style={styles.textField} ref="message"
+                floatingLabelText="留言" multiLine={true} />
+            </td>
+            <td style={styles.submitBtn}>
+              <RaisedButton label="送出"           onClick={this._onSubmitMessage} />
+            </td>
+          </tr>
+        </table>
+      </div>
+    )
+
+    return (
+      <Dialog autoDetectWindowHeight={true} autoScrollBodyContent={true} ref="noteDialog" title={this.state.noteText}>
+        <div>
+          {content}
+          <h3 style={styles.commentHeader}>Comment:</h3>
+          {comment}
+          {userInput}
+        </div>
+      </Dialog>
+    );
+  },
+
+  _onSubmitMessage: function () {
+    this.refs.message.setErrorText('');
+    let text = this.refs.message.getValue().trim();
+    if(text === ''){
+      this.refs.message.setErrorText('請輸入留言');
+      return;
+    }
+    console.log(text);
+
+    this.refs.message.setValue('');
+  },
 
   getVersion: function() {
     let self = this;
     let items = this.state.pack.versionInfo.map(function(item, i) {
       return (
-        <ListItem
-          primaryText={item.text} onClick={self._onVersionTapTouch.bind(self, item.id)}
-          key={i}/>
+        <ListItem key={i} onClick={self._onVersionTapTouch.bind(self, item.id)} primaryText={item.text}/>
       );
     });
 
     let result = (
       <List subheader="懶人包版本">
-        <ListItem primaryText='修改此懶人包' onClick={this._onModifiedPackClick.bind(this, this.state.pack.version.id)}/>
+        <ListItem onClick={this._onModifiedPackClick.bind(this, this.state.pack.version.id)} primaryText='修改此懶人包'/>
         {items}
       </List>
     );
@@ -103,6 +223,7 @@ var ViewPack = React.createClass({
   render: function() {
     let styles = this.getStyles();
     let version = this.getVersion();
+    let note = this.getNote();
     return (
       <ClearFix>
         <div style={styles.root}>
@@ -125,15 +246,16 @@ var ViewPack = React.createClass({
           </Paper>
 
         </div>
+        {note}
       </ClearFix>
     );
   },
 
-  _onVersionTapTouch: function (id, e) {
+  _onVersionTapTouch: function(id, e) {
     EasyLearnActions.checkoutVersion(id);
   },
 
-  _onModifiedPackClick: function () {
+  _onModifiedPackClick: function() {
     this.transitionTo('modified-pack');
   }
 

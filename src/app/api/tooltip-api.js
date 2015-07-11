@@ -9,7 +9,7 @@ function findNote(noteId) {
 }
 
 let Tooltip = {
-  init: function(notes) {
+  init: function(notes, clickHandler) {
     console.log('[Tooltip]init');
     _notes = notes;
 
@@ -17,11 +17,26 @@ let Tooltip = {
       content: 'Loading...'
     });
 
-    $('.note').mouseover(function (e) {
+    $('.note').mouseover(function () {
       let noteId = $(this).attr("noteid");
       let item = findNote(noteId);
+      console.log('[Tooltip]mouseover',item);
       $('.note').tooltipster('content', item.content);
-    })
+    });
+
+    $('.note').click(function () {
+      let noteId = $(this).attr("noteid");
+      let noteText = $(this).text();
+      let item = findNote(noteId);
+
+      clickHandler(noteText, item);
+    });
+  },
+
+  destroy: function () {
+    $('.note').unbind( "mouseover" );
+    $('.note').unbind( "click" );
+    $('.note').tooltipster('destroy');
   }
 };
 
