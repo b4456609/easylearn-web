@@ -217,6 +217,22 @@ function checkoutVersion(versionId) {
   }
 }
 
+function deletePack(idArray) {
+  localStorage.setItem('packs', JSON.stringify(_packs));
+  for (let id of idArray) {
+    console.log(id);
+    for(let i in _packs){
+      if(_packs[i].id == id){
+        _packs.splice(i, 1);
+      }
+    }
+  }
+}
+
+function redoDeletePack() {
+  _packs = JSON.parse(localStorage.getItem('packs'));
+}
+
 var PackStore = assign({}, EventEmitter.prototype, {
   getVersionForModified: function() {
     let content = replaceImgPath(_version.content, _packId);
@@ -228,6 +244,10 @@ var PackStore = assign({}, EventEmitter.prototype, {
 
   getDeleteList: function() {
     let result = [];
+
+    _packs.sort(function(a, b) {
+      return b.create_time - a.create_time
+    })
     for (let item of _packs) {
       let time = new Date(item.create_time);
       let timeString = time.toLocaleString("zh-TW", {
@@ -247,11 +267,13 @@ var PackStore = assign({}, EventEmitter.prototype, {
         },
         create_time: {
           content: timeString
-        }
+        },
+        id: item.id
       };
 
       result.push(pack);
     }
+
     return result;
   },
 
@@ -342,7 +364,17 @@ AppDispatcher.register(function(action) {
     break;
 
   case EasyLearnConstants.MODIFIED_PACK:
-    modifiedPackVersion(action.is_public, action.content,  action.files);
+    modifiedPackVersion(action.is_public, action.content, action.files);
+    PackStore.emitChange();
+    break;
+
+  case EasyLearnConstants.DELETE_PACK:
+    deletePack(action.idArray);
+    PackStore.emitChange();
+    break;
+
+  case EasyLearnConstants.REDO_DELETE_PACK:
+    redoDeletePack();
     PackStore.emitChange();
     break;
 

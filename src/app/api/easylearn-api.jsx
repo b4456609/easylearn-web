@@ -5,8 +5,6 @@ let EasylearnConfig = require('../api/easylearn-config.js');
 
 let Sync = {
   sync: function(success, fail) {
-    console.log('[sync]Start');
-
     var sendData = {
       user: UserStore.getUser(),
       folder: FolderStore.getFolder()
@@ -17,7 +15,7 @@ let Sync = {
         sendData[packs[j].id] = packs[j];
     }
 
-    console.log(sendData);
+    console.log('[sync]Start',sendData);
 
     var syncAjax = $.ajax({
       method: "POST",
@@ -31,8 +29,7 @@ let Sync = {
 
 //success
     syncAjax.done(function(data) {
-      console.log('[sync] success');
-      console.log(data);
+      console.log('[sync] success',data);
       success(data);
     });
 

@@ -9,5 +9,7 @@ module.exports = keyMirror({
   APP_INIT: null,
   NEW_PACK: null,
   MODIFIED_PACK: null,
-  CHECKOUT_VERSION: null
+  CHECKOUT_VERSION: null,
+  DELETE_PACK: null,
+  REDO_DELETE_PACK: null
 });

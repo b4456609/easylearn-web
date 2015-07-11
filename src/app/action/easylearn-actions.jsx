@@ -127,6 +127,14 @@ var EasyLearnActions = {
     });
   },
 
+  deletePack: function (idArray) {
+    console.log('[Action]deletePack', idArray);
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.DELETE_PACK,
+      idArray: idArray
+    });
+  },
+
   checkoutVersion:function (versionId) {
     console.log('[Action]checkoutVersion versionId', versionId);
 
@@ -134,8 +142,15 @@ var EasyLearnActions = {
       actionType: EasyLearnConstants.CHECKOUT_VERSION,
       versionId: versionId
     });
-  }
+  },
 
+  redoDeletePack:function () {
+    console.log('[Action]redoDeletePack');
+
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.REDO_DELETE_PACK
+    });
+  }
 };
 
 module.exports = EasyLearnActions;

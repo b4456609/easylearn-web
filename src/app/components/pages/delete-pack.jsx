@@ -4,10 +4,11 @@ let {
   RaisedButton,
   ClearFix,
   Paper,
-  Dialog
+  Snackbar
 } = require('material-ui');
 
 let PackStore = require('../../stores/pack-store.jsx');
+let EasylearnActions = require('../../action/easylearn-actions.jsx');
 
 function getData() {
   return {rowData: PackStore.getDeleteList()};
@@ -17,16 +18,9 @@ var DeletePack = React.createClass({
 
   getInitialState: function() {
     return {
-      fixedHeader: true,
-      fixedFooter: false,
-      stripedRows: true,
-      showRowHover: true,
-      selectable: true,
-      multiSelectable: true,
-      canSelectAll: true,
-      deselectOnClickaway: true,
       rowData: PackStore.getDeleteList(),
-      selected: []
+      selected: [],
+      message: ''
     };
   },
 
@@ -86,39 +80,45 @@ var DeletePack = React.createClass({
             headerColumns={headerCols}
             columnOrder={colOrder}
             rowData={this.state.rowData}
-            fixedHeader={this.state.fixedHeader}
-            fixedFooter={this.state.fixedFooter}
-            stripedRows={this.state.stripedRows}
-            showRowHover={this.state.showRowHover}
-            selectable={this.state.selectable}
-            multiSelectable={this.state.multiSelectable}
-            canSelectAll={this.state.canSelectAll}
-            deselectOnClickaway={this.state.deselectOnClickaway}
-            onCellClick={this._onCellClick}
+            fixedHeader={true}
+            fixedFooter={false}
+            stripedRows={true}
+            showRowHover={true}
+            selectable={true}
+            multiSelectable={true}
+            canSelectAll={false}
+            deselectOnClickaway={false}
             onRowSelection={this._onRowSelection} />
         </div>
-        <Dialog
-          ref="confirmDialog"
-          title="Dialog With Standard Actions"
-          actions={standardActions}
-          actionFocus="submit"
-          modal={false}>
-          確定要刪除選擇的懶人包?
-        </Dialog>
+        <Snackbar
+          ref="snackbar"
+          message={this.state.message}
+          action="undo"
+          autoHideDuration={5000}
+          onActionTouchTap={this._handleAction}/>
       </Paper>
     );
   },
 
-  _onCellClick: function (owNumber, columnId) {
-    console.log('_onCellClick', owNumber, columnId);
+  _handleAction: function () {
+    EasylearnActions.redoDeletePack();
   },
 
   _onRowSelection: function (selected) {
     console.log(selected);
+    this.setState({selected: selected});
   },
 
   _onDeleteClick: function () {
-    this.refs.confirmDialog.show();
+    let selectedId = [];
+    for(let item of this.state.selected){
+      selectedId.push(this.state.rowData[item].id);
+    }
+
+    EasylearnActions.deletePack(selectedId);
+
+    this.setState({message :'成功刪除' + this.state.selected.length + '個懶人包'});
+    this.refs.snackbar.show();
   },
 
   _onDialogSubmit: function () {

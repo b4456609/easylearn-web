@@ -9,7 +9,7 @@ var _folder = [
   {
     "name": "All",
     "id": "allPackId",
-    "pack": ["pack1435654271204"]
+    "pack": []
   }, {
     "name": "我的最愛",
     "id": "fjoeiwjowfe",
@@ -17,9 +17,7 @@ var _folder = [
   }, {
     "name": "全部的懶人包",
     "id": "allfolder",
-    "pack": [
-      "pack1435654271204", "pack1435840821469", "pack1435931033502", "pack1435931116723", "pack1435931157535"
-    ]
+    "pack": []
   }
 ];
 
@@ -33,6 +31,23 @@ function addPackToAll(packId) {
     }
   }
   _viewFolderId = "allPackId";
+}
+
+function deletePack(idArray) {
+  localStorage.setItem('folder', JSON.stringify(_folder));
+  for(let id of idArray){
+    for(let folder of _folder){
+      for(let i in folder.pack){
+        if(folder.pack[i] == id){
+          folder.pack.splice(i, 1);
+        }
+      }
+    }
+  }
+}
+
+function redoDeletePack() {
+  _folder = JSON.parse(localStorage.getItem('folder'));
 }
 
 var FolderStore = assign({}, EventEmitter.prototype, {
@@ -103,6 +118,16 @@ AppDispatcher.register(function(action) {
 
   case EasyLearnConstants.NEW_PACK:
     addPackToAll(action.data.id);
+    FolderStore.emitChange();
+    break;
+
+  case EasyLearnConstants.DELETE_PACK:
+    deletePack(action.idArray);
+    FolderStore.emitChange();
+    break;
+
+  case EasyLearnConstants.REDO_DELETE_PACK:
+    redoDeletePack();
     FolderStore.emitChange();
     break;
 
