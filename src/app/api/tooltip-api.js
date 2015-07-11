@@ -10,7 +10,7 @@ function findNote(noteId) {
 
 let Tooltip = {
   init: function(notes, clickHandler) {
-    console.log('[Tooltip]init');
+    console.log('[Tooltip]init',notes);
     _notes = notes;
 
     $('.note').tooltipster({
@@ -35,7 +35,7 @@ let Tooltip = {
 
   destroy: function () {
     $('.note').unbind( "mouseover" );
-    $('.note').unbind( "click" );
+    $('.note').unbind( "mouseover" );
     $('.note').tooltipster('destroy');
   }
 };

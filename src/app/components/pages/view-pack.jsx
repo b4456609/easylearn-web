@@ -35,8 +35,11 @@ var ViewPack = React.createClass({
     };
   },
 
+  componentWillUpdate: function(nextProps, nextState) {
+    Tooltip.destroy();    
+  },
+
   componentDidUpdate: function(prevProps, prevState) {
-    Tooltip.destroy();
     Tooltip.init(this.state.pack.version.note, this._onClickNote);
   },
 
@@ -46,7 +49,6 @@ var ViewPack = React.createClass({
   },
 
   componentWillUnmount: function() {
-    Tooltip.destroy();
     PackStore.removeChangeListener(this._onChange);
   },
 
