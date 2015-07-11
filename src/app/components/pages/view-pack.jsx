@@ -3,6 +3,8 @@ let Router = require('react-router');
 var PackStore = require('../../stores/pack-store');
 let EasyLearnActions = require('../../action/easylearn-actions.jsx');
 
+let Tooltip = require('../../api/tooltip-api.js');
+
 let Navigation = Router.Navigation;
 
 let {
@@ -28,7 +30,12 @@ var ViewPack = React.createClass({
     return getViewPackState();
   },
 
+  componentDidUpdate: function(prevProps, prevState) {
+    Tooltip.init(this.state.pack.version.note);
+  },
+
   componentDidMount: function() {
+    Tooltip.init(this.state.pack.version.note);
     PackStore.addChangeListener(this._onChange);
   },
 

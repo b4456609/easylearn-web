@@ -172,9 +172,11 @@ function getVersionInfo() {
     return b.create_time - a.create_time;
   });
 
+  console.log(_pack.version);
+
   for (let item of _pack.version) {
 //it's backup version
-    if (result.length !== 0 && result[result.length - 1].id == item.id) {
+    if (result.length !== 0 && result[result.length - 1].id == item.id && item.is_public == false) {
       continue;
     }
 
