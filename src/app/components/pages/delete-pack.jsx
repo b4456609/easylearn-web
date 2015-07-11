@@ -20,7 +20,8 @@ var DeletePack = React.createClass({
     return {
       rowData: PackStore.getDeleteList(),
       selected: [],
-      message: ''
+      message: '',
+      snackAction: ''
     };
   },
 
@@ -93,7 +94,7 @@ var DeletePack = React.createClass({
         <Snackbar
           ref="snackbar"
           message={this.state.message}
-          action="undo"
+          action={this.state.snackAction}
           autoHideDuration={5000}
           onActionTouchTap={this._handleAction}/>
       </Paper>
@@ -110,6 +111,12 @@ var DeletePack = React.createClass({
   },
 
   _onDeleteClick: function () {
+    if(this.state.selected.length === 0){
+      this.setState({action: '', message :'請選擇要刪除的懶人包'});
+      this.refs.snackbar.show();
+      return;
+    }
+
     let selectedId = [];
     for(let item of this.state.selected){
       selectedId.push(this.state.rowData[item].id);
@@ -117,7 +124,7 @@ var DeletePack = React.createClass({
 
     EasylearnActions.deletePack(selectedId);
 
-    this.setState({message :'成功刪除' + this.state.selected.length + '個懶人包'});
+    this.setState({action: 'undo', message :'成功刪除' + this.state.selected.length + '個懶人包'});
     this.refs.snackbar.show();
   },
 

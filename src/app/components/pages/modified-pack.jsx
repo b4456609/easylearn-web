@@ -54,6 +54,9 @@ var ModifiedPack = React.createClass({
 
   getStyles: function() {
     let styles = {
+      title:{
+        marginTop: 8
+      },
       block: {
         padding: '8px',
         lineHeight: '20px'
@@ -72,8 +75,8 @@ var ModifiedPack = React.createClass({
       errorContent: {
         color: Colors.red500
       },
-      toolbar: {
-        marginTop: 24
+      tool: {
+        marginTop: '24px'
       }
     };
 
@@ -98,15 +101,15 @@ var ModifiedPack = React.createClass({
         <Paper zDepth={1}>
           <div style={styles.block}>
 
-            <h1>{this.state.pack.title}</h1>
-
-            <ClearFix>
-              <div styles={styles.toolbar}>
+            <h1 style={styles.title}>{this.state.pack.title}</h1>
+            <div style={styles.tool}>
+              <ClearFix>
                 <Checkbox label="公開懶人包" name="is-pulic" onCheck={this._handlePublicChech} style={styles.checkbox} value="is-pulic-value"/>
 
                 <RaisedButton label="完成" onTouchTap={this._onSubmit} primary={true} style={styles.submitBtn}/>
-              </div>
-            </ClearFix>
+                </ClearFix>
+            </div>
+
 
             <ClearFix>
               <div style={styles.editor}>
