@@ -1,6 +1,9 @@
 var React = require('react');
+let Router = require('react-router');
 var PackStore = require('../../stores/pack-store');
 let EasyLearnActions = require('../../action/easylearn-actions.jsx');
+
+let Navigation = Router.Navigation;
 
 let {
   Styles,
@@ -17,6 +20,9 @@ function getViewPackState() {
 }
 
 var ViewPack = React.createClass({
+  mixins: [
+    Navigation
+  ],
 
   getInitialState: function() {
     return getViewPackState();
@@ -79,7 +85,7 @@ var ViewPack = React.createClass({
 
     let result = (
       <List subheader="懶人包版本">
-        <ListItem primaryText='修改此懶人包'/>
+        <ListItem primaryText='修改此懶人包' onClick={this._onModifiedPackClick.bind(this, this.state.pack.version.id)}/>
         {items}
       </List>
     );
@@ -119,6 +125,10 @@ var ViewPack = React.createClass({
   _onVersionTapTouch: function (id, e) {
     EasyLearnActions.checkoutVersion(id);
   },
+
+  _onModifiedPackClick: function () {
+    this.transitionTo('modified-pack');
+  }
 
 });
 

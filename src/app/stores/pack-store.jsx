@@ -150,6 +150,13 @@ function checkoutVersion(versionId) {
 }
 
 var PackStore = assign({}, EventEmitter.prototype, {
+  getVersionForModified: function () {
+    let content = replaceImgPath(_version.content, _packId);
+    return {
+      content: content,
+      title: _pack.name
+    }
+  },
 
   getDeleteList: function() {
     let result = [];

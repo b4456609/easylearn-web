@@ -10,6 +10,7 @@ let Home = require('./components/pages/home');
 let NewPack = require('./components/pages/new-pack');
 let ViewPack = require('./components/pages/view-pack');
 let DeletePack = require('./components/pages/delete-pack');
+let ModifiedPack = require('./components/pages/modified-pack');
 let FolderList = require('./components/pages/folder-list');
 
 
@@ -29,6 +30,7 @@ let AppRoutes = (
     <Route name="new-pack" handler={NewPack} />
     <Route name="view-pack" handler={ViewPack} />
     <Route name="delete-pack" handler={DeletePack} />
+    <Route name="modified-pack" handler={ModifiedPack} />
     <Route name="folder-list" handler={FolderList} />
     <DefaultRoute handler={Home}/>
   </Route>

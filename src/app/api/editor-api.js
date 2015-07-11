@@ -17,6 +17,11 @@ let Editor = {
       console.log('[Editor]change event');
       callback();
     });
+  },
+
+  setContent:function (content) {
+    console.log('[Editor]setContent');
+    tinymce.get('editor').setContent(content);
   }
 
 };
