@@ -104,20 +104,31 @@ var EasyLearnActions = {
   },
 
   newPack: function (data) {
-    console.log('[Action]newPack');
     // set packid
     var time = new Date().getTime();
     data['id'] = 'pack' + time;
 
-    console.log(data);
+    console.log('[Action]newPack', data);
+
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.NEW_PACK,
       data: data
     });
   },
 
+  modifiedPack: function (data) {
+    console.log('[Action]modifiedPack', data);
+
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.MODIFIED_PACK,
+      is_public: data.is_public,
+      content: data.content,
+      files: data.files
+    });
+  },
+
   checkoutVersion:function (versionId) {
-    console.log('[Action]checkoutVersion versionId',versionId);
+    console.log('[Action]checkoutVersion versionId', versionId);
 
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.CHECKOUT_VERSION,

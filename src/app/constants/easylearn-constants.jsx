@@ -8,5 +8,6 @@ module.exports = keyMirror({
   LOGIN_SUCCESS: null,
   APP_INIT: null,
   NEW_PACK: null,
+  MODIFIED_PACK: null,
   CHECKOUT_VERSION: null
 });

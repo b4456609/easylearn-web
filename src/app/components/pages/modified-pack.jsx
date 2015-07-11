@@ -5,7 +5,8 @@ let {
   Styles,
   Paper,
   ClearFix,
-  RaisedButton
+  RaisedButton,
+  Checkbox
 } = require('material-ui');
 let Editor = require('../../api/editor-api.js');
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
@@ -17,21 +18,26 @@ let {
 
 let Navigation = Router.Navigation;
 
-function getContent(){
+function getContent() {
   return {
-    errorContent: '',
     pack: PackStore.getVersionForModified()
   };
 }
 
-var newPack = React.createClass({
+var ModifiedPack = React.createClass({
 
-  mixins: [
-    Navigation
-  ],
+  mixins: [Navigation],
 
   getInitialState: function() {
-    return getContent();
+    let state = {
+      is_public: false,
+      errorContent: ''
+    };
+
+    let data = getContent();
+
+    state.pack = data.pack;
+    return state;
   },
 
   componentDidMount: function() {
@@ -52,30 +58,22 @@ var newPack = React.createClass({
         padding: '8px',
         lineHeight: '20px'
       },
-      group: {
-        marginBottom: 32
-      },
-      textfield: {
-        display: 'block',
-        marginTop: 10
-      },
       checkbox: {
-        marginTop: 20
-      },
-      button: {
-        marginTop: 30
+        marginTop: 10,
+        width: '300px',
+        float: 'left',
       },
       editor: {
         marginTop: 30
       },
-      left: {
-        float: 'left'
+      submitBtn: {
+        float: 'right'
       },
-      submitBtn:{
-        float:'right'
-      },
-      errorContent:{
+      errorContent: {
         color: Colors.red500
+      },
+      toolbar: {
+        marginTop: 24
       }
     };
 
@@ -88,8 +86,7 @@ var newPack = React.createClass({
 
   componentDidMount: function() {
     if (this.isMounted()) {
-      Editor.init();
-      Editor.setContent(this.state.pack.content);
+      Editor.initAndSetContent(this.state.pack.content);
     }
   },
 
@@ -104,11 +101,11 @@ var newPack = React.createClass({
             <h1>{this.state.pack.title}</h1>
 
             <ClearFix>
-              <RaisedButton
-                label="完成"
-                onTouchTap={this._onSubmit}
-                primary={true}
-                style={styles.submitBtn}/>
+              <div styles={styles.toolbar}>
+                <Checkbox label="公開懶人包" name="is-pulic" onCheck={this._handlePublicChech} style={styles.checkbox} value="is-pulic-value"/>
+
+                <RaisedButton label="完成" onTouchTap={this._onSubmit} primary={true} style={styles.submitBtn}/>
+              </div>
             </ClearFix>
 
             <ClearFix>
@@ -126,40 +123,44 @@ var newPack = React.createClass({
     );
   },
 
-  _handleContentChange:function () {
+  _handleContentChange: function() {
     this.setState({
       errorContent: ''
     });
   },
 
-  _onSubmit:function () {
+  _handlePublicChech: function(event) {
+    console.log(event.target.checked);
+    this.setState({
+      is_public: event.target.checked
+    });
+  },
+
+  _onSubmit: function() {
 
     Editor.onContentChange(this._handleContentChange);
-    //check title and content
+//check title and content
     let content = Editor.getContent();
     let canSubmit = true;
 
-    if(content === ''){
+    if (content === '') {
       this.setState({
         errorContent: '內容不能為空白'
       });
       canSubmit = false;
     }
 
-    //if no error send submit pack action
-    if(canSubmit == true){
-      EasylearnActions.newPack({
-        title: this.state.title,
-        description: this.state.description,
-        tag: this.state.tag,
+//if no error send submit pack action
+    if (canSubmit == true) {
+      EasylearnActions.modifiedPack({
         is_public: this.state.is_public,
-        cover_filename: this.state.cover_filename,
-        content: content
+        content: content,
+        files: []
       });
       EasylearnActions.sync();
-      this.transitionTo('folder-list');
+      this.transitionTo('view-pack');
     }
   }
 });
 
-module.exports = newPack;
+module.exports = ModifiedPack;

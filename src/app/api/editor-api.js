@@ -1,27 +1,37 @@
 let Editor = {
-  init: function() {
+  init: function(callback) {
     console.log('[Editor]init');
     tinymce.init({
-      selector: "#editor"
+      selector: "#editor",
+      resize: true,
+      min_height: 500,
+      setup: function(editor) {
+        editor.on('init', function() {
+          typeof callback === 'function' && callback();
+        });
+      }
     });
+    console.log(tinymce.activeEditor);
   },
   getContent: function() {
-    console.log('[Editor]getContent');
-    let content = tinymce.get('editor').getContent();
-    console.log(content);
+    let content = tinymce.activeEditor.getContent();
+    console.log('[Editor]getContent', content);
     return content;
   },
 
   onContentChange: function(callback) {
-    tinymce.get('editor').on('change', function(e) {
+    tinymce.activeEditor.on('change', function(e) {
       console.log('[Editor]change event');
       callback();
     });
   },
 
-  setContent:function (content) {
+  initAndSetContent:function (content) {
     console.log('[Editor]setContent');
-    tinymce.get('editor').setContent(content);
+
+    this.init(function () {
+      tinymce.activeEditor.setContent(content);
+    })
   }
 
 };
