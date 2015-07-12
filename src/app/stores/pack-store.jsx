@@ -75,12 +75,17 @@ function newPack(data) {
         note: [],
         file: [],
         version: 0,
-        modified: false,
+        private_id: '',
         view_count: 0,
         user_view_count: 0
       }
     ]
   };
+
+  //not private give a private id
+  if(!data.is_public){
+    newPackItem.version.private_id = 'private' + time;
+  }
 
   console.log(newPackItem);
 
@@ -106,7 +111,7 @@ function modifiedPackVersion(is_public, content, files) {
     note: _version.note,
     file: files.concat(_version.file),
     version: _version.version,
-    modified: false,
+    private_id: '',
     view_count: 0,
     user_view_count: 0
   };
