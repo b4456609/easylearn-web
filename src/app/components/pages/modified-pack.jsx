@@ -29,15 +29,12 @@ var ModifiedPack = React.createClass({
   mixins: [Navigation],
 
   getInitialState: function() {
-    let state = {
+    return {
       is_public: false,
-      errorContent: ''
+      errorContent: '',
+      modifyIndex: 0,
+      pack: PackStore.getVersionForModified()
     };
-
-    let data = getContent();
-
-    state.pack = data.pack;
-    return state;
   },
 
   componentDidMount: function() {
@@ -89,7 +86,8 @@ var ModifiedPack = React.createClass({
 
   componentDidMount: function() {
     if (this.isMounted()) {
-      Editor.initAndSetContent(this.state.pack.content);
+      console.log('[ModifyPack]componentDidMount count',this.state.pack.version);
+      Editor.initAndSetContent(this.state.pack.version[this.state.modifyIndex].content);
     }
   },
 
