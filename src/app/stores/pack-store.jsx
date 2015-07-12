@@ -40,13 +40,12 @@ function setVersionToLatest() {
   let version = _pack.version;
   let time = 0;
 
-  for (let i in version) {
-    if (version[i].create_time > time) {
-      time = version[i].create_time
-      _versonId = version[i].id;
-      _version = version[i];
-    }
-  }
+  version.sort(function (a,b) {
+    return b.create_time = a.create_time
+  });
+  _versonId = version[0].id;
+  _version = version[0];
+  
 }
 
 function newPack(data) {
@@ -82,9 +81,9 @@ function newPack(data) {
     ]
   };
 
-  //not private give a private id
-  if(!data.is_public){
-    newPackItem.version.private_id = 'private' + time;
+//not private give a private id
+  if (!data.is_public) {
+    newPackItem.version[0].private_id = 'private' + time;
   }
 
   console.log(newPackItem);
@@ -111,55 +110,56 @@ function modifiedPackVersion(is_public, content, files) {
     note: _version.note,
     file: files.concat(_version.file),
     version: _version.version,
-    private_id: '',
+    private_id: _version.private_id,
     view_count: 0,
     user_view_count: 0
   };
 
   console.log('[publicInfo]oldVersion', _version.is_public, 'newVersion', is_public);
 
+//origin is private, new is private
 //remain one not public
-  if (!_version.is_public && !isPublic) {
+  if (!_version.is_public && !is_public) {
 // modify origin to second one
-    newVersion.id = _version.id;
+    var find = _version.private_id;
     newVersion.version++;
 
 //remove the other backup
     for (var index in _pack.version) {
-      if (index == viewPackVersion.index //do nothing
-      ) {} else if (_pack.version[index].id === _version.id) {
+      if (_pack.version[index].id == _version.id) {
+        continue;
+      }
+      if (_pack.version[index].private_id === find) {
         _pack.version.splice(index, 1);
         break;
 //should be only one
 //public version, remove all old version
       }
     }
-  } else if (!_version.is_public && isPublic) {
-// modify origin to second one
-    newVersion.id = _version.id;
+  } else if (!_version.is_public && is_public) {
     newVersion.version++;
 
-//remove the other backup
-    re = new RegExp(_version.id, 'i');
-    console.log('_version.id:' + _version.id);
-    var i = 0;
-    for (; i < _pack.version.length; i++) {
-      console.log('for:' + _pack.version[i].id);
-      if (_pack.version[i].id === _version.id) {
-        console.log('delete:' + _pack.version[i].id + ' ' + _pack.version[i].version);
+    for (var j in _pack.version) {
+      if (_pack.version[i].private_id === _version.private_id) {
         _pack.version.splice(i, 1);
 //because delete one i
         i--;
       }
     }
 //version is public the pack will be public
-    _pack.is_public = true;
+    _pack.is_public =
+// old is public and new private
+    true;
+  } else if (_version.is_public && !is_public) {
+//set new private id
+    newVersion.private_id = 'private' + time;
   }
+//version is public the pack will be public
+  _pack.is_public = true;
 
   _pack.version.push(newVersion);
   checkoutVersion(newVersion.id);
 }
-
 function replaceImgPath(content, packId) {
   var url = EasylearnConfig.SERVER_URL + 'easylearn/download?pack_id=' + packId + '&filename=';
   var find = 'FILE_STORAGE_PATH' + packId + '/';
@@ -173,15 +173,17 @@ function getVersionInfo() {
 
   let result = [];
 
+//sort by private id and version
   _pack.version.sort(function(a, b) {
-    return b.create_time - a.create_time;
+    return (b.private_id - a.private_id) + (b.version - a.version);
   });
 
-  console.log(_pack.version);
+  console.log('[getVersionInfo]', _pack.version);
 
   for (let item of _pack.version) {
+    console.log(result,result.length !== 0,item.is_public == false);
 //it's backup version
-    if (result.length !== 0 && result[result.length - 1].id == item.id && item.is_public == false) {
+    if (result.length !== 0 && result[result.length - 1].private_id == item.private_id && item.is_public == false) {
       continue;
     }
 
@@ -190,7 +192,23 @@ function getVersionInfo() {
       continue;
     }
 
-    var time = new Date(item.create_time);
+    let versionInfo = {
+      text: item.create_time,
+      id: item.id,
+      private_id: item.private_id
+    };
+
+    result.push(versionInfo);
+  }
+
+  //sort by private id and version
+  result.sort(function(a, b) {
+    return (b.text - a.text);
+  });
+
+  //replace create time to string
+  for (let item of result) {
+    var time = new Date(item.text);
     var timeString = time.toLocaleString("zh-TW", {
       hour: '2-digit',
       minute: 'numeric',
@@ -198,13 +216,8 @@ function getVersionInfo() {
       month: "numeric",
       year: 'numeric'
     });
-
-    let versionInfo = {
-      text: timeString + ' ' + item.creator_user_name,
-      id: item.id
-    };
-
-    result.push(versionInfo);
+    item.text = timeString;
+    delete item.private_id;
   }
   return result;
 }
@@ -228,8 +241,8 @@ function deletePack(idArray) {
   localStorage.setItem('packs', JSON.stringify(_packs));
   for (let id of idArray) {
     console.log(id);
-    for(let i in _packs){
-      if(_packs[i].id == id){
+    for (let i in _packs) {
+      if (_packs[i].id == id) {
         _packs.splice(i, 1);
       }
     }
