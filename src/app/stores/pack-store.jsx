@@ -163,7 +163,7 @@ function modifiedPackVersion(is_public, content, files) {
   console.log(_packs);
 }
 function replaceImgPath(content, packId) {
-  var url = EasylearnConfig.SERVER_URL + 'easylearn/download?pack_id=' + packId + '&filename=';
+  var url = EasylearnConfig.IMG_URL;
   var find = 'FILE_STORAGE_PATH' + packId + '/';
   var re = new RegExp(find, 'g');
 
@@ -193,6 +193,7 @@ function getVersionInfo() {
 
     let versionInfo = {
       text: item.create_time,
+      name: item.creator_user_name,
       id: item.id,
       private_id: item.private_id
     };
@@ -215,8 +216,9 @@ function getVersionInfo() {
       month: "numeric",
       year: 'numeric'
     });
-    item.text = timeString;
+    item.text = timeString + ' ' + item.name;
     delete item.private_id;
+    delete item.name;
   }
   return result;
 }
@@ -257,7 +259,7 @@ function getContentForModified() {
   for (let item of _pack.version) {
     if (item.id == _versionId || item.private_id == _version.private_id) {
       content.push({
-        content: replaceImgPath(item.content),
+        content: replaceImgPath(item.content, _packId),
         create_time: item.create_time
       });
     }
@@ -321,7 +323,7 @@ var PackStore = assign({}, EventEmitter.prototype, {
 //set img
           let img = 'img/light102.png';
           if (_packs[j].cover_filename !== "") {
-            img = EasylearnConfig.SERVER_URL + 'easylearn/download?filename=' + _packs[j].cover_filename + '&pack_id=' + _packs[j].id;
+            img = EasylearnConfig.IMG_URL +  _packs[j].cover_filename;
           }
 
           let item = {
@@ -338,7 +340,17 @@ var PackStore = assign({}, EventEmitter.prototype, {
     return list;
   },
 
-  getAllPack: function() {
+  getSyncAllPack: function() {
+    for(let pack of _packs){
+      for(let version of pack.version){
+        var target = 'FILE_STORAGE_PATH' + pack.id + '/';
+        var find = EasylearnConfig.IMG_URL;
+        var re = new RegExp(find, 'g');
+
+        version.content = version.content.replace(find, target);
+      }
+    }
+
     return _packs;
   },
 
@@ -347,7 +359,7 @@ var PackStore = assign({}, EventEmitter.prototype, {
   },
 
   getViewVersion: function() {
-    _version.content = replaceImgPath(_version.content, _packId);
+    _version.content = replaceImgPath(_version.content,_packId);
     return {
       version: _version,
       title: _pack.name,

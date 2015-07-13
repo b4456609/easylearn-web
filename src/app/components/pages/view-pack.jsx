@@ -2,6 +2,7 @@ var React = require('react');
 let Router = require('react-router');
 var PackStore = require('../../stores/pack-store');
 let EasyLearnActions = require('../../action/easylearn-actions.jsx');
+let VersionInfo = require('./components/version-info.jsx');
 
 let Tooltip = require('../../api/tooltip-api.js');
 
@@ -36,7 +37,7 @@ var ViewPack = React.createClass({
   },
 
   componentWillUpdate: function(nextProps, nextState) {
-    Tooltip.destroy();    
+    Tooltip.destroy();
   },
 
   componentDidUpdate: function(prevProps, prevState) {
@@ -204,27 +205,8 @@ var ViewPack = React.createClass({
     this.refs.message.setValue('');
   },
 
-  getVersion: function() {
-    let self = this;
-    let items = this.state.pack.versionInfo.map(function(item, i) {
-      return (
-        <ListItem key={i} onClick={self._onVersionTapTouch.bind(self, item.id)} primaryText={item.text}/>
-      );
-    });
-
-    let result = (
-      <List subheader="懶人包版本">
-        <ListItem onClick={this._onModifiedPackClick.bind(this, this.state.pack.version.id)} primaryText='修改此懶人包'/>
-        {items}
-      </List>
-    );
-
-    return result;
-  },
-
   render: function() {
     let styles = this.getStyles();
-    let version = this.getVersion();
     let note = this.getNote();
     return (
       <ClearFix>
@@ -232,9 +214,7 @@ var ViewPack = React.createClass({
 
           <div style={styles.rightBlock}>
             <ClearFix>
-              <Paper style={styles.versionPaper} zDepth={1}>
-                {version}
-              </Paper>
+              <VersionInfo versionInfo={this.state.pack.versionInfo} currentVersionId={this.state.pack.version.id}/>
             </ClearFix>
           </div>
 
@@ -251,16 +231,7 @@ var ViewPack = React.createClass({
         {note}
       </ClearFix>
     );
-  },
-
-  _onVersionTapTouch: function(id, e) {
-    EasyLearnActions.checkoutVersion(id);
-  },
-
-  _onModifiedPackClick: function() {
-    this.transitionTo('modified-pack');
   }
-
 });
 
 module.exports = ViewPack;

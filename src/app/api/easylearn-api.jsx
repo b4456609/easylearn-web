@@ -10,7 +10,7 @@ let Sync = {
       folder: FolderStore.getFolder()
     };
 
-    let packs = PackStore.getAllPack();
+    let packs = PackStore.getSyncAllPack();
     for (let j in packs) {
         sendData[packs[j].id] = packs[j];
     }
