@@ -1,11 +1,13 @@
 var React = require('react');
 let EditorApi = require('../../../api/editor-api.js');
+let ImgurApi = require('../../../api/imgur-api.js');
 let {
   Styles,
   TextField,
   ClearFix,
   FlatButton,
-  Dialog
+  Dialog,
+  CircularProgress
 } = require('material-ui');
 
 let {
@@ -17,7 +19,8 @@ var Editor = React.createClass({
 
   getInitialState: function() {
     return {
-      errorTitle: ''
+      errorTitle: '',
+      file: []
     };
   },
 
@@ -48,6 +51,10 @@ var Editor = React.createClass({
       },
       dialogHeader:{
         marginTop: 24
+      },
+      loadingText:{
+        margin: 'auto 0',
+        fontSize: 24
       }
     }
   },
@@ -78,7 +85,7 @@ var Editor = React.createClass({
     ];
 
     return (
-      <Dialog ref="slideshareDialog" actions={standardActions} title="插入圖片">
+      <Dialog ref="slideshareDialog" actions={standardActions} title="插入Slideshare">
         <TextField floatingLabelText="Slideshare網址" ref="slideshareInput" style={styles.textFullWidth}/>
         <h3 style={styles.dialogHeader}>進階選項</h3>
         <TextField floatingLabelText="開始頁面" ref="youtubeStartInput" style={styles.textHalfWidth}/>
@@ -93,11 +100,11 @@ var Editor = React.createClass({
 
     let standardActions = [
       { text: '取消' },
-      { text: '送出', onTouchTap: this._handleImgDialogSubmit }
+      { text: '送出', onTouchTap: this._handleYoutubeDialogSubmit }
     ];
 
     return (
-      <Dialog ref="youtubeDialog" actions={standardActions} title="插入圖片">
+      <Dialog ref="youtubeDialog" actions={standardActions} title="插入Youtube">
         <TextField floatingLabelText="Youtube網址" ref="youtubeInput" style={styles.textFullWidth}/>
         <h3 style={styles.dialogHeader}>進階選項</h3>
         <TextField floatingLabelText="開始時間" ref="youtubeStartInput" style={styles.textHalfWidth}/>
@@ -107,11 +114,26 @@ var Editor = React.createClass({
 
   },
 
+  _handleYoutubeDialogSubmit: function () {
+    
+  },
+
+  getLoadingDialog: function () {
+    let styles = this.getStyles();
+    return (
+      <Dialog ref="loadingDialog">
+        <CircularProgress mode="indeterminate" />
+        <span style={styles.loadingText}>請稍後</span>
+      </Dialog>
+    );
+  },
+
   render: function() {
     let styles = this.getStyles();
     let imgDialog = this.getImgDialog();
     let slideshareDialog = this.getSlideshareDialog();
     let YoutubeDialog = this.getYoutubeDialog();
+    let loadingDialog = this.getLoadingDialog();
     return (
       <ClearFix>
         <div style={styles.editor}>
@@ -123,6 +145,7 @@ var Editor = React.createClass({
         {imgDialog}
         {slideshareDialog}
         {YoutubeDialog}
+        {loadingDialog}
       </ClearFix>
     );
   },
@@ -145,9 +168,31 @@ var Editor = React.createClass({
   },
 
   _handleImgDialogSubmit: function() {
+    let self = this;
     let value = this.refs.imgInput.getValue().trim();
     if (value === '') {
       this.refs.imgInput.setErrorText('網址不能空白');
+    }
+    else{
+      this.refs.imgDialog.dismiss();
+      this.refs.loadingDialog.show();
+      let success = function (item) {
+        self.refs.loadingDialog.dismiss();
+        //get file name
+        let filename = item.link.substring(item.link.lastIndexOf('/')+1);
+        self.state.file.push(filename);
+
+        //img html code
+        let img = "<img id='" + item.id + " ' src='" + item.link + "' width='100%' >";
+        EditorApi.insertContent(img);
+      };
+
+      let fail = function () {
+        self.refs.loadingDialog.dismiss();
+
+      };
+
+      ImgurApi.uploadImgUseUrl(value, success, fail);
     }
   },
 

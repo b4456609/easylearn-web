@@ -73,6 +73,10 @@ let Editor = {
     this.init(function() {
       tinymce.activeEditor.setContent(content);
     })
+  },
+
+  insertContent: function (content) {
+    tinymce.activeEditor.insertContent(content);
   }
 
 };

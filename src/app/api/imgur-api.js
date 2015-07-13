@@ -43,15 +43,6 @@ function uploadImgUseBase64(data, successCallback, failCallback) {
 
 function uploadImgUseUrl(imgUrl, successCallback, failCallback) {
   console.log('[uploadImgUseUrl]start');
-  if (navigator.network.connection.type == Connection.NONE) {
-    navigator.notification.alert(
-      '需要網路才能使用此功能', // message
-      null, // callback
-      '錯誤', // title
-      '確定' // buttonName
-    );
-    return;
-  }
 
   $.ajax({
     url: 'https://api.imgur.com/3/image',
