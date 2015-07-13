@@ -41,6 +41,23 @@ let Sync = {
       console.log(error);
       fail();
     });
+  },
+
+  fileDataUpload:function (id, deletehash) {
+    $.ajax({
+      url: EasylearnConfig.SERVER_URL+'easylearn/file_data',
+      type: 'POST',
+      data: {
+        id: id,
+        deletehash: deletehash
+      },
+      success:function () {
+        console.log('[fileDataUpload]success');
+      },
+      error:function () {
+        console.log('[fileDataUpload]fail');
+      }
+    });
   }
 }
 

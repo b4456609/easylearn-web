@@ -1,11 +1,16 @@
 let React = require('react');
+let Router = require('react-router');
 let {
   Paper,
   ListItem,
   List
 } = require('material-ui');
 
+let Navigation = Router.Navigation;
+
 let VersionInfo = React.createClass({
+
+  mixins: [Navigation],
 
   _onVersionTapTouch: function(id, e) {
     EasyLearnActions.checkoutVersion(id);
