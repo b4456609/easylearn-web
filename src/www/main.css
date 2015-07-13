@@ -27,6 +27,12 @@ body {
   line-height: 1.5em;
 }
 
+#content img{
+    max-width:100% !important;
+    height:auto;
+    display:block;
+}
+
 .note-purple{
   background-color: #E1BEE7;
 }

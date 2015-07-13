@@ -1,6 +1,8 @@
 var React = require('react');
 let EditorApi = require('../../../api/editor-api.js');
 let ImgurApi = require('../../../api/imgur-api.js');
+let YoutubeApi = require('../../../api/youtube-api.js');
+let SlideShareApi = require('../../../api/slideshare-api.js');
 let {
   Styles,
   TextField,
@@ -14,39 +16,6 @@ let {
   Spacing,
   Colors
 } = Styles;
-
-function generateYoutubeEmbedCode(user_url, start, end) {
-
-//save embed parameter
-  var startPar = '',
-    endPar = '';
-
-// error input hanlder
-  if (start !== 0 && start > 0) {
-    startPar += '&start=' + start;
-  }
-  if (end !== 0 && end > 0 && end > start) {
-    endPar += '&end=' + end;
-  }
-//get input id
-  var videoId = youtube_parser(user_url);
-
-//set embed code
-  var embedCode = '<p><div id="' + videoId + '" class="youtube video-container">' + '<iframe width="560" height="315" src="http://www.youtube.com/embed/' + videoId + '?controls=1&disablekb=1&modestbranding=1&showinfo=0&rel=0' + startPar + endPar + '" frameborder="0" allowfullscreen></iframe>' + '</div></p>';
-
-  return embedCode;
-}
-
-//parse youtube url to id
-function youtube_parser(url) {
-  var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-  var match = url.match(regExp);
-  if (match && match[7].length == 11) {
-    return match[7];
-  } else {
-    alert("Url incorrecta");
-  }
-}
 
 var Editor = React.createClass({
 
@@ -87,7 +56,8 @@ var Editor = React.createClass({
       },
       loadingText: {
         margin: 'auto 0',
-        fontSize: 24
+        fontSize: 24,
+        fontWeight: 'bold'
       }
     }
   },
@@ -120,16 +90,16 @@ var Editor = React.createClass({
         text: '取消'
       }, {
         text: '送出',
-        onTouchTap: this._handleImgDialogSubmit
+        onTouchTap: this._handleSlideshareDialogSubmit
       }
     ];
 
     return (
       <Dialog actions={standardActions} ref="slideshareDialog" title="插入Slideshare">
-        <TextField floatingLabelText="Slideshare網址" ref="slideshareInput" style={styles.textFullWidth}/>
+        <TextField floatingLabelText="Slideshare網址" ref="slideshareInput" style={styles.textFullWidth} value="http://www.slideshare.net/Branded3/what-is-the-future-of-seo-50393085"/>
         <h3 style={styles.dialogHeader}>進階選項</h3>
-        <TextField floatingLabelText="開始頁面" ref="youtubeStartInput" style={styles.textHalfWidth}/>
-        <TextField floatingLabelText="結束頁面" ref="youtubeEndInput" style={styles.textHalfWidth}/>
+        <TextField floatingLabelText="開始頁數" ref="slideshareStartInput" style={styles.textHalfWidth} value="0"/>
+        <TextField floatingLabelText="結束頁數" ref="slideshareEndInput" style={styles.textHalfWidth} value="0"/>
       </Dialog>
     );
 
@@ -206,6 +176,40 @@ var Editor = React.createClass({
     this.refs.imgInput.setErrorText('');
   },
 
+  _handleSlideshareDialogSubmit: function() {
+    let self = this;
+    let url = this.refs.slideshareInput.getValue().trim();
+    let start = this.refs.slideshareStartInput.getValue().trim();
+    let end = this.refs.slideshareEndInput.getValue().trim();
+
+    if (url === '') {
+      this.refs.slideshareInput.setErrorText('網址不能空白');
+    } else {
+      this.refs.slideshareDialog.dismiss();
+      this.refs.loadingDialog.show();
+
+      let fail = function() {
+        self.refs.loadingDialog.dismiss();
+      };
+
+      let success = function(result) {
+        ImgurApi.uploadMultipleImg(result.img, function(items) {
+          console.log('[SlideshareDialogSubmit]',items);
+          let code = '';
+          for (var i in items) {
+            var img = "<img id='" + items[i].id + "' class='slideshare-img " + result.path + " ' src='" + items[i].link + "'  >";
+            code += img;
+          }
+          EditorApi.insertContent(code);
+          self.refs.loadingDialog.dismiss();
+        });
+      };
+
+      SlideShareApi.getSlideshareImg(url, start, end, success, fail);
+    }
+
+  },
+
   _handleYoutubeDialogSubmit: function() {
     let youtubeUrl = this.refs.youtubeInput.getValue().trim();
     let start = this.refs.youtubeStartInput.getValue().trim();
@@ -215,7 +219,7 @@ var Editor = React.createClass({
       this.refs.youtubeInput.setErrorText('網址不能空白');
     } else {
       this.refs.youtubeDialog.dismiss();
-      let code = generateYoutubeEmbedCode(youtubeUrl, start, end);
+      let code = YoutubeApi.generateYoutubeEmbedCode(youtubeUrl, start, end);
       EditorApi.insertContent(code);
     }
 
@@ -236,7 +240,7 @@ var Editor = React.createClass({
         self.state.file.push(filename);
 
 //img html code
-        let img = "<img id='" + item.id + " ' src='" + item.link + "' width='100%' >";
+        let img = "<img id='" + item.id + " ' src='" + item.link + "' >";
         EditorApi.insertContent(img);
       };
 

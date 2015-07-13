@@ -81,11 +81,31 @@ function uploadImgUseUrl(imgUrl, successCallback, failCallback) {
 }
 
 let ImgurApi = {
-  uploadImgUseUrl:function (imgUrl, successCallback, failCallback) {
+  uploadImgUseUrl: function(imgUrl, successCallback, failCallback) {
     uploadImgUseUrl(imgUrl, successCallback, failCallback);
   },
-  uploadImgUseBase64:function (data, successCallback, failCallback) {
+  uploadImgUseBase64: function(data, successCallback, failCallback) {
     uploadImgUseBase64(data, successCallback, failCallback);
+  },
+  uploadMultipleImg: function(imgUrlArray, callback) {
+    let promiseArray = [];
+    let result = [];
+
+    for (let item of imgUrlArray) {
+      let deffer = $.Deferred();
+      promiseArray.push(deffer);
+      uploadImgUseUrl(item, function(data) {
+        result.push(data);
+        deffer.resolve();
+      }, function() {
+        deffer.resolve();
+      });
+    }
+
+    $.when.apply($, promiseArray).done(function() {
+      console.log('[uploadMultipleImg]All done');
+      callback(result);
+    });
   }
 }
 

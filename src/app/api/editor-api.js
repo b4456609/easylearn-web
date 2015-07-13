@@ -76,6 +76,7 @@ let Editor = {
   },
 
   insertContent: function (content) {
+    console.log('[Editor]insertContet',content);
     tinymce.activeEditor.insertContent(content);
   }
 

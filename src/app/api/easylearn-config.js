@@ -1,5 +1,5 @@
 let Config = {
-  SERVER_URL: 'http://192.168.3.146:8080/',
+  SERVER_URL: 'http://192.168.0.103:8080/',
   IMG_URL: 'http://i.imgur.com/',
 }
 //const SERVER_URL = 'http://140.121.197.135:11116/';
