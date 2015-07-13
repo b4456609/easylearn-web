@@ -12,8 +12,6 @@ let {
   Styles,
   Paper,
   ClearFix,
-  ListItem,
-  List,
   Dialog,
   TextField,
   RaisedButton
@@ -74,10 +72,6 @@ var ViewPack = React.createClass({
       content: {
         paddingTop: '6px',
         fontSize: '16px'
-      },
-      versionPaper: {
-        float: 'right',
-        width: '100%'
       },
       rightBlock: {
         float: 'right',
