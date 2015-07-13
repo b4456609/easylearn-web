@@ -1,35 +1,35 @@
-function addImgButton(editor) {
+function addImgButton(editor, callback) {
   editor.addButton('img', {
     text: 'Img',
     icon: false,
     onclick: function() {
-      editor.insertContent('Main button');
+      callback();
     }
   });
 }
 
-function addSlideshareButton(editor) {
+function addSlideshareButton(editor, callback) {
   editor.addButton('slideshare', {
     text: 'Slideshare',
     icon: false,
     onclick: function() {
-      editor.insertContent('Main button');
+      callback();
     }
   });
 }
 
-function addYoutubeButton(editor) {
+function addYoutubeButton(editor, callback) {
   editor.addButton('youtube', {
     text: 'Youtube',
     icon: false,
     onclick: function() {
-      editor.insertContent('Main button');
+      callback();
     }
   });
 }
 
 let Editor = {
-  init: function(callback) {
+  init: function(imgcallback, slideshareCallback, youtubeCallback, callback) {
     console.log('[Editor]init');
     tinymce.init({
       selector: "#editor",
@@ -43,9 +43,9 @@ let Editor = {
         editor.on('init', function() {
           typeof callback === 'function' && callback();
         });
-        addYoutubeButton(editor);
-        addSlideshareButton(editor);
-        addImgButton(editor);
+        addYoutubeButton(editor,youtubeCallback);
+        addSlideshareButton(editor,slideshareCallback);
+        addImgButton(editor,imgcallback);
       }
     });
     console.log(tinymce.activeEditor);
@@ -61,6 +61,10 @@ let Editor = {
       console.log('[Editor]change event');
       callback();
     });
+  },
+
+  remove:function () {
+    tinymce.remove('#editor');
   },
 
   initAndSetContent: function(content) {

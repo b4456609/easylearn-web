@@ -10,7 +10,7 @@ let {
   Checkbox,
   RaisedButton
 } = require('material-ui');
-let Editor = require('../../api/editor-api.js');
+let Editor = require('./components/editor.jsx');
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
 
 let {
@@ -32,7 +32,6 @@ var newPack = React.createClass({
 
   getInitialState: function() {
     return {
-      errorTitle: '',
       title: '',
       description: '',
       tag: '',
@@ -61,31 +60,15 @@ var newPack = React.createClass({
       button: {
         marginTop: 30
       },
-      editor: {
-        marginTop: 30
-      },
       left: {
         float: 'left'
       },
       submitBtn:{
         float:'right'
-      },
-      errorContent:{
-        color: Colors.red500
       }
     };
 
     return styles;
-  },
-
-  componentWillUnmount: function() {
-    tinymce.remove('#editor');
-  },
-
-  componentDidMount: function() {
-    if (this.isMounted()) {
-      Editor.init();
-    }
   },
 
   render: function() {
@@ -129,26 +112,11 @@ var newPack = React.createClass({
                 primary={true}
                 style={styles.submitBtn}/>
             </ClearFix>
-
-            <ClearFix>
-              <div style={styles.editor}>
-                <div style={styles.errorContent}>
-                  {this.state.errorContent}
-                </div>
-                <textarea id="editor"/>
-              </div>
-            </ClearFix>
-
+            <Editor ref="editor"/>
           </div>
         </Paper>
       </ClearFix>
     );
-  },
-
-  _handleContentChange:function () {
-    this.setState({
-      errorContent: ''
-    });
   },
 
   _handlePublicChech:function (event) {
@@ -171,12 +139,16 @@ var newPack = React.createClass({
   },
 
   _onSubmit:function () {
-
-    Editor.onContentChange(this._handleContentChange);
-    //check title and content
-    let content = Editor.getContent();
+    let content = '';
     let title = this.state.title;
     let canSubmit = true;
+
+    if(this.refs.editor.isEmpty()){
+      canSubmit = false;
+    }
+    else{
+      content = this.refs.editor.getContent();
+    }
 
     if(title === ''){
       this.setState({
@@ -185,12 +157,6 @@ var newPack = React.createClass({
       canSubmit = false;
     }
 
-    if(content === ''){
-      this.setState({
-        errorContent: '內容不能為空白'
-      });
-      canSubmit = false;
-    }
 
     //if no error send submit pack action
     if(canSubmit == true){
