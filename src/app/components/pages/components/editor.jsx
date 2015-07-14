@@ -9,7 +9,8 @@ let {
   ClearFix,
   FlatButton,
   Dialog,
-  CircularProgress
+  CircularProgress,
+  LinearProgress
 } = require('material-ui');
 
 let {
@@ -17,12 +18,64 @@ let {
   Colors
 } = Styles;
 
+function getExtension(filename) {
+  var parts = filename.split('.');
+  return parts[parts.length - 1];
+}
+
+function isImage(filename) {
+  var ext = getExtension(filename);
+  switch (ext.toLowerCase()) {
+  case 'jpg':
+  case 'gif':
+  case 'bmp':
+  case 'png':
+//etc
+    return true;
+  }
+  return false;
+}
+
+function readURL(input) {
+  console.log(input.files[0]);
+  $('#blah').attr('src', '');
+  if (!input) {
+    $('#error-img').text("找不到 fileinput element");
+    return false;
+  } else if (!input.files) {
+    $('#error-img').text("此瀏覽器不支援此上傳方式");
+    return false;
+  } else if (!input.files[0]) {
+    $('#error-img').text("請選擇圖片");
+    return false;
+  } else if (!isImage(input.files[0].name)) {
+    $('#error-img').text("請選擇圖片");
+    return false;
+  } else if (input.files[0].size > 10000000){
+    $('#error-img').text("檔案大小不能超過10MB");
+    return false;
+  } else {
+    let file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('#blah').attr('src', reader.result);
+      return true;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+
+}
+
 var Editor = React.createClass({
 
   getInitialState: function() {
     return {
       errorTitle: '',
-      file: []
+      file: [],
+      previewImg: false,
+      progressValue: 0
     };
   },
 
@@ -58,6 +111,11 @@ var Editor = React.createClass({
         margin: 'auto 0',
         fontSize: 24,
         fontWeight: 'bold'
+      },
+      previewImg: {
+        width: '100px',
+        height: 'auto',
+        display: 'block'
       }
     }
   },
@@ -74,10 +132,19 @@ var Editor = React.createClass({
       }
     ];
 
+    let img = null;
+
+    if(this.state.previewImg !== ''){
+      img = (<img alt="your image" id="blah" src={this.state.previewImg} style={styles.previewImg}/>);
+    }
+
     return (
-      <Dialog actions={standardActions} ref="imgDialog" title="插入圖片">
+      <Dialog actions={standardActions} autoScrollBodyContent={true} ref="imgDialog" title="插入圖片">
         <TextField floatingLabelText="圖片網址" onChange={this._handleImgDialogtChange} ref="imgInput" style={styles.textFullWidth}/>
-      </Dialog>
+        <input id="imgInp" type='file'/>
+
+        {img}
+        <p id="error-img"/></Dialog>
     );
 
   },
@@ -133,7 +200,15 @@ var Editor = React.createClass({
     return (
       <Dialog ref="loadingDialog">
         <CircularProgress mode="indeterminate"/>
-        <span style={styles.loadingText}>請稍後</span>
+        <p style={styles.loadingText}>請稍後</p>
+      </Dialog>
+    );
+  },
+
+  getDeterminateLoadingDialog: function() {
+    return (
+      <Dialog ref="determinateLoadingDialog">
+        <LinearProgress mode="determinate" value={this.state.progressValue} />
       </Dialog>
     );
   },
@@ -144,6 +219,7 @@ var Editor = React.createClass({
     let slideshareDialog = this.getSlideshareDialog();
     let YoutubeDialog = this.getYoutubeDialog();
     let loadingDialog = this.getLoadingDialog();
+    let progressDialog = this.getDeterminateLoadingDialog();
     return (
       <ClearFix>
         <div style={styles.editor}>
@@ -152,14 +228,22 @@ var Editor = React.createClass({
           </div>
           <textarea id="editor"/>
         </div>
-        {imgDialog} {slideshareDialog} {YoutubeDialog} {loadingDialog}
+        {imgDialog} {slideshareDialog} {YoutubeDialog} {loadingDialog} {progressDialog}
       </ClearFix>
     );
   },
 
   _onClickImgButton: function() {
+    let self = this;
     this.refs.imgDialog.show();
     this.refs.imgInput.focus();
+
+    $("#imgInp").change(function() {
+      let result = readURL(this);
+      self.setState({
+        previewImg: result
+      });
+    });
   },
 
   _onClickYoutubeButton: function() {
@@ -194,10 +278,10 @@ var Editor = React.createClass({
 
       let success = function(result) {
         ImgurApi.uploadMultipleImg(result.img, function(items) {
-          console.log('[SlideshareDialogSubmit]',items);
+          console.log('[SlideshareDialogSubmit]', items);
           let code = '';
           for (var i in items) {
-            var img = "<img id='" + items[i].id + "' class='slideshare-img " + result.path + " ' src='" + items[i].link + "'  >";
+            var img = "<img id='" + items[i].id + "' class='slideshare-img " + result.path + " ' src='" + items[i].link + "' style='max-width:100% !important; height:auto; display:block;' >";
             code += img;
           }
           EditorApi.insertContent(code);
@@ -228,29 +312,44 @@ var Editor = React.createClass({
   _handleImgDialogSubmit: function() {
     let self = this;
     let value = this.refs.imgInput.getValue().trim();
-    if (value === '') {
+
+    let success = function(item) {
+      self.refs.loadingDialog.dismiss();
+      self.refs.determinateLoadingDialog.dismiss();
+      //get file name
+      let filename = item.link.substring(item.link.lastIndexOf('/') + 1);
+      self.state.file.push(filename);
+
+      //img html code
+      let img = "<img id='" + item.id + " ' src='" + item.link + "' style='max-width:100% !important; height:auto; display:block;' >";
+      EditorApi.insertContent(img);
+    };
+
+    let fail = function() {
+      self.refs.loadingDialog.dismiss();
+
+    };
+
+    if (value === '' && this.state.previewImg == false) {
       this.refs.imgInput.setErrorText('網址不能空白');
-    } else {
+    } else if(value !== ''){
       this.refs.imgDialog.dismiss();
       this.refs.loadingDialog.show();
-      let success = function(item) {
-        self.refs.loadingDialog.dismiss();
-//get file name
-        let filename = item.link.substring(item.link.lastIndexOf('/') + 1);
-        self.state.file.push(filename);
-
-//img html code
-        let img = "<img id='" + item.id + " ' src='" + item.link + "' >";
-        EditorApi.insertContent(img);
-      };
-
-      let fail = function() {
-        self.refs.loadingDialog.dismiss();
-
-      };
 
       ImgurApi.uploadImgUseUrl(value, success, fail);
     }
+    else{
+      this.refs.imgDialog.dismiss();
+      this.refs.determinateLoadingDialog.show();
+
+      let base64 = $('#blah').attr('src');
+      base64= base64.substring(base64.indexOf(',')+1);
+      ImgurApi.uploadImgUseBase64(base64, success, fail,this._handleProgressChange);
+    }
+  },
+
+  _handleProgressChange: function (value) {
+    this.setState({progressValue: value});
   },
 
   _handleContentChange: function() {
