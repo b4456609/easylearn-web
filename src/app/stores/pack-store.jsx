@@ -76,7 +76,7 @@ function newPack(data) {
         creator_user_name: UserStore.getUserName(),
         bookmark: [],
         note: [],
-        file: [],
+        file: data.file,
         version: 0,
         private_id: '',
         view_count: 0,

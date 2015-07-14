@@ -166,7 +166,8 @@ var newPack = React.createClass({
         tag: this.state.tag,
         is_public: this.state.is_public,
         cover_filename: this.state.cover_filename,
-        content: content
+        content: content,
+        file: this.refs.editor.getFile()
       });
       EasylearnActions.sync();
       this.transitionTo('folder-list');
