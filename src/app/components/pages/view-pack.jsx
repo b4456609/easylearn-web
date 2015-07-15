@@ -128,7 +128,7 @@ var ViewPack = React.createClass({
 
     document.onmouseup = function() {
       var coords = getSelectionCoords();
-      console.log(coords.x, coords.y);
+      console.log('document.onmouseup', coords.x, coords.y);
       self.setState({
         x: coords.x,
         y: coords.y
@@ -137,11 +137,14 @@ var ViewPack = React.createClass({
 
     $(document).not("#content").mouseup(function() {
       self.setState(getWindowSize());
+      console.log('$(document).not("#content")');
     });
     self.setState(getWindowSize());
   },
 
   componentWillUnmount: function() {
+    document.onmouseup = null;
+    $(document).not("#content").unbind('mouseup');
     PackStore.removeChangeListener(this._onChange);
   },
 

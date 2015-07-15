@@ -14,20 +14,31 @@ let _versionId = '';
 let _version = {};
 
 function setPacks(data) {
-  _packs = [];
+  let packs = [];
   var keys = Object.keys(data);
 
   for (let i in keys) {
     if (keys[i].indexOf('pack') != -1) {
-      _packs.push(data[keys[i]]);
+      packs.push(data[keys[i]]);
 
 //add pack's id
-      _packs[_packs.length - 1].id = keys[i];
+      packs[packs.length - 1].id = keys[i];
     }
   }
 
+  for(let pack of packs){
+    for(let version of pack.version){
+      version.content = replaceImgPath(version.content, pack.id);
+    }
+  }
+
+  _packs = packs;
+
   if(_packId != ''){
     setPackById();
+  }
+  if(_versionId != ''){
+    checkoutVersion(_versionId);
   }
 }
 
@@ -266,7 +277,7 @@ function getContentForModified() {
     if (item.id == _versionId || item.private_id == _version.private_id) {
       content.push({
         is_public: item.is_public,
-        content: replaceImgPath(item.content, _packId),
+        content: item.content,
         create_time: item.create_time
       });
     }
@@ -280,7 +291,6 @@ function getContentForModified() {
 
 var PackStore = assign({}, EventEmitter.prototype, {
   getVersionForModified: function() {
-    let content = replaceImgPath(_version.content, _packId);
     return {
       version: getContentForModified(),
       title: _pack.name
@@ -348,7 +358,10 @@ var PackStore = assign({}, EventEmitter.prototype, {
   },
 
   getSyncAllPack: function() {
-    for(let pack of _packs){
+    sessionStorage.setItem('pack', JSON.stringify(_packs));
+    var packs = JSON.parse(sessionStorage.getItem('pack'));
+
+    for(let pack of packs){
       for(let version of pack.version){
         var target = 'FILE_STORAGE_PATH' + pack.id + '/';
         var find = EasylearnConfig.IMG_URL;
@@ -358,7 +371,7 @@ var PackStore = assign({}, EventEmitter.prototype, {
       }
     }
 
-    return _packs;
+    return packs;
   },
 
   getPack: function() {
@@ -367,7 +380,6 @@ var PackStore = assign({}, EventEmitter.prototype, {
 
 
   getViewVersion: function() {
-    _version.content = replaceImgPath(_version.content,_packId);
     return {
       version: _version,
       title: _pack.name,
