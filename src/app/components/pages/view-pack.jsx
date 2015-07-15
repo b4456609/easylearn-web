@@ -9,10 +9,11 @@ let Tooltip = require('../../api/tooltip-api.js');
 let Navigation = Router.Navigation;
 
 let {
-  Styles,
   Paper,
-  ClearFix,
+  Styles,
   Dialog,
+  Snackbar,
+  ClearFix,
   TextField,
   RaisedButton,
   FloatingActionButton
@@ -26,13 +27,14 @@ function getViewPackState() {
 
 function getSelectionCoords(win) {
   win = win || window;
-  var content = document.getElementById('content');
-  var sel = content.selection,
+  var doc = win.document;
+  var sel = doc.selection,
     range,
     rects,
     rect;
   var x = 0,
     y = 0;
+
   if (sel) {
     if (sel.type != "Control") {
       range = sel.createRange();
@@ -43,6 +45,13 @@ function getSelectionCoords(win) {
   } else if (win.getSelection) {
     sel = win.getSelection();
     console.log(sel);
+
+    let textNode = sel.focusNode;
+    let content = document.getElementById('content');
+    if (!content.contains(textNode)) {
+      return getWindowSize();
+    }
+
     if (sel.isCollapsed == true) {
       return getWindowSize();
     } else if (sel.rangeCount) {
@@ -55,14 +64,12 @@ function getSelectionCoords(win) {
           rect = range.getClientRects()[0];
         }
         x = rect.right;
-        y = rect.top;
+        y = rect.top + window.pageYOffset;
       } else {
         return getWindowSize();
-
       }
     }
-  }
-  else{
+  } else {
     return getWindowSize();
   }
   return {
@@ -76,8 +83,8 @@ function getWindowSize() {
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
   return {
-    x: w -100,
-    y: h -50
+    x: w - 100,
+    y: h - 50
   }
 }
 
@@ -89,8 +96,10 @@ var ViewPack = React.createClass({
       noteText: '',
       note: {},
       pack: PackStore.getViewVersion(),
-      x: 0,
-      y: 0
+      x: 2000,
+      y: 2000,
+      selectionText: '',
+      notifyText: ''
     };
   },
 
@@ -107,7 +116,6 @@ var ViewPack = React.createClass({
     PackStore.addChangeListener(this._onChange);
     let self = this;
 
-
     document.onmouseup = function() {
       var coords = getSelectionCoords();
       console.log(coords.x, coords.y);
@@ -117,12 +125,10 @@ var ViewPack = React.createClass({
       });
     };
 
-    $(document).not("#content").mouseup(function () {
+    $(document).not("#content").mouseup(function() {
       self.setState(getWindowSize());
     });
-
     self.setState(getWindowSize());
-
   },
 
   componentWillUnmount: function() {
@@ -200,10 +206,10 @@ var ViewPack = React.createClass({
 
     let windowSize = getWindowSize();
 
-    if(this.state.y == windowSize.y && this.state.x == windowSize.x) {
+    if (this.state.y == windowSize.y && this.state.x == windowSize.x) {
       styles.floatBtn.position = 'fixed';
-      styles.floatBtn.top = this.state.y-50;
-      styles.floatBtn.left = this.state.x-50;
+      styles.floatBtn.top = this.state.y - 50;
+      styles.floatBtn.left = this.state.x - 50;
     }
 
     return styles;
@@ -277,6 +283,18 @@ var ViewPack = React.createClass({
     );
   },
 
+  getNewNoteDialog() {
+    let style = {
+      width: '100%'
+    };
+    return (
+      <Dialog ref="newNoteDialog" title="新增便利貼">
+        <h2>{this.state.selectionText}</h2>
+        <TextField floatingLabelText="便利貼內容" multiLine={true} style={style}/>
+      </Dialog>
+    );
+  },
+
   _onSubmitMessage: function() {
     this.refs.message.setErrorText('');
     let text = this.refs.message.getValue().trim();
@@ -289,35 +307,67 @@ var ViewPack = React.createClass({
     this.refs.message.setValue('');
   },
 
+  getNotifySnackBar: function() {
+    return (
+      <Snackbar autoHideDuration={5000} message={this.state.notifyText} ref="notify"/>
+    );
+  },
+
   render: function() {
     let styles = this.getStyles();
     let note = this.getNote();
+    let newNote = this.getNewNoteDialog();
+    let notifyBar = this.getNotifySnackBar();
     return (
-      <ClearFix>
-        <div style={styles.root}>
+      <div>
+        <ClearFix>
+          <div style={styles.root}>
 
-          <div style={styles.rightBlock}>
-            <ClearFix>
-              <VersionInfo currentVersionId={this.state.pack.version.id} versionInfo={this.state.pack.versionInfo}/>
-            </ClearFix>
-          </div>
-
-          <Paper style={styles.contentPaper} zDepth={1}>
-            <div style={styles.contentPadding}>
-              <h1 style={styles.title}>
-                {this.state.pack.title}
-              </h1>
-              <div dangerouslySetInnerHTML={{__html: this.state.pack.version.content}} id="content" style={styles.content}/>
+            <div style={styles.rightBlock}>
+              <ClearFix>
+                <VersionInfo currentVersionId={this.state.pack.version.id} versionInfo={this.state.pack.versionInfo}/>
+              </ClearFix>
             </div>
-          </Paper>
 
-        </div>
-        {note}
-        <FloatingActionButton secondary={true} style={styles.floatBtn}>
-          <InsetComment/>
-        </FloatingActionButton>
-      </ClearFix>
+            <Paper style={styles.contentPaper} zDepth={1}>
+              <div style={styles.contentPadding}>
+                <h1 style={styles.title}>
+                  {this.state.pack.title}
+                </h1>
+                <div dangerouslySetInnerHTML={{__html: this.state.pack.version.content}} id="content" style={styles.content}/>
+              </div>
+            </Paper>
+
+          </div>
+          <FloatingActionButton onClick={this._handleNewNoteButtonClick} secondary={true} style={styles.floatBtn}>
+            <InsetComment/>
+          </FloatingActionButton>
+          {note} {newNote} {notifyBar}
+        </ClearFix>
+      </div>
     );
+  },
+
+  _handleNewNoteButtonClick: function() {
+    let selection = window.getSelection();
+    let textNode = selection.focusNode;
+    let content = document.getElementById('content');
+    let text = selection.toString();
+
+    // select words and is in version content
+    if (text !== '' || !content.contains(textNode)) {
+      this.setState({
+        selectionText: selection.toString().trim()
+      })
+      this.refs.newNoteDialog.show();
+    }
+    else{
+      this.setState({
+        notifyText: '請選擇文章的文字'
+      });
+      this.refs.notify.show();
+      return;
+    }
   }
 });
 

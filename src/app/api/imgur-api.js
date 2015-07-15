@@ -25,7 +25,7 @@ function uploadImgUseUrl(imgUrl, successCallback, failCallback) {
           link: result.data.link,
           deletehash: result.data.deletehash
         };
-        EasylearnApi.fileDataUpload(item.id, item.deletehash)
+        EasylearnApi.fileDataUpload(item.id, item.deletehash);
 
         successCallback(item);
       } else {
