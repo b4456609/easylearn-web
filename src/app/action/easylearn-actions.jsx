@@ -150,6 +150,16 @@ var EasyLearnActions = {
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.REDO_DELETE_PACK
     });
+  },
+
+  newNote: function (note, versionContent) {
+    console.log('[Action]newNote',note, versionContent);
+
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.NEW_NOTE,
+      note: note,
+      versionContent: versionContent
+    });
   }
 };
 

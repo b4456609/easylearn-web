@@ -52,6 +52,12 @@ function setVersionToLatest() {
 
 }
 
+function newNote(newNote, versionContent){
+  _version.note.push(newNote);
+  _version.content = versionContent;
+  console.log('newNote',newNote,_version.note);
+}
+
 function newPack(data) {
   console.log('[PackStore]newPack');
   var time = new Date().getTime();
@@ -359,6 +365,7 @@ var PackStore = assign({}, EventEmitter.prototype, {
     return _pack;
   },
 
+
   getViewVersion: function() {
     _version.content = replaceImgPath(_version.content,_packId);
     return {
@@ -424,6 +431,11 @@ AppDispatcher.register(function(action) {
 
   case EasyLearnConstants.REDO_DELETE_PACK:
     redoDeletePack();
+    PackStore.emitChange();
+    break;
+
+  case EasyLearnConstants.NEW_NOTE:
+    newNote(action.note, action.versionContent);
     PackStore.emitChange();
     break;
 

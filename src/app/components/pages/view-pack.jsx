@@ -5,6 +5,7 @@ let EasyLearnActions = require('../../action/easylearn-actions.jsx');
 let VersionInfo = require('./components/version-info.jsx');
 let InsetComment = require('material-ui/lib/svg-icons/editor/insert-comment.js');
 let Tooltip = require('../../api/tooltip-api.js');
+let UserStore = require('../../stores/user-store.jsx');;
 
 let Navigation = Router.Navigation;
 
@@ -88,6 +89,14 @@ function getWindowSize() {
   }
 }
 
+function paintNote(range, noteId) {
+
+  var span = document.createElement("span");
+  span.className = "note note-indigo";
+  span.setAttribute('noteid', noteId);
+  range.surroundContents(span);
+}
+
 var ViewPack = React.createClass({
   mixins: [Navigation],
 
@@ -99,7 +108,8 @@ var ViewPack = React.createClass({
       x: 2000,
       y: 2000,
       selectionText: '',
-      notifyText: ''
+      notifyText: '',
+      range: null
     };
   },
 
@@ -287,12 +297,41 @@ var ViewPack = React.createClass({
     let style = {
       width: '100%'
     };
+    let buttonStyle = {
+      float:'right'
+    }
     return (
       <Dialog ref="newNoteDialog" title="新增便利貼">
         <h2>{this.state.selectionText}</h2>
-        <TextField floatingLabelText="便利貼內容" multiLine={true} style={style}/>
+        <RaisedButton label="完成" onClick={this._onSubmitNoteButton} secondary={true} style={buttonStyle}/>
+        <TextField floatingLabelText="便利貼內容" multiLine={true} ref="noteText" style={style}/>
       </Dialog>
     );
+  },
+
+  _onSubmitNoteButton() {
+    let content = this.refs.noteText.getValue().trim();
+    if (content !== '') {
+      Tooltip.destroy();
+      //get current time
+      var time = new Date();
+      var newNote = {
+        id: "note" + time.getTime(),
+        content: content,
+        create_time: time.getTime(),
+        comment: [],
+        user_id: UserStore.getUserId,
+        user_name: UserStore.getUserName
+      };
+      paintNote(this.state.range, newNote.id);
+      let newContent = $('#content').html();
+
+      EasyLearnActions.newNote(newNote, newContent);
+      this.refs.newNoteDialog.dismiss();
+      EasyLearnActions.sync();
+
+      Tooltip.init(this.state.pack.version.note, this._onClickNote);
+    }
   },
 
   _onSubmitMessage: function() {
@@ -354,14 +393,14 @@ var ViewPack = React.createClass({
     let content = document.getElementById('content');
     let text = selection.toString();
 
-    // select words and is in version content
+// select words and is in version content
     if (text !== '' || !content.contains(textNode)) {
       this.setState({
+        range: selection.getRangeAt(0).cloneRange(),
         selectionText: selection.toString().trim()
       })
       this.refs.newNoteDialog.show();
-    }
-    else{
+    } else {
       this.setState({
         notifyText: '請選擇文章的文字'
       });
