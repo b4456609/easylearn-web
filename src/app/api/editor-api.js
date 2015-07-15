@@ -43,12 +43,17 @@ let Editor = {
         editor.on('init', function() {
           typeof content === 'string' && tinymce.activeEditor.setContent(content);
         });
-        addYoutubeButton(editor,youtubeCallback);
-        addSlideshareButton(editor,slideshareCallback);
-        addImgButton(editor,imgcallback);
+        addYoutubeButton(editor, youtubeCallback);
+        addSlideshareButton(editor, slideshareCallback);
+        addImgButton(editor, imgcallback);
       }
     });
   },
+
+  setContent: function(content) {
+    tinymce.activeEditor.setContent(content);
+  },
+
   getContent: function() {
     let content = tinymce.activeEditor.getContent();
     console.log('[Editor]getContent', content);
@@ -62,20 +67,20 @@ let Editor = {
     });
   },
 
-  remove:function () {
+  remove: function() {
     tinymce.remove('#editor');
   },
 
   initAndSetContent: function(content) {
-    console.log('[Editor]initAndSetContent',content);
+    console.log('[Editor]initAndSetContent', content);
 
     this.init(function() {
       tinymce.activeEditor.setContent(content);
     })
   },
 
-  insertContent: function (content) {
-    console.log('[Editor]insertContet',content);
+  insertContent: function(content) {
+    console.log('[Editor]insertContet', content);
     tinymce.activeEditor.insertContent(content);
   }
 

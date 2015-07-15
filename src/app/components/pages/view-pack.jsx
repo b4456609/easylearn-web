@@ -14,13 +14,73 @@ let {
   ClearFix,
   Dialog,
   TextField,
-  RaisedButton
+  RaisedButton,
+  FloatingActionButton
 } = require('material-ui');
 
 function getViewPackState() {
   return {
     pack: PackStore.getViewVersion()
   };
+}
+
+function getSelectionCoords(win) {
+    win = win || window;
+    var doc = win.document;
+    var sel = doc.selection, range, rects, rect;
+    var x = 0, y = 0;
+    if (sel) {
+        if (sel.type != "Control") {
+            range = sel.createRange();
+            range.collapse(true);
+            x = range.boundingLeft;
+            y = range.boundingTop;
+        }
+    } else if (win.getSelection) {
+        sel = win.getSelection();
+        console.log(sel);
+        if(sel.isCollapsed ==  true){
+          x = 0;
+          y = 0;
+        }
+        else if (sel.rangeCount) {
+            range = sel.getRangeAt(0).cloneRange();
+            if (range.getClientRects) {
+
+                rects = range.getClientRects();
+                console.log(rects);
+                if (rects.length > 0) {
+                    rect = range.getClientRects()[0];
+                }
+                x = rect.right;
+                y = rect.top;
+            }
+            else{
+              x = 0;
+              y = 0;
+            }
+
+            // // Fall back to inserting a temporary element
+            // if (x == 0 && y == 0) {
+            //     var span = doc.createElement("span");
+            //     if (span.getClientRects) {
+            //         // Ensure span has dimensions and position by
+            //         // adding a zero-width space character
+            //         span.appendChild( doc.createTextNode("\u200b") );
+            //         range.insertNode(span);
+            //         rect = span.getClientRects()[0];
+            //         x = rect.left;
+            //         y = rect.top;
+            //         var spanParent = span.parentNode;
+            //         spanParent.removeChild(span);
+            //
+            //         // Glue any broken text nodes back together
+            //         spanParent.normalize();
+            //     }
+            // }
+        }
+    }
+    return { x: x, y: y };
 }
 
 var ViewPack = React.createClass({
@@ -30,7 +90,9 @@ var ViewPack = React.createClass({
     return {
       noteText: '',
       note: {},
-      pack: PackStore.getViewVersion()
+      pack: PackStore.getViewVersion(),
+      x: 0,
+      y: 0
     };
   },
 
@@ -45,6 +107,14 @@ var ViewPack = React.createClass({
   componentDidMount: function() {
     Tooltip.init(this.state.pack.version.note, this._onClickNote);
     PackStore.addChangeListener(this._onChange);
+    let self = this;
+
+
+    document.getElementById("content").onmouseup = function() {
+        var coords = getSelectionCoords();
+        console.log(coords.x, coords.y);
+        self.setState({x: coords.x, y:coords.y});
+    };
   },
 
   componentWillUnmount: function() {
@@ -112,6 +182,11 @@ var ViewPack = React.createClass({
       },
       submitBtn: {
         width: 100
+      },
+      floatBtn:{
+        position:'absolute',
+        top: this.state.y + 20,
+        left: this.state.x + 20
       }
     }
   },
@@ -223,6 +298,7 @@ var ViewPack = React.createClass({
 
         </div>
         {note}
+        <FloatingActionButton iconClassName="muidocs-icon-action-grade" mini={true} style={styles.floatBtn}/>
       </ClearFix>
     );
   }

@@ -82,6 +82,11 @@ var Editor = React.createClass({
     };
   },
 
+  componentDidUpdate: function(prevProps, prevState) {
+    console.log('[Editor]componentDidUpdate');
+    EditorApi.setContent(this.props.content);
+  },
+
   componentWillUnmount: function() {
     EditorApi.remove();
   },
@@ -91,6 +96,9 @@ var Editor = React.createClass({
       EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton, this.props.content);
     else
       EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton);
+  },
+
+  setText(){
   },
 
   getFile: function () {

@@ -34,7 +34,8 @@ var ModifiedPack = React.createClass({
     return {
       is_public: pack.version[0].is_public,
       modifyIndex: 0,
-      pack: PackStore.getVersionForModified()
+      pack: PackStore.getVersionForModified(),
+      backupBtnText: '切換至上次編輯內容'
     };
   },
 
@@ -52,7 +53,7 @@ var ModifiedPack = React.createClass({
 
   getStyles: function() {
     let styles = {
-      title:{
+      title: {
         marginTop: 8
       },
       block: {
@@ -62,7 +63,7 @@ var ModifiedPack = React.createClass({
       checkbox: {
         marginTop: 10,
         width: '300px',
-        float: 'left',
+        float: 'left'
       },
       editor: {
         marginTop: 30
@@ -75,6 +76,10 @@ var ModifiedPack = React.createClass({
       },
       tool: {
         marginTop: '24px'
+      },
+      backupBtn: {
+        float: 'right',
+        marginRight: 8
       }
     };
 
@@ -85,8 +90,20 @@ var ModifiedPack = React.createClass({
     tinymce.remove('#editor');
   },
 
+  getBackupButton: function() {
+    let styles = this.getStyles();
+    if (this.state.pack.version.length === 1) {
+      return null
+    } else {
+      return (
+        <RaisedButton label={this.state.backupBtnText} onTouchTap={this._toggleVersion} style={styles.backupBtn}/>
+      )
+    }
+  },
+
   render: function() {
     let styles = this.getStyles();
+    let backupButton = this.getBackupButton();
 
     return (
       <ClearFix>
@@ -97,14 +114,13 @@ var ModifiedPack = React.createClass({
             <div style={styles.tool}>
               <ClearFix>
                 <Checkbox label="公開懶人包" name="is-pulic" onCheck={this._handlePublicChech} style={styles.checkbox} value="is-pulic-value"/>
-
                 <RaisedButton label="完成" onTouchTap={this._onSubmit} primary={true} style={styles.submitBtn}/>
+                {backupButton}
               </ClearFix>
             </div>
 
-
             <ClearFix>
-              <Editor ref="editor" content={this.state.pack.version[this.state.modifyIndex].content}/>
+              <Editor content={this.state.pack.version[this.state.modifyIndex].content} ref="editor"/>
             </ClearFix>
 
           </div>
@@ -113,9 +129,21 @@ var ModifiedPack = React.createClass({
     );
   },
 
+  _toggleVersion: function() {
+    if (this.state.modifyIndex == 0) {
+      this.setState({
+        modifyIndex: 1,
+        backupBtnText: '切換至本次編輯內容'
+      });
+    } else {
+      this.setState({
+        modifyIndex: 0,
+        backupBtnText: '切換至上次編輯內容'
+      });
+    }
+  },
 
   _handlePublicChech: function(event) {
-    console.log(event.target.checked);
     this.setState({
       is_public: event.target.checked
     });
