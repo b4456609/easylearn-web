@@ -69,6 +69,9 @@ function readURL(input) {
 }
 
 var Editor = React.createClass({
+  propTypes: {
+    content: React.PropTypes.string,
+  },
 
   getInitialState: function() {
     return {
@@ -85,7 +88,7 @@ var Editor = React.createClass({
 
   componentDidMount: function() {
     if (this.props.content)
-      EditorApi.initAndSetContent(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton, this.props.content);
+      EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton, this.props.content);
     else
       EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton);
   },

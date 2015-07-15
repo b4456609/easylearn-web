@@ -259,6 +259,7 @@ function getContentForModified() {
   for (let item of _pack.version) {
     if (item.id == _versionId || item.private_id == _version.private_id) {
       content.push({
+        is_public: item.is_public,
         content: replaceImgPath(item.content, _packId),
         create_time: item.create_time
       });

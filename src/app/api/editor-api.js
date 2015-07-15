@@ -29,7 +29,7 @@ function addYoutubeButton(editor, callback) {
 }
 
 let Editor = {
-  init: function(imgcallback, slideshareCallback, youtubeCallback, callback) {
+  init: function(imgcallback, slideshareCallback, youtubeCallback, content) {
     console.log('[Editor]init');
     tinymce.init({
       selector: "#editor",
@@ -41,14 +41,13 @@ let Editor = {
       toolbar2: "preview fullscreen | forecolor backcolor emoticons charmap | youtube slideshare img",
       setup: function(editor) {
         editor.on('init', function() {
-          typeof callback === 'function' && callback();
+          typeof content === 'string' && tinymce.activeEditor.setContent(content);
         });
         addYoutubeButton(editor,youtubeCallback);
         addSlideshareButton(editor,slideshareCallback);
         addImgButton(editor,imgcallback);
       }
     });
-    console.log(tinymce.activeEditor);
   },
   getContent: function() {
     let content = tinymce.activeEditor.getContent();
@@ -68,7 +67,7 @@ let Editor = {
   },
 
   initAndSetContent: function(content) {
-    console.log('[Editor]setContent');
+    console.log('[Editor]initAndSetContent',content);
 
     this.init(function() {
       tinymce.activeEditor.setContent(content);

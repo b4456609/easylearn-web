@@ -8,9 +8,10 @@ let {
   RaisedButton,
   Checkbox
 } = require('material-ui');
-let Editor = require('../../api/editor-api.js');
+let EditorApi = require('../../api/editor-api.js');
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
 let PackStore = require('../../stores/pack-store.jsx');
+let Editor = require('./components/editor.jsx');
 
 let {
   Colors
@@ -29,9 +30,9 @@ var ModifiedPack = React.createClass({
   mixins: [Navigation],
 
   getInitialState: function() {
+    let pack = PackStore.getVersionForModified();
     return {
-      is_public: false,
-      errorContent: '',
+      is_public: pack.version[0].is_public,
       modifyIndex: 0,
       pack: PackStore.getVersionForModified()
     };
@@ -84,13 +85,6 @@ var ModifiedPack = React.createClass({
     tinymce.remove('#editor');
   },
 
-  componentDidMount: function() {
-    if (this.isMounted()) {
-      console.log('[ModifyPack]componentDidMount count',this.state.pack.version);
-      Editor.initAndSetContent(this.state.pack.version[this.state.modifyIndex].content);
-    }
-  },
-
   render: function() {
     let styles = this.getStyles();
 
@@ -105,17 +99,12 @@ var ModifiedPack = React.createClass({
                 <Checkbox label="公開懶人包" name="is-pulic" onCheck={this._handlePublicChech} style={styles.checkbox} value="is-pulic-value"/>
 
                 <RaisedButton label="完成" onTouchTap={this._onSubmit} primary={true} style={styles.submitBtn}/>
-                </ClearFix>
+              </ClearFix>
             </div>
 
 
             <ClearFix>
-              <div style={styles.editor}>
-                <div style={styles.errorContent}>
-                  {this.state.errorContent}
-                </div>
-                <textarea id="editor"/>
-              </div>
+              <Editor ref="editor" content={this.state.pack.version[this.state.modifyIndex].content}/>
             </ClearFix>
 
           </div>
@@ -124,11 +113,6 @@ var ModifiedPack = React.createClass({
     );
   },
 
-  _handleContentChange: function() {
-    this.setState({
-      errorContent: ''
-    });
-  },
 
   _handlePublicChech: function(event) {
     console.log(event.target.checked);
@@ -139,9 +123,8 @@ var ModifiedPack = React.createClass({
 
   _onSubmit: function() {
 
-    Editor.onContentChange(this._handleContentChange);
 //check title and content
-    let content = Editor.getContent();
+    let content = EditorApi.getContent();
     let canSubmit = true;
 
     if (content === '') {

@@ -124,7 +124,7 @@ var DeletePack = React.createClass({
 
     EasylearnActions.deletePack(selectedId);
 
-    this.setState({action: 'undo', message :'成功刪除' + this.state.selected.length + '個懶人包'});
+    this.setState({snackAction: 'undo', message :'成功刪除' + this.state.selected.length + '個懶人包'});
     this.refs.snackbar.show();
   },
 

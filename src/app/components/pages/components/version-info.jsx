@@ -5,6 +5,7 @@ let {
   ListItem,
   List
 } = require('material-ui');
+let EasyLearnActions = require('../../../action/easylearn-actions.jsx');
 
 let Navigation = Router.Navigation;
 
