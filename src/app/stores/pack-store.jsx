@@ -26,18 +26,18 @@ function setPacks(data) {
     }
   }
 
-  for(let pack of packs){
-    for(let version of pack.version){
+  for (let pack of packs) {
+    for (let version of pack.version) {
       version.content = replaceImgPath(version.content, pack.id);
     }
   }
 
   _packs = packs;
 
-  if(_packId != ''){
+  if (_packId != '') {
     setPackById();
   }
-  if(_versionId != ''){
+  if (_versionId != '') {
     checkoutVersion(_versionId);
   }
 }
@@ -63,10 +63,10 @@ function setVersionToLatest() {
 
 }
 
-function newNote(newNote, versionContent){
+function newNote(newNote, versionContent) {
   _version.note.push(newNote);
   _version.content = versionContent;
-  console.log('newNote',newNote,_version.note);
+  console.log('newNote', newNote, _version.note);
 }
 
 function newPack(data) {
@@ -186,6 +186,22 @@ function replaceImgPath(content, packId) {
 
   content = content.replace(re, url);
   return content;
+}
+
+function newComment(content, noteId) {
+  var time = new Date();
+  for (let item of _version.note) {
+    if (item.id == noteId) {
+      let newComment = {
+        id: 'comment' + time.getTime(),
+        content: content,
+        create_time: time.getTime(),
+        user_id: UserStore.getUserId(),
+        user_name: UserStore.getUserName()
+      };
+      item.comment.push(newComment);
+    }
+  }
 }
 
 function getVersionInfo() {
@@ -340,7 +356,7 @@ var PackStore = assign({}, EventEmitter.prototype, {
 //set img
           let img = 'img/light102.png';
           if (_packs[j].cover_filename !== "") {
-            img = EasylearnConfig.IMG_URL +  _packs[j].cover_filename;
+            img = EasylearnConfig.IMG_URL + _packs[j].cover_filename;
           }
 
           let item = {
@@ -361,8 +377,8 @@ var PackStore = assign({}, EventEmitter.prototype, {
     sessionStorage.setItem('pack', JSON.stringify(_packs));
     var packs = JSON.parse(sessionStorage.getItem('pack'));
 
-    for(let pack of packs){
-      for(let version of pack.version){
+    for (let pack of packs) {
+      for (let version of pack.version) {
         var target = 'FILE_STORAGE_PATH' + pack.id + '/';
         var find = EasylearnConfig.IMG_URL;
         var re = new RegExp(find, 'g');
@@ -377,7 +393,6 @@ var PackStore = assign({}, EventEmitter.prototype, {
   getPack: function() {
     return _pack;
   },
-
 
   getViewVersion: function() {
     return {
@@ -448,6 +463,11 @@ AppDispatcher.register(function(action) {
 
   case EasyLearnConstants.NEW_NOTE:
     newNote(action.note, action.versionContent);
+    PackStore.emitChange();
+    break;
+
+  case EasyLearnConstants.NEW_COMMENT:
+    newComment(action.content, action.noteId);
     PackStore.emitChange();
     break;
 

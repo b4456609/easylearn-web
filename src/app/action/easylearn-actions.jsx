@@ -160,6 +160,16 @@ var EasyLearnActions = {
       note: note,
       versionContent: versionContent
     });
+  },
+
+  newComment: function (content, noteId) {
+    console.log('[Action]newComment',content, noteId);
+
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.NEW_COMMENT,
+      content: content,
+      noteId: noteId
+    });
   }
 };
 

@@ -41,7 +41,7 @@ let Editor = {
       toolbar2: "preview fullscreen | forecolor backcolor emoticons charmap | youtube slideshare img",
       setup: function(editor) {
         editor.on('init', function() {
-          typeof content === 'string' && tinymce.activeEditor.setContent(content);
+          if(content !== undefined) tinymce.activeEditor.setContent(content);
         });
         addYoutubeButton(editor, youtubeCallback);
         addSlideshareButton(editor, slideshareCallback);
