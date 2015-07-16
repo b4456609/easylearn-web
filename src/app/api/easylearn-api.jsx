@@ -3,7 +3,7 @@ let UserStore = require('../stores/user-store.jsx');
 let PackStore = require('../stores/pack-store.jsx');
 let EasylearnConfig = require('../api/easylearn-config.js');
 
-let Sync = {
+let EasylearnApi = {
   sync: function(success, fail) {
     var sendData = {
       user: UserStore.getUser(),
@@ -12,16 +12,16 @@ let Sync = {
 
     let packs = PackStore.getSyncAllPack();
     for (let j in packs) {
-        sendData[packs[j].id] = packs[j];
+      sendData[packs[j].id] = packs[j];
     }
 
-    console.log('[sync]Start',sendData);
+    console.log('[sync]Start', sendData);
 
     var syncAjax = $.ajax({
       method: "POST",
       url: EasylearnConfig.SERVER_URL + 'easylearn/sync',
       contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-      crossDomain :true,
+      crossDomain: true,
       data: {
         sync_data: JSON.stringify(sendData)
       }
@@ -29,7 +29,7 @@ let Sync = {
 
 //success
     syncAjax.done(function(data) {
-      console.log('[sync] success',data);
+      console.log('[sync] success', data);
       success(data);
     });
 
@@ -43,22 +43,42 @@ let Sync = {
     });
   },
 
-  fileDataUpload:function (id, deletehash) {
+  fileDataUpload: function(id, deletehash) {
     $.ajax({
-      url: EasylearnConfig.SERVER_URL+'easylearn/file_data',
+      url: EasylearnConfig.SERVER_URL + 'easylearn/file_data',
       type: 'POST',
       data: {
         id: id,
         deletehash: deletehash
       },
-      success:function () {
+      success: function() {
         console.log('[fileDataUpload]success');
       },
-      error:function () {
+      error: function() {
         console.log('[fileDataUpload]fail');
+      }
+    });
+  },
+
+  postComment: function(noteId, newComment) {
+    var jsonObj = JSON.stringify(newComment);
+    $.ajax({
+      type: "POST",
+      url: EasylearnConfig.SERVER_URL + 'easylearn/comment',
+      data: {
+        noteId: noteId,
+        newComment: jsonObj
+      },
+      success: function() {
+        console.log('success post new comment');
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log('error');
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
       }
     });
   }
 }
-
-module.exports = Sync;
+module.exports = EasylearnApi;

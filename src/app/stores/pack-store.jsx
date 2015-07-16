@@ -188,17 +188,10 @@ function replaceImgPath(content, packId) {
   return content;
 }
 
-function newComment(content, noteId) {
+function newComment(newComment, noteId) {
   var time = new Date();
   for (let item of _version.note) {
     if (item.id == noteId) {
-      let newComment = {
-        id: 'comment' + time.getTime(),
-        content: content,
-        create_time: time.getTime(),
-        user_id: UserStore.getUserId(),
-        user_name: UserStore.getUserName()
-      };
       item.comment.push(newComment);
     }
   }
@@ -467,7 +460,7 @@ AppDispatcher.register(function(action) {
     break;
 
   case EasyLearnConstants.NEW_COMMENT:
-    newComment(action.content, action.noteId);
+    newComment(action.newComment, action.noteId);
     PackStore.emitChange();
     break;
 

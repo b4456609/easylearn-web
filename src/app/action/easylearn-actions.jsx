@@ -1,12 +1,12 @@
 var AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
 var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
-var EasyLearnApi = require('../api/easylearn-api.jsx');
+var EasylearnApi = require('../api/easylearn-api.jsx');
 var FBApi = require('../api/facebook-api.js');
+var UserStore = require('../stores/user-store.jsx');
 
 var EasyLearnActions = {
 
-
-  appInit: function () {
+  appInit: function() {
     console.log('[Action]appInit');
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.APP_INIT
@@ -21,7 +21,7 @@ var EasyLearnActions = {
     });
   },
 
-  folderView: function (folderId) {
+  folderView: function(folderId) {
     console.log('[Action]folderView folderId:' + folderId);
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.FOLDER_VIEW,
@@ -44,15 +44,15 @@ var EasyLearnActions = {
       });
     };
 
-    EasyLearnApi.sync(success, fail);
+    EasylearnApi.sync(success, fail);
   },
 
-  fbInit: function(){
+  fbInit: function() {
     console.log('[Action]fbInit');
-    let callback = function(response){
+    let callback = function(response) {
       if (response.status === 'connected') {
-        // Logged into your app and Facebook.
-        //this.testAPI();
+// Logged into your app and Facebook.
+//this.testAPI();
         console.log('[fbInit]connected');
         FBApi.me(function(response) {
           console.log('Successful login for: ' + response.name);
@@ -64,22 +64,22 @@ var EasyLearnActions = {
           EasyLearnActions.sync();
         });
       } else if (response.status === 'not_authorized') {
-        // The person is logged into Facebook, but not your app.
+// The person is logged into Facebook, but not your app.
         console.log('[fbInit]Please log into this app.');
       } else {
-        // The person is not logged into Facebook, so we're not sure if
-        // they are logged into this app or not.
+// The person is not logged into Facebook, so we're not sure if
+// they are logged into this app or not.
         console.log('[fbInit]Please log into Facebook.');
       }
     };
     FBApi.initial(callback);
   },
 
-  fbLogin: function(){
-    let callback = function(response){
+  fbLogin: function() {
+    let callback = function(response) {
       if (response.status === 'connected') {
-        // Logged into your app and Facebook.
-        //this.testAPI();
+// Logged into your app and Facebook.
+//this.testAPI();
         console.log('[fbInit]connected');
         FBApi.me(function(response) {
           console.log('Successful login for: ' + response.name);
@@ -91,11 +91,11 @@ var EasyLearnActions = {
           EasyLearnActions.sync();
         });
       } else if (response.status === 'not_authorized') {
-        // The person is logged into Facebook, but not your app.
+// The person is logged into Facebook, but not your app.
         console.log('[fbInit]Please log into this app.');
       } else {
-        // The person is not logged into Facebook, so we're not sure if
-        // they are logged into this app or not.
+// The person is not logged into Facebook, so we're not sure if
+// they are logged into this app or not.
         console.log('[fbInit]Please log into Facebook.');
       }
     };
@@ -103,8 +103,8 @@ var EasyLearnActions = {
     FBApi.login(callback);
   },
 
-  newPack: function (data) {
-    // set packid
+  newPack: function(data) {
+// set packid
     var time = new Date().getTime();
     data['id'] = 'pack' + time;
 
@@ -116,7 +116,7 @@ var EasyLearnActions = {
     });
   },
 
-  modifiedPack: function (data) {
+  modifiedPack: function(data) {
     console.log('[Action]modifiedPack', data);
 
     AppDispatcher.dispatch({
@@ -127,7 +127,7 @@ var EasyLearnActions = {
     });
   },
 
-  deletePack: function (idArray) {
+  deletePack: function(idArray) {
     console.log('[Action]deletePack', idArray);
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.DELETE_PACK,
@@ -135,7 +135,7 @@ var EasyLearnActions = {
     });
   },
 
-  checkoutVersion:function (versionId) {
+  checkoutVersion: function(versionId) {
     console.log('[Action]checkoutVersion versionId', versionId);
 
     AppDispatcher.dispatch({
@@ -144,7 +144,7 @@ var EasyLearnActions = {
     });
   },
 
-  redoDeletePack:function () {
+  redoDeletePack: function() {
     console.log('[Action]redoDeletePack');
 
     AppDispatcher.dispatch({
@@ -152,8 +152,8 @@ var EasyLearnActions = {
     });
   },
 
-  newNote: function (note, versionContent) {
-    console.log('[Action]newNote',note, versionContent);
+  newNote: function(note, versionContent) {
+    console.log('[Action]newNote', note, versionContent);
 
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.NEW_NOTE,
@@ -162,14 +162,24 @@ var EasyLearnActions = {
     });
   },
 
-  newComment: function (content, noteId) {
-    console.log('[Action]newComment',content, noteId);
+  newComment: function(content, noteId) {
+    console.log('[Action]newComment', content, noteId);
+//create new comment
+    var time = new Date();
+    let newComment = {
+      id: 'comment' + time.getTime(),
+      content: content,
+      create_time: time.getTime(),
+      user_id: UserStore.getUserId(),
+      user_name: UserStore.getUserName()
+    };
 
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.NEW_COMMENT,
-      content: content,
+      newComment: newComment,
       noteId: noteId
     });
+    EasylearnApi.postComment(noteId, newComment);
   }
 };
 
