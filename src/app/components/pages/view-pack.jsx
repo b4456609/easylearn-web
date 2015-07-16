@@ -17,7 +17,9 @@ let {
   Snackbar,
   ClearFix,
   TextField,
+  RadioButton,
   RaisedButton,
+  RadioButtonGroup,
   FloatingActionButton
 } = require('material-ui');
 
@@ -207,13 +209,41 @@ var ViewPack = React.createClass({
       width: '100%'
     };
     let buttonStyle = {
-      float:'right'
+      float: 'right'
+    }
+    let marginBottomStyle = {
+      marginBottom: 16
+    }
+    let colors = {
+      orange: {
+        backgroundColor: '#FFE0B2',
+        borderRadius: '5px'
+      },
+      teal: {
+        backgroundColor: '#B2DFDB',
+        borderRadius: '5px'
+      },
+      indigo: {
+        backgroundColor: '#C5CAE9',
+        borderRadius: '5px'
+      },
+      purple: {
+        backgroundColor: '#E1BEE7',
+        borderRadius: '5px'
+      }
     }
     return (
       <Dialog ref="newNoteDialog" title="新增便利貼">
         <h2>{this.state.selectionText}</h2>
         <RaisedButton label="完成" onClick={this._onSubmitNoteButton} secondary={true} style={buttonStyle}/>
         <TextField floatingLabelText="便利貼內容" multiLine={true} ref="noteText" style={style}/>
+        <h3 style={marginBottomStyle}>便利貼顏色</h3>
+        <RadioButtonGroup defaultSelected="orange" name="color">
+          <RadioButton label="Orange" style={marginBottomStyle} labelStyle={colors.orange} value="orange"/>
+          <RadioButton label="Teal" style={marginBottomStyle} labelStyle={colors.teal} value="teal"/>
+          <RadioButton label="Indigo" style={marginBottomStyle} labelStyle={colors.indigo} value="indigo"/>
+          <RadioButton label="Purple" style={marginBottomStyle} labelStyle={colors.purple} value="purple"/>
+        </RadioButtonGroup>
       </Dialog>
     );
   },
@@ -222,7 +252,7 @@ var ViewPack = React.createClass({
     let content = this.refs.noteText.getValue().trim();
     if (content !== '') {
       Tooltip.destroy();
-      //get current time
+//get current time
       var time = new Date();
       var newNote = {
         id: "note" + time.getTime(),
@@ -277,8 +307,8 @@ var ViewPack = React.createClass({
           <FloatingActionButton onClick={this._handleNewNoteButtonClick} secondary={true} style={styles.floatBtn}>
             <InsetComment/>
           </FloatingActionButton>
-          <NoteDialog ref="noteDialog" noteText={this.state.noteText}
-          note={this.state.note} /> {newNote} {notifyBar}
+          <NoteDialog note={this.state.note} noteText={this.state.noteText} ref="noteDialog"/>
+          {newNote} {notifyBar}
         </ClearFix>
       </div>
     );

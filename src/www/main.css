@@ -1,49 +1,47 @@
-
 a {
   color: #ff4081; //pinkA200
   text-decoration: none;
 }
-
 a:hover {
   text-decoration: underline;
 }
-
 html {
   font-family: 'Roboto', sans-serif;
 }
-
 body, h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
-
 body {
   font-size: 13px;
   line-height: 20px;
 }
 
 /* Used in our inline-styles.jsx as an example */
+
 #content h1 {
   font-family: 'Roboto', sans-serif;
   line-height: 1.5em;
 }
-
-#content img{
-    max-width:100% !important;
-    height:auto;
-    display:block;
+#content img {
+  max-width: 100% !important;
+  height: auto;
+  display: block;
 }
-
-.note-purple{
+.note-purple {
   background-color: #E1BEE7;
+  border-radius: 5px;
 }
-.note-indigo{
+.note-indigo {
   background-color: #C5CAE9;
+  border-radius: 5px;
 }
-.note-teal{
+.note-teal {
   background-color: #B2DFDB;
+  border-radius: 5px;
 }
-.note-orange{
+.note-orange {
   background-color: #FFE0B2;
+  border-radius: 5px;
 }
 
 /*for youtube video responsive size*/
