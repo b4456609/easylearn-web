@@ -13,5 +13,6 @@ module.exports = keyMirror({
   DELETE_PACK: null,
   REDO_DELETE_PACK: null,
   NEW_NOTE: null,
-  NEW_COMMENT: null
+  NEW_COMMENT: null,
+  GET_COMMENT: null
 });

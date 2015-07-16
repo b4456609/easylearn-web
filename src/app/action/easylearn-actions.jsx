@@ -180,6 +180,20 @@ var EasyLearnActions = {
       noteId: noteId
     });
     EasylearnApi.postComment(noteId, newComment);
+  },
+
+  getComment: function (noteId) {
+    console.log('[Action]getComment', noteId);
+
+    let success = function (data) {
+      AppDispatcher.dispatch({
+        actionType: EasyLearnConstants.GET_COMMENT,
+        notes: data,
+        noteId: noteId
+      });
+    }
+
+    EasylearnApi.getComment(noteId,success);
   }
 };
 

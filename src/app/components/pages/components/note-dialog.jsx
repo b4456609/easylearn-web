@@ -119,10 +119,11 @@ var NoteDialog = React.createClass({
   },
 
   _handleScrollableDialogCancel(){
-    this.refs.noteDialog.dismiss();    
+    this.refs.noteDialog.dismiss();
   },
 
   show(){
+    EasylearnActions.getComment(this.props.note.id);
     this.refs.noteDialog.show();
   },
 

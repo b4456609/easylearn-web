@@ -197,6 +197,15 @@ function newComment(newComment, noteId) {
   }
 }
 
+function setComment(comments, noteId) {
+  var time = new Date();
+  for (let item of _version.note) {
+    if (item.id == noteId) {
+      item.comment = comments;
+    }
+  }
+}
+
 function getVersionInfo() {
 
   let result = [];
@@ -461,6 +470,11 @@ AppDispatcher.register(function(action) {
 
   case EasyLearnConstants.NEW_COMMENT:
     newComment(action.newComment, action.noteId);
+    PackStore.emitChange();
+    break;
+
+  case EasyLearnConstants.GET_COMMENT:
+    setComment(action.notes, action.noteId);
     PackStore.emitChange();
     break;
 
