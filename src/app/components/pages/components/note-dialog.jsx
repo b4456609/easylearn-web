@@ -118,9 +118,12 @@ var NoteDialog = React.createClass({
     );
   },
 
+  _handleScrollableDialogCancel(){
+    this.refs.noteDialog.dismiss();    
+  },
+
   show(){
     this.refs.noteDialog.show();
-
   },
 
   _onSubmitMessage: function() {
