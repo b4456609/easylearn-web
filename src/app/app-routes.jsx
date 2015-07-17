@@ -12,8 +12,7 @@ let ViewPack = require('./components/pages/view-pack');
 let DeletePack = require('./components/pages/delete-pack');
 let ModifiedPack = require('./components/pages/modified-pack');
 let FolderList = require('./components/pages/folder-list');
-
-
+let FolderManerger = require('./components/pages/folder-manerger.jsx');
 
 /** Routes: https://github.com/rackt/react-router/blob/master/docs/api/components/Route.md
   *
@@ -25,13 +24,14 @@ let FolderList = require('./components/pages/folder-list');
   */
 
 let AppRoutes = (
-  <Route name="root" path="/" handler={Master}>
-    <Route name="home" handler={Home} />
-    <Route name="new-pack" handler={NewPack} />
-    <Route name="view-pack" handler={ViewPack} />
-    <Route name="delete-pack" handler={DeletePack} />
-    <Route name="modified-pack" handler={ModifiedPack} />
-    <Route name="folder-list" handler={FolderList} />
+  <Route handler={Master} name="root" path="/">
+    <Route handler={Home} name="home"/>
+    <Route handler={NewPack} name="new-pack"/>
+    <Route handler={ViewPack} name="view-pack"/>
+    <Route handler={DeletePack} name="delete-pack"/>
+    <Route handler={ModifiedPack} name="modified-pack"/>
+    <Route handler={FolderList} name="folder-list"/>
+    <Route handler={FolderManerger} name="folder-manerger"/>
     <DefaultRoute handler={Home}/>
   </Route>
 );

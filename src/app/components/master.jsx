@@ -126,6 +126,9 @@ var Master = React.createClass({
       }, {
         route: 'delete-pack',
         text: '刪除懶人包'
+      }, {
+        route: 'folder-manerger',
+        text: '管理資料夾'
       }
     ];
 
