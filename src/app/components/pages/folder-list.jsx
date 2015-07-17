@@ -3,6 +3,7 @@ let Router = require('react-router');
 let RouteHandler = Router.RouteHandler;
 let EasyLearnActions = require('../../action/easylearn-actions.jsx');
 let PackInfo = require('./components/pack-info.jsx');
+let PackItem = require('./components/pack-item.jsx');
 let {
   Styles,
   Paper,
@@ -51,38 +52,6 @@ let FolderList = React.createClass({
 
   getStyles: function() {
     return {
-      paper: {
-        marginBottom: 16,
-        WebkitTouchCallout: 'none',
-        WebkitUserSelect: 'none',
-        KhtmlUserSelect: 'none',
-        MozUserSelect: 'none',
-        MsUserSelect: 'none',
-        userSelect: 'none',
-      },
-      paperPadding: {
-        padding: '16px'
-      },
-      left: {
-        float: 'left',
-        marginRight: 16,
-        width: 150
-      },
-      right: {
-        marginLeft: 158
-      },
-      title: {
-        lineHeight: '1.25em',
-        paddingTop: '6px',
-      },
-      des: {
-        paddingTop: '16px',
-        margin: 0,
-      },
-      img: {
-        maxWidth: '100px',
-        maxHeight: '100px'
-      },
       content: {
         marginRight: '324px',
         marginBottom: '16px'
@@ -99,25 +68,10 @@ let FolderList = React.createClass({
 
   getPackPaperNode(){
     let self = this;
-    let styles = this.getStyles();
 
     return this.state.packArray.map(function(pack, i) {
       return (
-        <Paper onDoubleClick={self._onClick.bind(self, pack.id)} style={styles.paper} zDepth={1} onClick={self._onPackMouseEnter.bind(self, i)} onMouseLeave  ={self._onPackMouseLeave}>
-          <div style={styles.paperPadding}>
-            <ClearFix>
-              <div style={styles.left}>
-                <img src={pack.img} style={styles.img}/></div>
-                <div style={styles.right}>
-                  <h1 style={styles.title}>
-                    {pack.name}
-                  </h1>
-                  <p style={styles.des}>
-                    {pack.description}</p>
-                </div>
-              </ClearFix>
-            </div>
-          </Paper>
+        <PackItem key={i} pack={pack} onClick={self._onPackClick.bind(self, pack.id)} onMouseEnter={self._onPackMouseEnter.bind(self, i)}/>
       );
     });
   },
@@ -145,7 +99,7 @@ let FolderList = React.createClass({
     );
   },
 
-  _onClick: function(packId) {
+  _onPackClick: function(packId) {
     EasyLearnActions.packView(packId);
     this.context.router.transitionTo('view-pack');
   }
