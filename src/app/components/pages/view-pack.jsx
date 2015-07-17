@@ -92,10 +92,10 @@ function getWindowSize() {
   }
 }
 
-function paintNote(range, noteId) {
+function paintNote(range, noteId, classColor) {
 
   var span = document.createElement("span");
-  span.className = "note note-indigo";
+  span.className = "note " + classColor;
   span.setAttribute('noteid', noteId);
   range.surroundContents(span);
 }
@@ -118,6 +118,7 @@ var ViewPack = React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     console.log('[ViewPack]componentDidUpdate');
+    Tooltip.init(this.state.pack.version.note, this._onClickNote);
     Tooltip.destroy();
     Tooltip.init(this.state.pack.version.note, this._onClickNote);
   },
@@ -217,19 +218,27 @@ var ViewPack = React.createClass({
     let colors = {
       orange: {
         backgroundColor: '#FFE0B2',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        width: '100px',
+        textAlign: 'center'
       },
       teal: {
         backgroundColor: '#B2DFDB',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        width: '100px',
+        textAlign: 'center'
       },
       indigo: {
         backgroundColor: '#C5CAE9',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        width: '100px',
+        textAlign: 'center'
       },
       purple: {
         backgroundColor: '#E1BEE7',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        width: '100px',
+        textAlign: 'center'
       }
     }
     return (
@@ -238,11 +247,11 @@ var ViewPack = React.createClass({
         <RaisedButton label="完成" onClick={this._onSubmitNoteButton} secondary={true} style={buttonStyle}/>
         <TextField floatingLabelText="便利貼內容" multiLine={true} ref="noteText" style={style}/>
         <h3 style={marginBottomStyle}>便利貼顏色</h3>
-        <RadioButtonGroup defaultSelected="orange" name="color">
-          <RadioButton label="Orange" style={marginBottomStyle} labelStyle={colors.orange} value="orange"/>
-          <RadioButton label="Teal" style={marginBottomStyle} labelStyle={colors.teal} value="teal"/>
-          <RadioButton label="Indigo" style={marginBottomStyle} labelStyle={colors.indigo} value="indigo"/>
-          <RadioButton label="Purple" style={marginBottomStyle} labelStyle={colors.purple} value="purple"/>
+        <RadioButtonGroup defaultSelected="note-orange" name="color" ref="colorButton">
+          <RadioButton label="Orange" style={marginBottomStyle} labelStyle={colors.orange} value="note-orange"/>
+          <RadioButton label="Teal" style={marginBottomStyle} labelStyle={colors.teal} value="note-teal"/>
+          <RadioButton label="Indigo" style={marginBottomStyle} labelStyle={colors.indigo} value="note-indigo"/>
+          <RadioButton label="Purple" style={marginBottomStyle} labelStyle={colors.purple} value="note-purple"/>
         </RadioButtonGroup>
       </Dialog>
     );
@@ -251,9 +260,9 @@ var ViewPack = React.createClass({
   _onSubmitNoteButton() {
     let content = this.refs.noteText.getValue().trim();
     if (content !== '') {
-      Tooltip.destroy();
-//get current time
+      //get current time
       var time = new Date();
+      let colorClass = this.refs.colorButton.getSelectedValue();
       var newNote = {
         id: "note" + time.getTime(),
         content: content,
@@ -262,14 +271,17 @@ var ViewPack = React.createClass({
         user_id: UserStore.getUserId,
         user_name: UserStore.getUserName
       };
-      paintNote(this.state.range, newNote.id);
+      Tooltip.destroy();
+      paintNote(this.state.range, newNote.id, colorClass);
       let newContent = $('#content').html();
 
       EasyLearnActions.newNote(newNote, newContent);
+
       this.refs.newNoteDialog.dismiss();
       EasyLearnActions.sync();
+    }
+    else{
 
-      Tooltip.init(this.state.pack.version.note, this._onClickNote);
     }
   },
 

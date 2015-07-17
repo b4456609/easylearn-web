@@ -13,9 +13,7 @@ let Tooltip = {
     console.log('[Tooltip]init',notes);
     _notes = notes;
 
-    $('.note').tooltipster({
-      content: 'Loading...'
-    });
+    $('.note').tooltipster();
 
     $('.note').mouseover(function () {
       let noteId = $(this).attr("noteid");
