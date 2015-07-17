@@ -21,7 +21,7 @@ let VersionInfo = React.createClass({
     this.transitionTo('modified-pack');
   },
 
-  getStyles: function () {
+  getStyles: function() {
     return {
       versionPaper: {
         float: 'right',
@@ -40,7 +40,7 @@ let VersionInfo = React.createClass({
 
     let result = (
       <List subheader="懶人包版本">
-        <ListItem onClick={this._onModifiedPackClick.bind(this,  this.props.currentVersionId)} primaryText='修改此懶人包'/>
+        <ListItem onClick={this._onModifiedPackClick.bind(this, this.props.currentVersionId)} primaryText='修改此懶人包'/>
         {items}
       </List>
     );
@@ -50,7 +50,7 @@ let VersionInfo = React.createClass({
 
   render: function() {
     let styles = this.getStyles();
-  let version = this.getVersion();
+    let version = this.getVersion();
     return (
       <Paper style={styles.versionPaper} zDepth={1}>
         {version}
