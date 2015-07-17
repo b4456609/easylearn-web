@@ -1,10 +1,10 @@
-var AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
-var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
-var EasylearnApi = require('../api/easylearn-api.jsx');
-var FBApi = require('../api/facebook-api.js');
-var UserStore = require('../stores/user-store.jsx');
+let AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
+let EasyLearnConstants = require('../constants/easylearn-constants.jsx');
+let EasylearnApi = require('../api/easylearn-api.jsx');
+let FBApi = require('../api/facebook-api.js');
+let UserStore = require('../stores/user-store.jsx');
 
-var EasyLearnActions = {
+let EasyLearnActions = {
 
   appInit: function() {
     console.log('[Action]appInit');
@@ -105,7 +105,7 @@ var EasyLearnActions = {
 
   newPack: function(data) {
 // set packid
-    var time = new Date().getTime();
+    let time = new Date().getTime();
     data['id'] = 'pack' + time;
 
     console.log('[Action]newPack', data);
@@ -165,7 +165,7 @@ var EasyLearnActions = {
   newComment: function(content, noteId) {
     console.log('[Action]newComment', content, noteId);
 //create new comment
-    var time = new Date();
+    let time = new Date();
     let newComment = {
       id: 'comment' + time.getTime(),
       content: content,
@@ -194,6 +194,15 @@ var EasyLearnActions = {
     }
 
     EasylearnApi.getComment(noteId,success);
+  },
+
+  renameFolder: function (folderId, name) {
+    console.log('[Action]renameFolder', folderId, name);
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.RENAME_FOLDER,
+      folderId: folderId,
+      name: name
+    });
   }
 };
 

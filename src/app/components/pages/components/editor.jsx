@@ -1,4 +1,4 @@
-var React = require('react');
+let React = require('react');
 let EditorApi = require('../../../api/editor-api.js');
 let ImgurApi = require('../../../api/imgur-api.js');
 let YoutubeApi = require('../../../api/youtube-api.js');
@@ -19,12 +19,12 @@ let {
 } = Styles;
 
 function getExtension(filename) {
-  var parts = filename.split('.');
+  let parts = filename.split('.');
   return parts[parts.length - 1];
 }
 
 function isImage(filename) {
-  var ext = getExtension(filename);
+  let ext = getExtension(filename);
   switch (ext.toLowerCase()) {
   case 'jpg':
   case 'gif':
@@ -57,7 +57,7 @@ function readURL(input) {
   } else {
     let file = input.files[0];
 
-    var reader = new FileReader();
+    let reader = new FileReader();
 
     reader.onload = function(e) {
       $('#blah').attr('src', reader.result);
@@ -68,7 +68,7 @@ function readURL(input) {
 
 }
 
-var Editor = React.createClass({
+let Editor = React.createClass({
   propTypes: {
     content: React.PropTypes.string,
   },
@@ -318,10 +318,10 @@ var Editor = React.createClass({
         ImgurApi.uploadMultipleImg(result.img, function(items) {
           console.log('[SlideshareDialogSubmit]', items);
           let code = '';
-          for (var i in items) {
+          for (let i in items) {
             let filename = items[i].link.substring(items[i].link.lastIndexOf('/') + 1);
             self.state.file.push(filename);
-            var img = "<img id='" + items[i].id + "' class='slideshare-img " + result.path + " ' src='" + items[i].link + "' style='max-width:100% !important; height:auto;' >";
+            let img = "<img id='" + items[i].id + "' class='slideshare-img " + result.path + " ' src='" + items[i].link + "' style='max-width:100% !important; height:auto;' >";
             code += img;
           }
           EditorApi.insertContent(code);
@@ -370,7 +370,7 @@ var Editor = React.createClass({
 
     };
 
-    if (value === '' && this.state.previewImg == false) {
+    if (value === '' && this.state.previewImg === false) {
       this.refs.imgInput.setErrorText('網址不能空白');
     } else if (value !== '') {
       this.refs.imgDialog.dismiss();

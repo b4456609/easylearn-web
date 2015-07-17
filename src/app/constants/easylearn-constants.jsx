@@ -1,4 +1,4 @@
-var keyMirror = require('keymirror');
+let keyMirror = require('keymirror');
 
 module.exports = keyMirror({
   PACK_VIEW: null,
@@ -14,5 +14,6 @@ module.exports = keyMirror({
   REDO_DELETE_PACK: null,
   NEW_NOTE: null,
   NEW_COMMENT: null,
-  GET_COMMENT: null
+  GET_COMMENT: null,
+  RENAME_FOLDER: null
 });

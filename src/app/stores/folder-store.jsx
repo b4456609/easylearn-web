@@ -1,11 +1,11 @@
-var AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
-var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+let AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
+let EasyLearnConstants = require('../constants/easylearn-constants.jsx');
+let EventEmitter = require('events').EventEmitter;
+let assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
-var _folder = [
+let _folder = [
   {
     "name": "All",
     "id": "allPackId",
@@ -25,7 +25,7 @@ let _viewFolderId = "allPackId";
 
 function addPackToAll(packId) {
   for (let item of _folder) {
-    if (item.id == 'allPackId') {
+    if (item.id === 'allPackId') {
       item.pack.push(packId);
       break;
     }
@@ -38,7 +38,7 @@ function deletePack(idArray) {
   for(let id of idArray){
     for(let folder of _folder){
       for(let i in folder.pack){
-        if(folder.pack[i] == id){
+        if(folder.pack[i] === id){
           folder.pack.splice(i, 1);
         }
       }
@@ -50,7 +50,18 @@ function redoDeletePack() {
   _folder = JSON.parse(localStorage.getItem('folder'));
 }
 
-var FolderStore = assign({}, EventEmitter.prototype, {
+function renameFolder(id , name){
+  console.log('renameFolder',id,name);
+  for(let folder of _folder){
+    if(folder.id === id){
+      console.log('match');
+      folder.name = name;
+      break;
+    }
+  }
+}
+
+let FolderStore = assign({}, EventEmitter.prototype, {
   getViewFolderId: function() {
     return _viewFolderId;
   },
@@ -69,10 +80,10 @@ var FolderStore = assign({}, EventEmitter.prototype, {
 
 //generate master menu
   getFolderMenu: function() {
-    var folderMenu = [];
+    let folderMenu = [];
 
-    for (var i in _folder) {
-      var item = {
+    for (let i in _folder) {
+      let item = {
         route: 'folder-list',
         text: _folder[i].name,
         number: _folder[i].pack.length.toString(),
@@ -128,6 +139,11 @@ AppDispatcher.register(function(action) {
 
   case EasyLearnConstants.REDO_DELETE_PACK:
     redoDeletePack();
+    FolderStore.emitChange();
+    break;
+
+  case EasyLearnConstants.RENAME_FOLDER:
+    renameFolder(action.folderId, action.name);
     FolderStore.emitChange();
     break;
 
