@@ -1,4 +1,4 @@
-var React = require('react');
+let React = require('react');
 let Router = require('react-router');
 let FullWidthSection = require('../full-width-section');
 let {
@@ -24,7 +24,7 @@ let {
 let Navigation = Router.Navigation;
 
 
-var newPack = React.createClass({
+let newPack = React.createClass({
 
   mixins: [
     StyleResizable, React.addons.LinkedStateMixin, Navigation
@@ -159,7 +159,7 @@ var newPack = React.createClass({
 
 
     //if no error send submit pack action
-    if(canSubmit == true){
+    if(canSubmit === true){
       EasylearnActions.newPack({
         title: this.state.title,
         description: this.state.description,

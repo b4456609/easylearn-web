@@ -1,4 +1,4 @@
-var React = require('react');
+let React = require('react');
 let {
   Dialog,
   TextField,
@@ -6,7 +6,7 @@ let {
   FlatButton
 } = require('material-ui');
 let EasylearnActions = require('../../../action/easylearn-actions.jsx');
-var NoteDialog = React.createClass({
+let NoteDialog = React.createClass({
 
   getStyles: function () {
     return {
@@ -60,8 +60,8 @@ var NoteDialog = React.createClass({
     );
 
     let comment = (this.props.note.comment.map(function(item) {
-      var time = new Date(item.create_time);
-      var timeString = time.toLocaleString("zh-TW", {
+      let time = new Date(item.create_time);
+      let timeString = time.toLocaleString("zh-TW", {
         hour: '2-digit',
         minute: 'numeric',
         day: "numeric",

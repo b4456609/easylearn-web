@@ -1,14 +1,14 @@
-var AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
-var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
+let AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
+let EasyLearnConstants = require('../constants/easylearn-constants.jsx');
 let EasyLearnActions = require('../action/easylearn-actions.jsx');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+let EventEmitter = require('events').EventEmitter;
+let assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
 let _isSyncFail = false;
 
-var AppStore = assign({}, EventEmitter.prototype, {
+let AppStore = assign({}, EventEmitter.prototype, {
 
   isSyncFail: function() {
     return _isSyncFail;

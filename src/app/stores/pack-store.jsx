@@ -1,13 +1,13 @@
-var AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
-var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+let AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
+let EasyLearnConstants = require('../constants/easylearn-constants.jsx');
+let EventEmitter = require('events').EventEmitter;
+let assign = require('object-assign');
 let EasylearnConfig = require('../api/easylearn-config.js');
 let UserStore = require('./user-store.jsx');
 
 const CHANGE_EVENT = 'change';
 
-var _packs = [];
+let _packs = [];
 let _packId = '';
 let _pack = {};
 let _versionId = '';
@@ -15,10 +15,10 @@ let _version = {};
 
 function setPacks(data) {
   let packs = [];
-  var keys = Object.keys(data);
+  let keys = Object.keys(data);
 
   for (let i in keys) {
-    if (keys[i].indexOf('pack') != -1) {
+    if (keys[i].indexOf('pack') !== -1) {
       packs.push(data[keys[i]]);
 
 //add pack's id
@@ -34,16 +34,16 @@ function setPacks(data) {
 
   _packs = packs;
 
-  if (_packId != '') {
+  if (_packId !== '') {
     setPackById();
   }
-  if (_versionId != '') {
+  if (_versionId !== '') {
     checkoutVersion(_versionId);
   }
 }
 
 function setPackById() {
-  for (var i in _packs) {
+  for (let i in _packs) {
     if (_packs[i].id === _packId) {
       _pack = _packs[i];
       return;
@@ -71,7 +71,7 @@ function newNote(newNote, versionContent) {
 
 function newPack(data) {
   console.log('[PackStore]newPack');
-  var time = new Date().getTime();
+  let time = new Date().getTime();
 
   let newPackItem = {
     id: data.id,
@@ -114,7 +114,7 @@ function newPack(data) {
 
 function modifiedPackVersion(is_public, content, files) {
   console.log('[PackStore]modifiedPackVersion');
-  var time = new Date().getTime();
+  let time = new Date().getTime();
 
 //TODO replace file path
 
@@ -142,12 +142,12 @@ function modifiedPackVersion(is_public, content, files) {
 //remain one not public
   if (!_version.is_public && !is_public) {
 // modify origin to second one
-    var find = _version.private_id;
+    let find = _version.private_id;
     newVersion.version++;
 
 //remove the other backup
-    for (var index in _pack.version) {
-      if (_pack.version[index].id == _version.id) {
+    for (let index in _pack.version) {
+      if (_pack.version[index].id === _version.id) {
         continue;
       }
       if (_pack.version[index].private_id === find) {
@@ -160,7 +160,7 @@ function modifiedPackVersion(is_public, content, files) {
   } else if (!_version.is_public && is_public) {
     newVersion.version++;
 
-    for (var j in _pack.version) {
+    for (let j in _pack.version) {
       if (_pack.version[j].private_id === _version.private_id) {
         _pack.version.splice(j, 1);
 //because delete one i
@@ -180,27 +180,27 @@ function modifiedPackVersion(is_public, content, files) {
   console.log(_packs);
 }
 function replaceImgPath(content, packId) {
-  var url = EasylearnConfig.IMG_URL;
-  var find = 'FILE_STORAGE_PATH' + packId + '/';
-  var re = new RegExp(find, 'g');
+  let url = EasylearnConfig.IMG_URL;
+  let find = 'FILE_STORAGE_PATH' + packId + '/';
+  let re = new RegExp(find, 'g');
 
   content = content.replace(re, url);
   return content;
 }
 
 function newComment(newComment, noteId) {
-  var time = new Date();
+  let time = new Date();
   for (let item of _version.note) {
-    if (item.id == noteId) {
+    if (item.id === noteId) {
       item.comment.push(newComment);
     }
   }
 }
 
 function setComment(comments, noteId) {
-  var time = new Date();
+  let time = new Date();
   for (let item of _version.note) {
-    if (item.id == noteId) {
+    if (item.id === noteId) {
       item.comment = comments;
     }
   }
@@ -217,12 +217,12 @@ function getVersionInfo() {
 
   for (let item of _pack.version) {
 //it's backup version
-    if (result.length !== 0 && result[result.length - 1].private_id == item.private_id && item.is_public == false) {
+    if (result.length !== 0 && result[result.length - 1].private_id === item.private_id && item.is_public === false) {
       continue;
     }
 
 //other people's private version
-    if (item.is_public == false && item.creator_user_id != UserStore.getUserId()) {
+    if (item.is_public === false && item.creator_user_id !== UserStore.getUserId()) {
       continue;
     }
 
@@ -243,8 +243,8 @@ function getVersionInfo() {
 
 //replace create time to string
   for (let item of result) {
-    var time = new Date(item.text);
-    var timeString = time.toLocaleString("zh-TW", {
+    let time = new Date(item.text);
+    let timeString = time.toLocaleString("zh-TW", {
       hour: '2-digit',
       minute: 'numeric',
       day: "numeric",
@@ -266,7 +266,7 @@ function checkoutVersion(versionId) {
   });
 
   for (let i in version) {
-    if (version[i].id == versionId) {
+    if (version[i].id === versionId) {
       _versionId = versionId;
       _version = version[i];
     }
@@ -278,7 +278,7 @@ function deletePack(idArray) {
   for (let id of idArray) {
     console.log(id);
     for (let i in _packs) {
-      if (_packs[i].id == id) {
+      if (_packs[i].id === id) {
         _packs.splice(i, 1);
       }
     }
@@ -292,7 +292,7 @@ function redoDeletePack() {
 function getContentForModified() {
   let content = [];
   for (let item of _pack.version) {
-    if (item.id == _versionId || item.private_id == _version.private_id) {
+    if (item.id === _versionId || item.private_id === _version.private_id) {
       content.push({
         is_public: item.is_public,
         content: item.content,
@@ -307,7 +307,7 @@ function getContentForModified() {
   return content;
 }
 
-var PackStore = assign({}, EventEmitter.prototype, {
+let PackStore = assign({}, EventEmitter.prototype, {
   getVersionForModified: function() {
     return {
       version: getContentForModified(),
@@ -351,10 +351,10 @@ var PackStore = assign({}, EventEmitter.prototype, {
   },
 
   getFolderList: function(packIdArray) {
-    var list = [];
+    let list = [];
     for (let i in packIdArray) {
       for (let j in _packs) {
-        if (packIdArray[i] == _packs[j].id) {
+        if (packIdArray[i] === _packs[j].id) {
 //set img
           let img = 'img/light102.png';
           if (_packs[j].cover_filename !== "") {
@@ -377,13 +377,13 @@ var PackStore = assign({}, EventEmitter.prototype, {
 
   getSyncAllPack: function() {
     sessionStorage.setItem('pack', JSON.stringify(_packs));
-    var packs = JSON.parse(sessionStorage.getItem('pack'));
+    let packs = JSON.parse(sessionStorage.getItem('pack'));
 
     for (let pack of packs) {
       for (let version of pack.version) {
-        var target = 'FILE_STORAGE_PATH' + pack.id + '/';
-        var find = EasylearnConfig.IMG_URL;
-        var re = new RegExp(find, 'g');
+        let target = 'FILE_STORAGE_PATH' + pack.id + '/';
+        let find = EasylearnConfig.IMG_URL;
+        let re = new RegExp(find, 'g');
 
         version.content = version.content.replace(find, target);
       }

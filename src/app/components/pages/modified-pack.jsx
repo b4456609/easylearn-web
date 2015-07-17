@@ -1,4 +1,4 @@
-var React = require('react');
+let React = require('react');
 let Router = require('react-router');
 let {
   Mixins,
@@ -25,7 +25,7 @@ function getContent() {
   };
 }
 
-var ModifiedPack = React.createClass({
+let ModifiedPack = React.createClass({
 
   mixins: [Navigation],
 
@@ -130,7 +130,7 @@ var ModifiedPack = React.createClass({
   },
 
   _toggleVersion: function() {
-    if (this.state.modifyIndex == 0) {
+    if (this.state.modifyIndex === 0) {
       this.setState({
         modifyIndex: 1,
         backupBtnText: '切換至本次編輯內容'
@@ -163,7 +163,7 @@ var ModifiedPack = React.createClass({
     }
 
 //if no error send submit pack action
-    if (canSubmit == true) {
+    if (canSubmit === true) {
       EasylearnActions.modifiedPack({
         is_public: this.state.is_public,
         content: content,

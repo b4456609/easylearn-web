@@ -1,11 +1,11 @@
-var React = require('react');
+let React = require('react');
 let FullWidthSection = require('../full-width-section');
 let { Mixins, RaisedButton, Styles } = require('material-ui');
 let { StylePropable, StyleResizable } = Mixins;
 let { Colors, Spacing, Typography } = Styles;
 
 
-var Fail = React.createClass({
+let Fail = React.createClass({
   mixins: [StylePropable, StyleResizable],
 
   _getHomePageHero: function() {

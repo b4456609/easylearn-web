@@ -1,6 +1,6 @@
-var React = require('react');
+let React = require('react');
 let Router = require('react-router');
-var PackStore = require('../../stores/pack-store');
+let PackStore = require('../../stores/pack-store');
 let EasyLearnActions = require('../../action/easylearn-actions.jsx');
 let VersionInfo = require('./components/version-info.jsx');
 let InsetComment = require('material-ui/lib/svg-icons/editor/insert-comment.js');
@@ -31,16 +31,16 @@ function getViewPackState() {
 
 function getSelectionCoords(win) {
   win = win || window;
-  var doc = win.document;
-  var sel = doc.selection,
+  let doc = win.document;
+  let sel = doc.selection,
     range,
     rects,
     rect;
-  var x = 0,
+  let x = 0,
     y = 0;
 
   if (sel) {
-    if (sel.type != "Control") {
+    if (sel.type !== "Control") {
       range = sel.createRange();
       range.collapse(true);
       x = range.boundingLeft;
@@ -56,7 +56,7 @@ function getSelectionCoords(win) {
       return getWindowSize();
     }
 
-    if (sel.isCollapsed == true) {
+    if (sel.isCollapsed === true) {
       return getWindowSize();
     } else if (sel.rangeCount) {
       range = sel.getRangeAt(0).cloneRange();
@@ -83,8 +83,8 @@ function getSelectionCoords(win) {
 }
 
 function getWindowSize() {
-  var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-  var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  let w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
   return {
     x: w - 100,
@@ -94,13 +94,13 @@ function getWindowSize() {
 
 function paintNote(range, noteId, classColor) {
 
-  var span = document.createElement("span");
+  let span = document.createElement("span");
   span.className = "note " + classColor;
   span.setAttribute('noteid', noteId);
   range.surroundContents(span);
 }
 
-var ViewPack = React.createClass({
+let ViewPack = React.createClass({
   mixins: [Navigation],
 
   getInitialState: function() {
@@ -129,7 +129,7 @@ var ViewPack = React.createClass({
     let self = this;
 
     document.onmouseup = function() {
-      var coords = getSelectionCoords();
+      let coords = getSelectionCoords();
       console.log('document.onmouseup', coords.x, coords.y);
       self.setState({
         x: coords.x,
@@ -188,7 +188,7 @@ var ViewPack = React.createClass({
 
     let windowSize = getWindowSize();
 
-    if (this.state.y == windowSize.y && this.state.x == windowSize.x) {
+    if (this.state.y === windowSize.y && this.state.x === windowSize.x) {
       styles.floatBtn.position = 'fixed';
       styles.floatBtn.top = this.state.y - 50;
       styles.floatBtn.left = this.state.x - 50;
@@ -261,9 +261,9 @@ var ViewPack = React.createClass({
     let content = this.refs.noteText.getValue().trim();
     if (content !== '') {
       //get current time
-      var time = new Date();
+      let time = new Date();
       let colorClass = this.refs.colorButton.getSelectedValue();
-      var newNote = {
+      let newNote = {
         id: "note" + time.getTime(),
         content: content,
         create_time: time.getTime(),

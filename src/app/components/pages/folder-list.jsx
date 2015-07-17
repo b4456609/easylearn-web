@@ -13,14 +13,14 @@ let FolderStore = require('../../stores/folder-store.jsx');
 let PackStore = require('../../stores/pack-store.jsx');
 
 function getState() {
-  var list = FolderStore.getPackInFolder();
-  var items = PackStore.getFolderList(list);
+  let list = FolderStore.getPackInFolder();
+  let items = PackStore.getFolderList(list);
   return {
     packArray: items
   };
 }
 
-var FolderList = React.createClass({
+let FolderList = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.func
@@ -79,7 +79,7 @@ var FolderList = React.createClass({
     let self = this;
     let styles = this.getStyles();
 
-    var packNodes = this.state.packArray.map(function(pack) {
+    let packNodes = this.state.packArray.map(function(pack) {
       return (
         <Paper onClick={self._onClick.bind(self, pack.id)} style={styles.paper} zDepth={1}>
           <div style={styles.root}>

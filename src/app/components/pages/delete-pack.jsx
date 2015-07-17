@@ -1,4 +1,4 @@
-var React = require('react');
+let React = require('react');
 let {
   Table,
   RaisedButton,
@@ -14,7 +14,7 @@ function getData() {
   return {rowData: PackStore.getDeleteList()};
 }
 
-var DeletePack = React.createClass({
+let DeletePack = React.createClass({
 
   getInitialState: function() {
     return {
