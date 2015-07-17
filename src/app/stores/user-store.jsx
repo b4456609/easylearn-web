@@ -1,8 +1,8 @@
-var AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
-var EasyLearnConstants = require('../constants/easylearn-constants.jsx');
+let AppDispatcher = require('../dispatcher/app-dispatcher.jsx');
+let EasyLearnConstants = require('../constants/easylearn-constants.jsx');
 let EasyLearnActions = require('../action/easylearn-actions.jsx');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+let EventEmitter = require('events').EventEmitter;
+let assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
@@ -27,7 +27,7 @@ function modified() {
 }
 
 function hasUser() {
-  if(_user.id == ''){
+  if (_user.id === '') {
     return false;
   }
   return true;
@@ -39,7 +39,7 @@ function getLocalStorage() {
   if (user !== null) {
     _user = JSON.parse(localStorage.getItem('user'));
   }
-  console.log('[User]hasUser()'+hasUser());
+  console.log('[User]hasUser()' + hasUser());
 }
 
 //initial data from localStorage
@@ -52,7 +52,7 @@ _user.setting = {
   modified: true
 };
 
-var UserStore = assign({}, EventEmitter.prototype, {
+let UserStore = assign({}, EventEmitter.prototype, {
 
   getUser: function() {
     return _user;
@@ -89,6 +89,10 @@ var UserStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case EasyLearnConstants.NEW_PACK:
+    _user.setting.modified = true;
+    break;
+
+  case EasyLearnConstants.RENAME_FOLDER:
     _user.setting.modified = true;
     break;
 

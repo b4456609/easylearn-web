@@ -51,10 +51,8 @@ function redoDeletePack() {
 }
 
 function renameFolder(id , name){
-  console.log('renameFolder',id,name);
   for(let folder of _folder){
     if(folder.id === id){
-      console.log('match');
       folder.name = name;
       break;
     }
