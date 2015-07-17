@@ -319,7 +319,7 @@ var Editor = React.createClass({
           console.log('[SlideshareDialogSubmit]', items);
           let code = '';
           for (var i in items) {
-            let filename = item.link.substring(item.link.lastIndexOf('/') + 1);
+            let filename = items[i].link.substring(items[i].link.lastIndexOf('/') + 1);
             self.state.file.push(filename);
             var img = "<img id='" + items[i].id + "' class='slideshare-img " + result.path + " ' src='" + items[i].link + "' style='max-width:100% !important; height:auto;' >";
             code += img;
