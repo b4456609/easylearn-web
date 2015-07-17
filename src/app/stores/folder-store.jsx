@@ -76,6 +76,18 @@ let FolderStore = assign({}, EventEmitter.prototype, {
     return _folder;
   },
 
+  getFolderIdName: function () {
+    let result = [];
+    for(let item of _folder){
+      result.push({
+        payload: item.id,
+        text: item.name
+      })
+    }
+
+    return result;
+  },
+
 //generate master menu
   getFolderMenu: function() {
     let folderMenu = [];

@@ -5,13 +5,43 @@ let {
   ListItem,
   ClearFix,
   Styles,
-  ListDivider
+  ListDivider,
+  Dialog,
+  SelectField
 } = require('material-ui');
+
+let FolderStore= require('../../../stores/folder-store.jsx');
 
 let {Colors} = Styles;
 
+function getState() {
+  return {
+    folder: FolderStore.getFolderIdName(),
+    folderId: FolderStore.getViewFolderId()
+  };
+}
 
 let PackInfo = React.createClass({
+
+  getInitialState: function() {
+    return {
+      folder: FolderStore.getFolderIdName(),
+      folderId: FolderStore.getViewFolderId(),
+      selectedId: undefined
+    };
+  },
+
+  componentDidMount: function() {
+    FolderStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function() {
+    FolderStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function() {
+    this.setState(getState());
+  },
 
   getStyles: function() {
     return {
@@ -30,11 +60,9 @@ let PackInfo = React.createClass({
     );
   },
 
-  componentDidMount: function() {
-  },
-
   render: function() {
     let styles = this.getStyles();
+    let moveDialog = this.getMoveDialog();
 
     if(this.props.pack != null){
       let publicStatus = '不公開';
@@ -54,10 +82,11 @@ let PackInfo = React.createClass({
           <ListDivider />
           </List>
           <List subheader="管理此懶人包">
-          <ListItem primaryText="移至..." onClick={this._onPackMove.bind(this, this.props.pack.id)}/>
-          <ListItem primaryText="移除" onClick={this._onPackDelete.bind(this, this.props.pack.id)}/>
+          <ListItem primaryText="移至..." onClick={this._onPackMove}/>
+          <ListItem primaryText="移除" onClick={this._onPackDelete}/>
          </List>
         </Paper>
+        {moveDialog}
       </ClearFix>
       );
     }
@@ -66,8 +95,41 @@ let PackInfo = React.createClass({
     }
   },
 
-  _onPackMove(id){
-    console.log('_onPackMove',id);
+  getMoveDialog(){
+    let standardActions = [
+      {
+        text: '取消'
+      }, {
+        text: '送出',
+        onTouchTap: this._handleMoveDialogSubmit
+      }
+    ];
+
+    return (
+      <Dialog actions={standardActions} ref="moveDialog" title="移動懶人包">
+        <div  style={{height: '250px'}}>
+      <SelectField
+        value={this.state.selectedId}
+        ref="select"
+        floatingLabelText="選擇資料夾"
+        menuItems={this.state.folder}
+        onChange={this._handleSelectValueChange} />
+      </div>
+      </Dialog>
+    );
+  },
+
+  _handleSelectValueChange(e){
+    let id = e.target.value.payload;
+    this.setState({selectedId:id});
+  },
+
+  _handleMoveDialogSubmit(){
+    console.log(this.state.selectedId, this.props.pack.id, this.state.folderId);
+  },
+
+  _onPackMove(){
+    this.refs.moveDialog.show();
   },
 
   _onPackDelete(id){
