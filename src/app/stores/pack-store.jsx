@@ -308,6 +308,7 @@ function getContentForModified() {
 }
 
 let PackStore = assign({}, EventEmitter.prototype, {
+
   getVersionForModified: function() {
     return {
       version: getContentForModified(),
@@ -361,10 +362,23 @@ let PackStore = assign({}, EventEmitter.prototype, {
             img = EasylearnConfig.IMG_URL + _packs[j].cover_filename;
           }
 
+          let time = new Date(_packs[j].create_time);
+          let timeString = time.toLocaleString("zh-TW", {
+            year: 'numeric',
+            hour: '2-digit',
+            minute: 'numeric',
+            day: "numeric",
+            month: "numeric"
+          });
+
           let item = {
             id: _packs[j].id,
-            title: _packs[j].name,
+            name: _packs[j].name,
             description: _packs[j].description,
+            create_time: timeString,
+            tags: _packs[j].tags,
+            is_public: _packs[j].is_public,
+            creator_user_name: _packs[j].creator_user_name,
             img: img
           }
           list.push(item);

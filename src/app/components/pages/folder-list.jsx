@@ -2,6 +2,7 @@ let React = require('react');
 let Router = require('react-router');
 let RouteHandler = Router.RouteHandler;
 let EasyLearnActions = require('../../action/easylearn-actions.jsx');
+let PackInfo = require('./components/pack-info.jsx');
 let {
   Styles,
   Paper,
@@ -27,7 +28,11 @@ let FolderList = React.createClass({
   },
 
   getInitialState: function() {
-    return getState();
+    let state = getState();
+    return {
+      hoverPack: null,
+      packArray: state.packArray
+    };
   },
 
   componentDidMount: function() {
@@ -47,9 +52,15 @@ let FolderList = React.createClass({
   getStyles: function() {
     return {
       paper: {
-        marginBottom: 16
+        marginBottom: 16,
+        WebkitTouchCallout: 'none',
+        WebkitUserSelect: 'none',
+        KhtmlUserSelect: 'none',
+        MozUserSelect: 'none',
+        MsUserSelect: 'none',
+        userSelect: 'none',
       },
-      root: {
+      paperPadding: {
         padding: '16px'
       },
       left: {
@@ -71,24 +82,35 @@ let FolderList = React.createClass({
       img: {
         maxWidth: '100px',
         maxHeight: '100px'
+      },
+      content: {
+        marginRight: '324px',
+        marginBottom: '16px'
+      },
+      rightBlock: {
+        position: 'fixed',
+        right: 50
+      },
+      root: {
+        maxWidth: '1920px'
       }
     };
   },
 
-  render: function() {
+  getPackPaperNode(){
     let self = this;
     let styles = this.getStyles();
 
-    let packNodes = this.state.packArray.map(function(pack) {
+    return this.state.packArray.map(function(pack, i) {
       return (
-        <Paper onClick={self._onClick.bind(self, pack.id)} style={styles.paper} zDepth={1}>
-          <div style={styles.root}>
+        <Paper onDoubleClick={self._onClick.bind(self, pack.id)} style={styles.paper} zDepth={1} onClick={self._onPackMouseEnter.bind(self, i)} onMouseLeave  ={self._onPackMouseLeave}>
+          <div style={styles.paperPadding}>
             <ClearFix>
               <div style={styles.left}>
                 <img src={pack.img} style={styles.img}/></div>
                 <div style={styles.right}>
                   <h1 style={styles.title}>
-                    {pack.title}
+                    {pack.name}
                   </h1>
                   <p style={styles.des}>
                     {pack.description}</p>
@@ -98,10 +120,27 @@ let FolderList = React.createClass({
           </Paper>
       );
     });
+  },
+
+  _onPackMouseEnter(i){
+    let pack = this.state.packArray[i];
+    this.setState({hoverPack: pack});
+  },
+
+  render: function() {
+    let packNodes = this.getPackPaperNode();
+    let styles = this.getStyles();
 
     return (
-      <div>
-        {packNodes}
+      <div style={styles.root}>
+        <div style={styles.rightBlock}>
+          <PackInfo pack={this.state.hoverPack} />
+        </div>
+        <div style={styles.content}>
+          <ClearFix>
+          {packNodes}
+          </ClearFix>
+        </div>
       </div>
     );
   },
