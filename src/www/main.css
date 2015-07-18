@@ -79,3 +79,19 @@ body {
   opacity: 0.01;
   transition: opacity .5s ease-in;
 }
+
+
+.page-transition-enter {
+  opacity: 0.01;
+}
+.page-transition-enter.page-transition-enter-active {
+  opacity: 1;
+  transition: opacity .2s ease-in;
+}
+.page-transition-leave {
+  opacity: 0.05;
+}
+.page-transition-leave.page-transition-leave-active {
+  opacity: 0.01;
+  transition: opacity .1s ease-in;
+}

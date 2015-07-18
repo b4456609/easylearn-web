@@ -4,7 +4,7 @@ let RouteHandler = Router.RouteHandler;
 let EasyLearnActions = require('../action/easylearn-actions.jsx');
 let FolderStore = require('../stores/folder-store.jsx');
 let { Menu, Mixins, Styles } = require('material-ui');
-
+let CSSTransitionGroup = React.addons.CSSTransitionGroup;
 let { Spacing, Colors } = Styles;
 let { StyleResizable, StylePropable } = Mixins;
 
@@ -68,10 +68,13 @@ let PageWithNav = React.createClass({
 
   render() {
     let styles = this.getStyles();
+    let name = this.context.router.getCurrentPath();
     return (
       <div style={styles.root}>
         <div style={styles.content}>
-          <RouteHandler />
+          <CSSTransitionGroup transitionName="page-transition">
+          <RouteHandler key={name}/>
+          </CSSTransitionGroup>
         </div>
         <div style={styles.secondaryNav}>
           <Menu
