@@ -307,12 +307,14 @@ let ViewPack = React.createClass({
             </div>
 
             <Paper style={styles.contentPaper} zDepth={1}>
+              <ClearFix>
               <div style={styles.contentPadding}>
                 <h1 style={styles.title}>
                   {this.state.pack.title}
                 </h1>
                 <div dangerouslySetInnerHTML={{__html: this.state.pack.version.content}} id="content" style={styles.content}/>
               </div>
+            </ClearFix>
             </Paper>
 
           </div>

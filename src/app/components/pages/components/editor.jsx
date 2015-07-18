@@ -197,10 +197,10 @@ let Editor = React.createClass({
 
     return (
       <Dialog actions={standardActions} ref="slideshareDialog" title="插入Slideshare">
-        <TextField floatingLabelText="Slideshare網址" ref="slideshareInput" style={styles.textFullWidth} value="http://www.slideshare.net/Branded3/what-is-the-future-of-seo-50393085"/>
+        <TextField floatingLabelText="Slideshare網址" ref="slideshareInput" style={styles.textFullWidth} />
         <h3 style={styles.dialogHeader}>進階選項</h3>
-        <TextField floatingLabelText="開始頁數" ref="slideshareStartInput" style={styles.textHalfWidth} value="0"/>
-        <TextField floatingLabelText="結束頁數" ref="slideshareEndInput" style={styles.textHalfWidth} value="0"/>
+        <TextField floatingLabelText="開始頁數" ref="slideshareStartInput" style={styles.textHalfWidth} />
+        <TextField floatingLabelText="結束頁數" ref="slideshareEndInput" style={styles.textHalfWidth} />
       </Dialog>
     );
 
