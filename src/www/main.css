@@ -87,11 +87,28 @@ body {
 .page-transition-enter.page-transition-enter-active {
   opacity: 1;
   transition: opacity .2s ease-in;
+  position: absolute;
 }
 .page-transition-leave {
   opacity: 0.05;
 }
 .page-transition-leave.page-transition-leave-active {
   opacity: 0.01;
-  transition: opacity .1s ease-in;
+  position: absolute;
+  transition: opacity .2s ease-in;
+}
+
+p {
+  animation-duration: .5s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    opacity: 0.2;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
