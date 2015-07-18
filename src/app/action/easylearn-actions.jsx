@@ -239,6 +239,14 @@ let EasyLearnActions = {
       packId: packId,
       fodlerId: fodlerId
     });
+  },
+
+  addFolder: function (folderName) {
+    console.log('[Action]addFolder',folderName);
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.ADD_FOLDER,
+      folderName: folderName
+    });
   }
 };
 

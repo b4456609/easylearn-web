@@ -11,7 +11,8 @@ let {
   TextField,
   ListItem,
   IconMenu,
-  IconButton
+  IconButton,
+  FlatButton
 } = require('material-ui');
 let MenuItem = require('material-ui/lib/menus/menu-item');
 
@@ -81,7 +82,9 @@ let FolderManerger = React.createClass({
     let id = item.key;
     if (id.indexOf('rename') !== -1) {
       this.refs.renameDialog.show();
-      this.setState({renameFolderId: id.substring(0, id.indexOf('rename'))});
+      this.setState({
+        renameFolderId: id.substring(0, id.indexOf('rename'))
+      });
     } else if (id.indexOf('delete') !== -1) {}
   },
 
@@ -128,10 +131,49 @@ let FolderManerger = React.createClass({
     }
   },
 
+  getNewFolderDialog() {
+    let standardActions = [
+      {
+        text: '取消'
+      }, {
+        text: '送出',
+        onTouchTap: this._handleNewDialogDialogSubmit
+      }
+    ];
+
+    let style = {
+      width: '100%'
+    };
+
+    return (
+      <Dialog actions={standardActions} ref="newFolderDialog" title="新增資料夾">
+        <TextField floatingLabelText="資料夾名稱" ref="folderText" style={style}/>
+      </Dialog>
+    );
+
+  },
+
+  _handleNewDialogDialogSubmit(){
+    let folderName = this.refs.folderText.getValue().trim();
+    if(folderName !== ''){
+      EasylearnActions.addFolder(folderName);
+      this.refs.newFolderDialog.dismiss();
+    }
+    else{
+      //error handling
+      this.refs.folderText.setErrorText('請輸入資料夾名稱');
+    }
+  },
+
+  _onNewFolderClick: function() {
+    this.refs.newFolderDialog.show();
+  },
+
   render: function() {
     let styles = this.getStyles();
     let userFolder = this.getUserFolder();
     let renameDialog = this.getRenameDialog();
+    let newFolderDialog = this.getNewFolderDialog();
     return (
       <Paper style={styles.paper} zDepth={1}>
         <List subheader="系統資料夾">
@@ -141,6 +183,8 @@ let FolderManerger = React.createClass({
           {userFolder}
         </List>
         {renameDialog}
+        <FlatButton label="新增資料夾" onClick={this._onNewFolderClick} secondary={true}/>
+        {newFolderDialog}
       </Paper>
     );
   }

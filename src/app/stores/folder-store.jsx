@@ -106,6 +106,17 @@ function deletePackInAllFolders(packId) {
   }
 }
 
+function addFolder(folderName) {
+  let time = new Date();
+
+  _folder.push({
+    "name": folderName,
+    "id": "folder" + time.getTime(),
+    "pack": []
+  });
+}
+
+
 let FolderStore = assign({}, EventEmitter.prototype, {
   getViewFolderId: function() {
     return _viewFolderId;
@@ -223,6 +234,11 @@ AppDispatcher.register(function(action) {
     deletePackInFolder(action.packId, action.fodlerId);
     FolderStore.emitChange();
     break;
+
+    case EasyLearnConstants.ADD_FOLDER :
+      addFolder(action.folderName);
+      FolderStore.emitChange();
+      break;
 
   default :
 // no op
