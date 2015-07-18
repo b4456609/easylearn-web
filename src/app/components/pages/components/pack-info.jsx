@@ -115,6 +115,56 @@ let PackInfo = React.createClass({
     );
   },
 
+  getDeleteDialog(){
+    //no props no need to render
+    if(!this.props.pack) return null;
+
+    let self = this;
+    let standardActions = [
+      {
+        text: '取消'
+      }, {
+        text: '確定',
+        onTouchTap: this._handleDeleteDialogSubmit
+      }
+    ];
+
+    let content = (
+      <p>
+        是否要移除在任何資料夾中的<br></br>"{this.props.pack.name}"?
+      </p>
+    );
+
+    if(this.state.folderId !== 'allPackId'){
+      content = (
+        <p>
+          是否要移除此資料夾中的<br></br>"{self.props.pack.name}"?
+        </p>
+      );
+    }
+
+    return (
+      <Dialog actions={standardActions} ref="deleteDialog" title="刪除懶人包">
+        {content}
+      </Dialog>
+    );
+  },
+
+
+  _onPackDelete() {
+    this.refs.deleteDialog.show();
+  },
+
+  _handleDeleteDialogSubmit(){
+    if(this.state.folderId === 'allPackId'){
+      EasylearnActions.deletePackInAllFolders(this.props.pack.id)
+    }
+    else{
+      EasylearnActions.deletePackInFolder(this.props.pack.id, this.state.folderId)
+    }
+    this.refs.deleteDialog.dismiss();
+  },
+
   getManageMenu(){
     let copyAction = null;
     //
@@ -146,6 +196,7 @@ let PackInfo = React.createClass({
     let moveDialog = this.getCopyMoveDialog();
     let manageMenu = this.getManageMenu();
     let snackBar = this.getSnackBar();
+    let deleteDialog = this.getDeleteDialog();
 
     if (this.props.pack != null) {
       let publicStatus = '不公開';
@@ -167,6 +218,7 @@ let PackInfo = React.createClass({
             {manageMenu}
           </Paper>
           {moveDialog}
+          {deleteDialog}
           {snackBar}
         </div>
       );
@@ -202,9 +254,6 @@ let PackInfo = React.createClass({
     this.refs.moveDialog.show();
   },
 
-  _onPackDelete(id) {
-    console.log('_onPackDelete', id);
-  }
 
 });
 

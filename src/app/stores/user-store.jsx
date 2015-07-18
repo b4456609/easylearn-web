@@ -104,9 +104,16 @@ AppDispatcher.register(function(action) {
     _user.setting.modified = true;
     break;
 
+  case EasyLearnConstants.DELETE_PACK_IN_ALL_FOLDERS :
+    _user.setting.modified = true;
+    break;
+
+  case EasyLearnConstants.DELETE_PACK_IN_FOLDER :
+    _user.setting.modified = true;
+    break;
+
   case EasyLearnConstants.SYNC_SUCCESS :
     _user.setting = action.data.setting;
-    UserStore.emitChange();
     setLocalStorage();
     break;
 

@@ -223,6 +223,23 @@ let EasyLearnActions = {
       targetFolderId: targetFolderId
     });
   },
+
+  deletePackInAllFolders: function (packId) {
+    console.log('[Action]deletePackInAllFolders',packId);
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.DELETE_PACK_IN_ALL_FOLDERS,
+      packId: packId
+    });
+  },
+
+  deletePackInFolder: function (packId, fodlerId) {
+    console.log('[Action]deletePackInFolder',packId,fodlerId);
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.DELETE_PACK_IN_FOLDER,
+      packId: packId,
+      fodlerId: fodlerId
+    });
+  }
 };
 
 module.exports = EasyLearnActions;

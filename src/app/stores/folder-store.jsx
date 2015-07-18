@@ -67,7 +67,7 @@ function movePack(packId, originFolderId, targetFolderId) {
     }
 
     if (folder.id === targetFolderId) {
-      //not exist in folder then add
+//not exist in folder then add
       if (folder.pack.indexOf(packId) === -1)
         folder.pack.push(packId);
     }
@@ -77,10 +77,31 @@ function movePack(packId, originFolderId, targetFolderId) {
 function copyPack(packId, targetFolderId) {
   for (let folder of _folder) {
     if (folder.id === targetFolderId) {
-      //not exist then add
+//not exist then add
       if (folder.pack.indexOf(packId) === -1)
         folder.pack.push(packId);
       break;
+    }
+  }
+}
+
+function deletePackInFolder(packId, fodlerId) {
+  for (let folder of _folder) {
+    if (folder.id === fodlerId) {
+      let index = folder.pack.indexOf(packId);
+      if(index !== -1){
+          folder.pack.splice(index, 1);
+      }
+      break;
+    }
+  }
+}
+
+function deletePackInAllFolders(packId) {
+  for (let folder of _folder) {
+    let index = folder.pack.indexOf(packId);
+    if(index !== -1){
+        folder.pack.splice(index, 1);
     }
   }
 }
@@ -190,6 +211,16 @@ AppDispatcher.register(function(action) {
 
   case EasyLearnConstants.COPY_PACK :
     copyPack(action.packId, action.targetFolderId);
+    FolderStore.emitChange();
+    break;
+
+  case EasyLearnConstants.DELETE_PACK_IN_ALL_FOLDERS :
+    deletePackInAllFolders(action.packId);
+    FolderStore.emitChange();
+    break;
+
+  case EasyLearnConstants.DELETE_PACK_IN_FOLDER :
+    deletePackInFolder(action.packId, action.fodlerId);
     FolderStore.emitChange();
     break;
 
