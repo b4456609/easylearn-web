@@ -103,6 +103,8 @@ let DeletePack = React.createClass({
 
   _handleAction: function () {
     EasylearnActions.redoDeletePack();
+    EasylearnActions.sync();
+
   },
 
   _onRowSelection: function (selected) {
@@ -123,6 +125,7 @@ let DeletePack = React.createClass({
     }
 
     EasylearnActions.deletePack(selectedId);
+    EasylearnActions.sync();
 
     this.setState({snackAction: 'undo', message :'成功刪除' + this.state.selected.length + '個懶人包'});
     this.refs.snackbar.show();

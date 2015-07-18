@@ -166,10 +166,12 @@ let PackInfo = React.createClass({
 
   _handleDeleteDialogSubmit(){
     if(this.state.folderId === 'allPackId'){
-      EasylearnActions.deletePackInAllFolders(this.props.pack.id)
+      EasylearnActions.deletePackInAllFolders(this.props.pack.id);
+      EasylearnActions.sync();
     }
     else{
       EasylearnActions.deletePackInFolder(this.props.pack.id, this.state.folderId)
+      EasylearnActions.sync();
     }
     this.refs.deleteDialog.dismiss();
   },
