@@ -15,5 +15,7 @@ module.exports = keyMirror({
   NEW_NOTE: null,
   NEW_COMMENT: null,
   GET_COMMENT: null,
-  RENAME_FOLDER: null
+  RENAME_FOLDER: null,
+  MOVE_PACK: null,
+  COPY_PACK: null
 });

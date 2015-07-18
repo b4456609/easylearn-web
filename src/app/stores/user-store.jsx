@@ -88,21 +88,29 @@ let UserStore = assign({}, EventEmitter.prototype, {
 // Register callback to handle all updates
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
-  case EasyLearnConstants.NEW_PACK:
+  case EasyLearnConstants.NEW_PACK :
     _user.setting.modified = true;
     break;
 
-  case EasyLearnConstants.RENAME_FOLDER:
+  case EasyLearnConstants.RENAME_FOLDER :
     _user.setting.modified = true;
     break;
 
-  case EasyLearnConstants.SYNC_SUCCESS:
+  case EasyLearnConstants.MOVE_PACK :
+    _user.setting.modified = true;
+    break;
+
+  case EasyLearnConstants.COPY_PACK :
+    _user.setting.modified = true;
+    break;
+
+  case EasyLearnConstants.SYNC_SUCCESS :
     _user.setting = action.data.setting;
     UserStore.emitChange();
     setLocalStorage();
     break;
 
-  case EasyLearnConstants.LOGIN_SUCCESS:
+  case EasyLearnConstants.LOGIN_SUCCESS :
     _user.id = action.id;
     _user.name = action.name;
     console.log('[LOGIN_SUCCESS]');
@@ -111,7 +119,7 @@ AppDispatcher.register(function(action) {
     setLocalStorage();
     break;
 
-  default:
+  default :
 // no op
   }
 });

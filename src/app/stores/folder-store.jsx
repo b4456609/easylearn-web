@@ -35,10 +35,10 @@ function addPackToAll(packId) {
 
 function deletePack(idArray) {
   localStorage.setItem('folder', JSON.stringify(_folder));
-  for(let id of idArray){
-    for(let folder of _folder){
-      for(let i in folder.pack){
-        if(folder.pack[i] === id){
+  for (let id of idArray) {
+    for (let folder of _folder) {
+      for (let i in folder.pack) {
+        if (folder.pack[i] === id) {
           folder.pack.splice(i, 1);
         }
       }
@@ -50,10 +50,36 @@ function redoDeletePack() {
   _folder = JSON.parse(localStorage.getItem('folder'));
 }
 
-function renameFolder(id , name){
-  for(let folder of _folder){
-    if(folder.id === id){
+function renameFolder(id, name) {
+  for (let folder of _folder) {
+    if (folder.id === id) {
       folder.name = name;
+      break;
+    }
+  }
+}
+
+function movePack(packId, originFolderId, targetFolderId) {
+  for (let folder of _folder) {
+    if (folder.id === originFolderId) {
+      let index = folder.pack.indexOf(packId);
+      folder.pack.splice(index, 1);
+    }
+
+    if (folder.id === targetFolderId) {
+      //not exist in folder then add
+      if (folder.pack.indexOf(packId) === -1)
+        folder.pack.push(packId);
+    }
+  }
+}
+
+function copyPack(packId, targetFolderId) {
+  for (let folder of _folder) {
+    if (folder.id === targetFolderId) {
+      //not exist then add
+      if (folder.pack.indexOf(packId) === -1)
+        folder.pack.push(packId);
       break;
     }
   }
@@ -76,9 +102,9 @@ let FolderStore = assign({}, EventEmitter.prototype, {
     return _folder;
   },
 
-  getFolderIdName: function () {
+  getFolderIdName: function() {
     let result = [];
-    for(let item of _folder){
+    for (let item of _folder) {
       result.push({
         id: item.id,
         name: item.name
@@ -127,37 +153,47 @@ let FolderStore = assign({}, EventEmitter.prototype, {
 // Register callback to handle all updates
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
-  case EasyLearnConstants.FOLDER_VIEW:
+  case EasyLearnConstants.FOLDER_VIEW :
     _viewFolderId = action.folderId;
     FolderStore.emitChange();
     break;
 
-  case EasyLearnConstants.SYNC_SUCCESS:
+  case EasyLearnConstants.SYNC_SUCCESS :
     _folder = action.data.folder;
     FolderStore.emitChange();
     break;
 
-  case EasyLearnConstants.NEW_PACK:
+  case EasyLearnConstants.NEW_PACK :
     addPackToAll(action.data.id);
     FolderStore.emitChange();
     break;
 
-  case EasyLearnConstants.DELETE_PACK:
+  case EasyLearnConstants.DELETE_PACK :
     deletePack(action.idArray);
     FolderStore.emitChange();
     break;
 
-  case EasyLearnConstants.REDO_DELETE_PACK:
+  case EasyLearnConstants.REDO_DELETE_PACK :
     redoDeletePack();
     FolderStore.emitChange();
     break;
 
-  case EasyLearnConstants.RENAME_FOLDER:
+  case EasyLearnConstants.RENAME_FOLDER :
     renameFolder(action.folderId, action.name);
     FolderStore.emitChange();
     break;
 
-  default:
+  case EasyLearnConstants.MOVE_PACK :
+    movePack(action.packId, action.originFolderId, action.targetFolderId);
+    FolderStore.emitChange();
+    break;
+
+  case EasyLearnConstants.COPY_PACK :
+    copyPack(action.packId, action.targetFolderId);
+    FolderStore.emitChange();
+    break;
+
+  default :
 // no op
   }
 });

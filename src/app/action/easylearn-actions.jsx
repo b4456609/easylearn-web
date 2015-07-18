@@ -203,7 +203,26 @@ let EasyLearnActions = {
       folderId: folderId,
       name: name
     });
-  }
+  },
+
+  movePack: function (packId, originFolderId, targetFolderId) {
+    console.log('[Action]movePack',packId, originFolderId, targetFolderId);
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.MOVE_PACK,
+      packId: packId,
+      originFolderId: originFolderId,
+      targetFolderId: targetFolderId
+    });
+  },
+
+  copyPack: function (packId, targetFolderId) {
+    console.log('[Action]copyPack',packId, targetFolderId);
+    AppDispatcher.dispatch({
+      actionType: EasyLearnConstants.COPY_PACK,
+      packId: packId,
+      targetFolderId: targetFolderId
+    });
+  },
 };
 
 module.exports = EasyLearnActions;

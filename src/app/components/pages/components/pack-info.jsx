@@ -3,7 +3,6 @@ let {
   Paper,
   List,
   ListItem,
-  ClearFix,
   Styles,
   ListDivider,
   Dialog,
@@ -11,6 +10,11 @@ let {
   RadioButtonGroup
 } = require('material-ui');
 
+let Menu = require('material-ui/lib/menus/menu');
+let MenuItem = require('material-ui/lib/menus/menu-item');
+let MenuDivider = require('material-ui/lib/menus/menu-divider');
+
+let EasylearnActions = require('../../../action/easylearn-actions.jsx');
 let FolderStore = require('../../../stores/folder-store.jsx');
 
 let {
@@ -30,7 +34,6 @@ let PackInfo = React.createClass({
     return {
       folder: FolderStore.getFolderIdName(),
       folderId: FolderStore.getViewFolderId(),
-      selectedId: undefined
     };
   },
 
@@ -66,7 +69,7 @@ let PackInfo = React.createClass({
     );
   },
 
-  getMoveDialog() {
+  getCopyMoveDialog() {
     let self = this;
     let standardActions = [
       {
@@ -92,19 +95,48 @@ let PackInfo = React.createClass({
         );
       }
     });
+    let title;
+    if(this.state.folderId === 'allPackId'){
+      title = '複製懶人包';
+    }  else{
+      title = '移動懶人包';
+    }
 
     return (
-      <Dialog actions={standardActions} ref="moveDialog" title="移動懶人包">
-        <RadioButtonGroup name="shipSpeed">
+      <Dialog actions={standardActions} ref="moveDialog" title={title}>
+        <RadioButtonGroup name="folder-choose" ref="folderRadio">
           {RadioItem}
         </RadioButtonGroup>
       </Dialog>
     );
   },
 
+  getManageMenu(){
+    let moveOrCopy;
+    if(this.state.folderId === 'allPackId'){
+      moveOrCopy = (
+        <ListItem onClick={this._onPackCopyMove} primaryText="複製到..."/>
+      );
+    }
+    else{
+      moveOrCopy = (
+        <ListItem onClick={this._onPackCopyMove}
+          primaryText="移至..."/>
+      );
+    }
+
+    return (
+      <List subheader="管理此懶人包">
+        {moveOrCopy}
+        <ListItem onClick={this._onPackDelete} primaryText="移除"/>
+      </List>
+    );
+  },
+
   render: function() {
     let styles = this.getStyles();
-    let moveDialog = this.getMoveDialog();
+    let moveDialog = this.getCopyMoveDialog();
+    let manageMenu = this.getManageMenu();
 
     if (this.props.pack != null) {
       let publicStatus = '不公開';
@@ -113,7 +145,7 @@ let PackInfo = React.createClass({
 
       }
       return (
-        <ClearFix>
+        <div>
           <Paper className="pack-paper" style={styles.rightBlock} zDepth={1}>
 
             <List>
@@ -123,33 +155,38 @@ let PackInfo = React.createClass({
               <ListItem primaryText="狀態" secondaryText={this.getSecondaryText(publicStatus)}/>
               <ListDivider/>
             </List>
-            <List subheader="管理此懶人包">
-              <ListItem onClick={this._onPackMove} primaryText="移至..."/>
-              <ListItem onClick={this._onPackDelete} primaryText="移除"/>
-            </List>
+            {manageMenu}
           </Paper>
-          <div style={{display:'relative !important'}}>
-            {moveDialog}
-          </div>
-        </ClearFix>
+          {moveDialog}
+        </div>
       );
     } else {
       return null;
     }
   },
 
-  _handleSelectValueChange(e) {
-    let id = e.target.value.payload;
-    this.setState({
-      selectedId: id
-    });
-  },
-
   _handleMoveDialogSubmit() {
-    console.log(this.state.selectedId, this.props.pack.id, this.state.folderId);
+    let target = this.refs.folderRadio.getSelectedValue();
+    console.log(target, this.props.pack.id, this.state.folderId);
+    //user not select
+    if(target === ''){
+      console.log(null);
+    }
+
+    //copy action system folder
+    if(this.state.folderId === 'allPackId'){
+      EasylearnActions.copyPack(this.props.pack.id, target);
+      EasylearnActions.sync();
+      this.refs.moveDialog.dismiss();
+    }
+    else{
+      EasylearnActions.movePack(this.props.pack.id, this.state.folderId, target);
+      EasylearnActions.sync();
+      this.refs.moveDialog.dismiss();
+    }
   },
 
-  _onPackMove() {
+  _onPackCopyMove() {
     this.refs.moveDialog.show();
   },
 
