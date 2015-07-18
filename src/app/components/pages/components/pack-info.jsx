@@ -1,11 +1,12 @@
 let React = require('react');
 let {
-  Paper,
   List,
-  ListItem,
+  Paper,
   Styles,
-  ListDivider,
   Dialog,
+  Snackbar,
+  ListItem,
+  ListDivider,
   RadioButton,
   RadioButtonGroup
 } = require('material-ui');
@@ -35,6 +36,7 @@ let PackInfo = React.createClass({
       action: '',
       folder: FolderStore.getFolderIdName(),
       folderId: FolderStore.getViewFolderId(),
+      message: ''
     };
   },
 
@@ -132,10 +134,18 @@ let PackInfo = React.createClass({
     );
   },
 
+  getSnackBar(){
+    return (<Snackbar
+      ref="snackbar"
+      message={this.state.message}
+      autoHideDuration={5000}/>);
+  },
+
   render: function() {
     let styles = this.getStyles();
     let moveDialog = this.getCopyMoveDialog();
     let manageMenu = this.getManageMenu();
+    let snackBar = this.getSnackBar();
 
     if (this.props.pack != null) {
       let publicStatus = '不公開';
@@ -157,6 +167,7 @@ let PackInfo = React.createClass({
             {manageMenu}
           </Paper>
           {moveDialog}
+          {snackBar}
         </div>
       );
     } else {
@@ -170,10 +181,11 @@ let PackInfo = React.createClass({
     //user not select
     if(target === ''){
       console.log(null);
+      this.setState({message: '請選擇項目'});
+      this.refs.snackbar.show();
     }
-
     //copy action system folder
-    if(this.state.folderId === 'allPackId'){
+    else if(this.state.action === 'copy'){
       EasylearnActions.copyPack(this.props.pack.id, target);
       EasylearnActions.sync();
       this.refs.moveDialog.dismiss();
