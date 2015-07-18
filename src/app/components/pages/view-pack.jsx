@@ -333,7 +333,7 @@ let ViewPack = React.createClass({
     let text = selection.toString();
 
 // select words and is in version content
-    if (text !== '' || !content.contains(textNode)) {
+    if (text !== '' && content.contains(textNode)) {
       this.setState({
         range: selection.getRangeAt(0).cloneRange(),
         selectionText: selection.toString().trim()

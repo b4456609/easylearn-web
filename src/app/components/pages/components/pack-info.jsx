@@ -32,6 +32,7 @@ let PackInfo = React.createClass({
 
   getInitialState: function() {
     return {
+      action: '',
       folder: FolderStore.getFolderIdName(),
       folderId: FolderStore.getViewFolderId(),
     };
@@ -79,7 +80,7 @@ let PackInfo = React.createClass({
         onTouchTap: this._handleMoveDialogSubmit
       }
     ];
-
+    //disable current folder item
     let RadioItem = this.state.folder.map(function(item) {
       if (self.state.folderId === item.id) {
         return (
@@ -95,8 +96,9 @@ let PackInfo = React.createClass({
         );
       }
     });
+    //dialog title
     let title;
-    if(this.state.folderId === 'allPackId'){
+    if(this.state.action === 'copy'){
       title = '複製懶人包';
     }  else{
       title = '移動懶人包';
@@ -112,22 +114,19 @@ let PackInfo = React.createClass({
   },
 
   getManageMenu(){
-    let moveOrCopy;
-    if(this.state.folderId === 'allPackId'){
-      moveOrCopy = (
-        <ListItem onClick={this._onPackCopyMove} primaryText="複製到..."/>
-      );
-    }
-    else{
-      moveOrCopy = (
-        <ListItem onClick={this._onPackCopyMove}
+    let copyAction = null;
+    //
+    if(this.state.folderId !== 'allPackId'){
+      copyAction = (
+        <ListItem onClick={this._onPackCopyMove.bind(this, 'move')}
           primaryText="移至..."/>
       );
     }
 
     return (
       <List subheader="管理此懶人包">
-        {moveOrCopy}
+        <ListItem onClick={this._onPackCopyMove.bind(this, 'copy')} primaryText="複製至..."/>
+        {copyAction}
         <ListItem onClick={this._onPackDelete} primaryText="移除"/>
       </List>
     );
@@ -186,7 +185,8 @@ let PackInfo = React.createClass({
     }
   },
 
-  _onPackCopyMove() {
+  _onPackCopyMove(action) {
+    this.setState({action: action});
     this.refs.moveDialog.show();
   },
 
