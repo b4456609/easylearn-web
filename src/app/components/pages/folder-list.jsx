@@ -48,6 +48,7 @@ let FolderList = React.createClass({
 
   _onChange: function() {
     this.setState(getState());
+    this.setState({hoverPack: null});
   },
 
   getStyles: function() {

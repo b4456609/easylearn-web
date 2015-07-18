@@ -10,6 +10,7 @@ let {
   RadioButton,
   RadioButtonGroup
 } = require('material-ui');
+let InfoOutlineIcon = require('material-ui/lib/svg-icons/action/info-outline');
 
 let Menu = require('material-ui/lib/menus/menu');
 let MenuItem = require('material-ui/lib/menus/menu-item');
@@ -59,6 +60,15 @@ let PackInfo = React.createClass({
         right: 50,
         width: 250
       },
+      center:{
+        textAlign: 'center',
+        marginTop: 16,
+        marginBottom: 16
+      },
+      icon: {
+        height:"150",
+        width:"150",
+      }
     };
   },
 
@@ -223,7 +233,13 @@ let PackInfo = React.createClass({
         </div>
       );
     } else {
-      return null;
+      return (
+        <Paper className="pack-paper" style={styles.rightBlock} zDepth={1}>
+          <div style={styles.center}>
+        <InfoOutlineIcon color={Colors.cyan500} style={styles.icon}/>
+        <p>滑鼠移到懶人包上，即可觀看詳細資訊</p>
+        </div>
+      </Paper>)
     }
   },
 

@@ -49,7 +49,11 @@ let FolderManerger = React.createClass({
   getStyles: function() {
     return {
       paper: {
-        marginBottom: 16
+        marginBottom: 16,
+        maxWidth: 300
+      },
+      btn:{
+        width: '100%',
       }
     };
   },
@@ -182,8 +186,8 @@ let FolderManerger = React.createClass({
         <List subheader="使用者資料夾">
           {userFolder}
         </List>
+        <FlatButton style={styles.btn} label="新增資料夾" onClick={this._onNewFolderClick} secondary={true}/>
         {renameDialog}
-        <FlatButton label="新增資料夾" onClick={this._onNewFolderClick} secondary={true}/>
         {newFolderDialog}
       </Paper>
     );
