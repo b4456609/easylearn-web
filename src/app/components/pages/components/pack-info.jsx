@@ -11,7 +11,6 @@ let {
   RadioButtonGroup
 } = require('material-ui');
 let InfoOutlineIcon = require('material-ui/lib/svg-icons/action/info-outline');
-
 let Menu = require('material-ui/lib/menus/menu');
 let MenuItem = require('material-ui/lib/menus/menu-item');
 let MenuDivider = require('material-ui/lib/menus/menu-divider');
@@ -96,13 +95,13 @@ let PackInfo = React.createClass({
     let RadioItem = this.state.folder.map(function(item) {
       if (self.state.folderId === item.id) {
         return (
-          <RadioButton disabled={true} id={item.id} label={item.name} style={{
+          <RadioButton disabled={true} key={item.id} label={item.name} style={{
             marginBottom: 16
           }} value={item.id}/>
         );
       } else {
         return (
-          <RadioButton id={item.id} label={item.name} style={{
+          <RadioButton key={item.id} label={item.name} style={{
             marginBottom: 16
           }} value={item.id}/>
         );
@@ -217,12 +216,11 @@ let PackInfo = React.createClass({
       return (
         <div>
           <Paper className="pack-paper" style={styles.rightBlock} zDepth={1}>
-
             <List>
-              <ListItem primaryText="名稱" secondaryText={this.getSecondaryText(this.props.pack.name)}/>
-              <ListItem primaryText="描述" secondaryText={this.getSecondaryText(this.props.pack.description)}/>
-              <ListItem primaryText="建立時間" secondaryText={this.getSecondaryText(this.props.pack.create_time)}/>
-              <ListItem primaryText="狀態" secondaryText={this.getSecondaryText(publicStatus)}/>
+              <ListItem key={this.props.pack.id + 1} primaryText="名稱" secondaryText={this.getSecondaryText(this.props.pack.name)}/>
+              <ListItem key={this.props.pack.id + 2} primaryText="描述" secondaryText={this.getSecondaryText(this.props.pack.description)}/>
+              <ListItem key={this.props.pack.id + 3} primaryText="建立時間" secondaryText={this.getSecondaryText(this.props.pack.create_time)}/>
+              <ListItem key={this.props.pack.id + 4} primaryText="狀態" secondaryText={this.getSecondaryText(publicStatus)}/>
               <ListDivider/>
             </List>
             {manageMenu}

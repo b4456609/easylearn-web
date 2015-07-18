@@ -1,6 +1,7 @@
 let React = require('react');
 let Router = require('react-router');
 let RouteHandler = Router.RouteHandler;
+let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 let EasyLearnActions = require('../../action/easylearn-actions.jsx');
 let PackInfo = require('./components/pack-info.jsx');
 let PackItem = require('./components/pack-item.jsx');
@@ -91,7 +92,9 @@ let FolderList = React.createClass({
         <PackInfo pack={this.state.hoverPack} />
         <div style={styles.content}>
           <ClearFix>
-          {packNodes}
+            <ReactCSSTransitionGroup transitionName="example">
+              {packNodes}
+            </ReactCSSTransitionGroup>
           </ClearFix>
         </div>
       </div>

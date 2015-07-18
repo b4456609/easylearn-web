@@ -77,7 +77,7 @@ let PackItem= React.createClass({
 
   _onMouseOver() {
     this.setState({
-      zDepth: 2
+      zDepth: 3
     });
   },
 
