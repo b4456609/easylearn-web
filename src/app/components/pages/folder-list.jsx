@@ -87,9 +87,7 @@ let FolderList = React.createClass({
 
     return (
       <div style={styles.root}>
-        <div style={styles.rightBlock}>
-          <PackInfo pack={this.state.hoverPack} />
-        </div>
+        <PackInfo pack={this.state.hoverPack} />
         <div style={styles.content}>
           <ClearFix>
           {packNodes}

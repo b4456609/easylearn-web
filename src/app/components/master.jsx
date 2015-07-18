@@ -11,7 +11,7 @@ let EasyLearnActions = require('../action/easylearn-actions.jsx');
 let Home = require('./pages/home.jsx');
 let Fail = require('./pages/fail.jsx');
 
-var Navigation = Router.Navigation;
+let Navigation = Router.Navigation;
 let {
   AppBar,
   AppCanvas,
@@ -36,7 +36,7 @@ function getState() {
   }
 }
 
-var Master = React.createClass({
+let Master = React.createClass({
   mixins: [
     Router.State, Navigation
   ],

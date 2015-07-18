@@ -80,8 +80,8 @@ let FolderStore = assign({}, EventEmitter.prototype, {
     let result = [];
     for(let item of _folder){
       result.push({
-        payload: item.id,
-        text: item.name
+        id: item.id,
+        name: item.name
       })
     }
 
