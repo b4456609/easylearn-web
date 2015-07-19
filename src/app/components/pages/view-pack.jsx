@@ -7,6 +7,7 @@ let InsetComment = require('material-ui/lib/svg-icons/editor/insert-comment.js')
 let Tooltip = require('../../api/tooltip-api.js');
 let UserStore = require('../../stores/user-store.jsx');
 let NoteDialog = require('./components/note-dialog.jsx');
+let PageTemplete = require('../page-templete.jsx');
 
 let Navigation = Router.Navigation;
 
@@ -177,7 +178,8 @@ let ViewPack = React.createClass({
         width: '300px'
       },
       root: {
-        maxWidth: '1920px'
+        maxWidth: 8.3 * 8 + '%',
+        margin: '0 auto'
       },
       floatBtn: {
         position: 'absolute',
@@ -296,8 +298,8 @@ let ViewPack = React.createClass({
     let newNote = this.getNewNoteDialog();
     let notifyBar = this.getNotifySnackBar();
     return (
-      <div>
-        <ClearFix>
+      <PageTemplete>
+
           <div style={styles.root}>
 
             <div style={styles.rightBlock}>
@@ -323,8 +325,8 @@ let ViewPack = React.createClass({
           </FloatingActionButton>
           <NoteDialog note={this.state.note} noteText={this.state.noteText} ref="noteDialog"/>
           {newNote} {notifyBar}
-        </ClearFix>
-      </div>
+        </PageTemplete>
+
     );
   },
 

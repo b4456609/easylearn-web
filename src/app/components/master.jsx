@@ -10,6 +10,7 @@ let AppStore = require('../stores/app-store.jsx');
 let EasyLearnActions = require('../action/easylearn-actions.jsx');
 let Home = require('./pages/home.jsx');
 let Fail = require('./pages/fail.jsx');
+let AppLeftNav = require('./app-left-nav');
 
 let Navigation = Router.Navigation;
 let {
@@ -141,9 +142,16 @@ let Master = React.createClass({
       <h3>資料夾</h3>
     );
 
+    // let content = (
+    //   <AppMenuWithContent folderItems={this.state.folder} folderTitle={folderTitle} menuItems={menuItems}/>
+    // );
+
     let content = (
-      <AppMenuWithContent folderItems={this.state.folder} folderTitle={folderTitle} menuItems={menuItems}/>
+      <div>
+        <RouteHandler />
+      </div>
     );
+
 
     if (this.isActive('home') || this.isActive('/')) {
       content = (
@@ -185,12 +193,18 @@ let Master = React.createClass({
     return (
       <AppCanvas>
 
-        <AppBar iconElementLeft={homeIcon} iconElementRight={logoutBtn} title={title} zDepth={zDepth}/>
+        <AppBar onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap} iconElementRight={logoutBtn} title={title} zDepth={zDepth}/>
+
+        <AppLeftNav ref="leftNav" />
 
         {content}
 
       </AppCanvas>
     );
+  },
+
+  _onLeftIconButtonTouchTap() {
+    this.refs.leftNav.toggle();
   }
 });
 

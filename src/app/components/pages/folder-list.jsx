@@ -5,6 +5,7 @@ let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 let EasyLearnActions = require('../../action/easylearn-actions.jsx');
 let PackInfo = require('./components/pack-info.jsx');
 let PackItem = require('./components/pack-item.jsx');
+let PageTemplete = require('../page-templete.jsx');
 let {
   Styles,
   Paper,
@@ -54,16 +55,15 @@ let FolderList = React.createClass({
 
   getStyles: function() {
     return {
-      content: {
-        marginRight: '324px',
-        marginBottom: '16px'
+      root: {
       },
       rightBlock: {
         position: 'fixed',
         right: 50
       },
-      root: {
-        maxWidth: '1920px'
+      content: {
+        margin: '0 auto',
+        maxWidth: 8.3 * 6 + '%', // 12 of 6 col
       }
     };
   },
@@ -86,10 +86,11 @@ let FolderList = React.createClass({
   render: function() {
     let packNodes = this.getPackPaperNode();
     let styles = this.getStyles();
-
+    //
+    //  <PackInfo pack={this.state.hoverPack} />
     return (
-      <div style={styles.root}>
-        <PackInfo pack={this.state.hoverPack} />
+      <PageTemplete>
+        <div style={styles.root}>
         <div style={styles.content}>
           <ClearFix>
             <ReactCSSTransitionGroup transitionName="example">
@@ -97,7 +98,8 @@ let FolderList = React.createClass({
             </ReactCSSTransitionGroup>
           </ClearFix>
         </div>
-      </div>
+        </div>
+      </PageTemplete>
     );
   },
 
