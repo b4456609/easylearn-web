@@ -78,7 +78,7 @@ let Fail = React.createClass({
           <div style={styles.tagline}>
             <h1 style={styles.h1}>伺服器發生錯誤</h1>
             <h2 style={styles.h2}>
-              請稍後再重試
+              你想要重新再試一次嗎?
             </h2>
           </div>
       </FullWidthSection>
