@@ -1,4 +1,9 @@
 let React = require('react');
+let {
+  Navigation,
+  State
+} = require('react-router');
+let EasyLearnActions = require('../action/easylearn-actions.jsx');
 let FolderStore = require('../stores/folder-store.jsx');
 let {
   LeftNav,
@@ -13,7 +18,10 @@ let {
   Colors
 } = Styles;
 
-let { StylePropable, StyleResizable } = Mixins;
+let {
+  StylePropable,
+  StyleResizable
+} = Mixins;
 
 function getState() {
   return {
@@ -22,11 +30,14 @@ function getState() {
 }
 
 let AppLeftNav = React.createClass({
-  mixins: [StylePropable, StyleResizable],
+  mixins: [
+    StylePropable, StyleResizable, Navigation, State
+  ],
 
   getInitialState: function() {
     return {
-      folder: []
+      folder: [],
+      docked: true
     };
   },
 
@@ -34,13 +45,25 @@ let AppLeftNav = React.createClass({
     FolderStore.addChangeListener(this._onChange);
     let self = this;
     window.addEventListener("resize", function() {
-      if (self.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
-          self.refs.leftNav.close();
-          self.refs.leftNav.toggle();
-      } else {
-        self.refs.leftNav.close();
-      }
+      self.determinOpenOrClose();
     });
+
+    if (window.innerWidth < 900) {
+      this.refs.leftNav.close();
+      this.refs.leftNav.toggle();
+    }
+
+  },
+
+  determinOpenOrClose() {
+    if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
+      this.refs.leftNav.close();
+      this.refs.leftNav.toggle();
+      this.setState({docked : true});
+    } else {
+      this.refs.leftNav.close();
+      this.setState({docked : false});
+    }
   },
 
   componentWillUnmount: function() {
@@ -54,7 +77,7 @@ let AppLeftNav = React.createClass({
   getStyles() {
     return {
       cursor: 'pointer',
-      //.mui-font-style-headline
+//.mui-font-style-headline
       fontSize: '24px',
       color: Typography.textFullWhite,
       lineHeight: Spacing.desktopKeylineIncrement + 'px',
@@ -66,12 +89,7 @@ let AppLeftNav = React.createClass({
     };
   },
 
-  render: function() {
-    let header = (
-      <div style={this.getStyles()} onTouchTap={this._onHeaderClick}>
-        EasyLearn
-      </div>
-    );
+  getMenuItem() {
 
     let menuItems = [
       {
@@ -89,9 +107,19 @@ let AppLeftNav = React.createClass({
       },
     ];
 
-    for(let item of this.state.folder){
+    for (let item of this.state.folder) {
       menuItems.push(item);
     }
+
+    return menuItems;
+  },
+
+  render: function() {
+    let header = (
+      <div onTouchTap={this._onHeaderClick} style={this.getStyles()}>
+        EasyLearn
+      </div>
+    );
 
     let docked;
     if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
@@ -100,17 +128,36 @@ let AppLeftNav = React.createClass({
       docked = false;
     }
 
+    let menuItems = this.getMenuItem();
+
     return (
-      <LeftNav
-        docked={docked}
-        ref="leftNav"
-        header={header}
-        menuItems={menuItems}/>
+      <LeftNav docked={this.state.docked} header={header} menuItems={menuItems} onChange={this._onLeftNavChange} ref="leftNav" selectedIndex={this._getSelectedIndex()}/>
+
     );
   },
 
   toggle() {
     this.refs.leftNav.toggle();
+  },
+
+  _onLeftNavChange(e, key, payload) {
+    if (payload.route === 'folder-list') {
+      EasyLearnActions.folderView(payload.id);
+    }
+    this.transitionTo(payload.route);
+  },
+
+  _getSelectedIndex() {
+    let currentItem;
+    let menuItems = this.getMenuItem();
+
+    for (let i = menuItems.length - 1; i >= 0; i--) {
+      currentItem = menuItems[i];
+      if (this.isActive('folder-list') && (currentItem.id === FolderStore.getViewFolderId())) {
+        return i;
+      } else if (currentItem.route && this.isActive(currentItem.route) && !this.isActive('folder-list'))
+        return i;
+    }
   }
 
 });
