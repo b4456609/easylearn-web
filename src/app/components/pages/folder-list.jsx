@@ -88,14 +88,25 @@ let FolderList = React.createClass({
     let styles = this.getStyles();
     //
     //  <PackInfo pack={this.state.hoverPack} />
+    // return (
+    //   <PageTemplete>
+    //     <div style={styles.root}>
+    //     <div style={styles.content}>
+    //       <ClearFix>
+    //         <ReactCSSTransitionGroup transitionName="example">
+    //           {packNodes}
+    //         </ReactCSSTransitionGroup>
+    //       </ClearFix>
+    //     </div>
+    //     </div>
+    //   </PageTemplete>
+    // );
     return (
       <PageTemplete>
         <div style={styles.root}>
         <div style={styles.content}>
           <ClearFix>
-            <ReactCSSTransitionGroup transitionName="example">
               {packNodes}
-            </ReactCSSTransitionGroup>
           </ClearFix>
         </div>
         </div>

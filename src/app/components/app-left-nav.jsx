@@ -1,143 +1,61 @@
 let React = require('react');
-let Router = require('react-router');
+let FolderStore = require('../stores/folder-store.jsx');
 let {
-  MenuItem,
-  Mixins,
   LeftNav,
-  Styles
+  MenuItem
 } = require('material-ui');
-let {
-  Colors,
-  Spacing,
-  Typography
-} = Styles;
-let {
-  StyleResizable,
-  StylePropable
-} = Mixins;
 
-let menuItems = [
-  {
-    route: 'get-started',
-    text: 'Get Started'
-  }, {
-    route: 'customization',
-    text: 'Customization'
-  }, {
-    route: 'components',
-    text: 'Components'
-  }, {
-    type: MenuItem.Types.SUBHEADER,
-    text: 'Resources'
-  }, {
-    type: MenuItem.Types.LINK,
-    payload: 'https://github.com/callemall/material-ui',
-    text: 'GitHub'
-  }, {
-    type: MenuItem.Types.LINK,
-    payload: 'http://facebook.github.io/react',
-    text: 'React'
-  }, {
-    type: MenuItem.Types.LINK,
-    payload: 'https://www.google.com/design/spec/material-design/introduction.html',
-    text: 'Material Design'
+function getState() {
+  return {
+    folder: FolderStore.getFolderMenu()
   }
-];
+}
 
 let AppLeftNav = React.createClass({
-  mixins: [
-    StyleResizable, StylePropable
-  ],
-  contextTypes: {
-    router: React.PropTypes.func
-  },
 
   getInitialState: function() {
     return {
-      docked: true
-    };
-  },
-
-  getStyles() {
-    return {
-      cursor: 'pointer',
-//.mui-font-style-headline
-      fontSize: '24px',
-      color: Typography.textFullWhite,
-      lineHeight: Spacing.desktopKeylineIncrement + 'px',
-      fontWeight: Typography.fontWeightLight,
-      backgroundColor: Colors.cyan500,
-      paddingLeft: Spacing.desktopGutter,
-      paddingTop: '0px',
-      marginBottom: '8px'
+      folder: []
     };
   },
 
   componentDidMount: function() {
-    let self = this;
-    window.addEventListener("resize", function () {
-      if (window.innerWidth > 900) {
-        if(!self.state.docked){
-          self.refs.leftNav.close();
-          self.refs.leftNav.toggle();
-        }
-        self.setState({docked:true})
-      }
-      else{
-        if (self.state.docked) {
-          self.refs.leftNav.close();
-        }
-        self.setState({docked:false})
-
-      }
-    });
+    FolderStore.addChangeListener(this._onChange);
   },
 
-  resize(){
-    if (window.innerWidth > 900) {
-      return true;
-    } else {
-      return false;
+  componentWillUnmount: function() {
+    FolderStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function() {
+    this.setState(getState());
+  },
+
+  render: function() {
+    let menuItems = [
+      {
+        route: 'new-pack',
+        text: '新增懶人包'
+      }, {
+        route: 'delete-pack',
+        text: '刪除懶人包'
+      }, {
+        route: 'folder-manerger',
+        text: '管理資料夾'
+      }, {
+        type: MenuItem.Types.SUBHEADER,
+        text: '資料夾'
+      },
+    ];
+
+    for(let item of this.state.folder){
+      menuItems.push(item);
     }
-  },
-
-
-  render() {
-    let header = (
-      <div onTouchTap={this._onHeaderClick} style={this.getStyles()}>
-        material ui
-      </div>
-    );
-
-    let docked = this.resize();
-
     return (
-      <LeftNav docked={docked} header={header} menuItems={menuItems} onChange={this._onLeftNavChange} ref="leftNav" selectedIndex={this._getSelectedIndex()}/>
+      <LeftNav menuItems={menuItems}/>
     );
-  },
-
-  toggle() {
-    this.refs.leftNav.toggle();
-  },
-
-  _getSelectedIndex() {
-    let currentItem;
-
-    for (let i = menuItems.length - 1; i >= 0; i--) {
-      currentItem = menuItems[i];
-      if (currentItem.route && this.context.router.isActive(currentItem.route))
-        return i;
-    }
-  },
-
-  _onLeftNavChange(e, key, payload) {
-    this.context.router.transitionTo(payload.route);
-  },
-
-  _onHeaderClick() {
-    this.context.router.transitionTo('root');
-    this.refs.leftNav.close();
   }
+
 });
 
 module.exports = AppLeftNav;

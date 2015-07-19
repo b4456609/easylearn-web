@@ -18,7 +18,8 @@ let {
   AppCanvas,
   IconButton,
   Menu,
-  Styles
+  Styles,
+  LeftNav
 } = require('material-ui');
 
 let RouteHandler = Router.RouteHandler;
@@ -30,7 +31,6 @@ let ThemeManager = new Styles.ThemeManager();
 
 function getState() {
   return {
-    folder: FolderStore.getFolderMenu(),
     username: UserStore.getUserName(),
     userId: UserStore.getUserId(),
     syncFail: AppStore.isSyncFail()
@@ -51,11 +51,16 @@ let Master = React.createClass({
   },
 
   getInitialState: function() {
-    return getState();
+    return {
+      folder: [],
+      username: UserStore.getUserName(),
+      userId: UserStore.getUserId(),
+      syncFail: AppStore.isSyncFail()
+    };
   },
 
   _onChange: function() {
-    this.setState(getViewPackState());
+    this.setState(getState());
   },
 
   getChildContext: function() {
@@ -79,19 +84,14 @@ let Master = React.createClass({
     console.log('[master] componentDidMount');
 
     AppStore.addChangeListener(this._onChange);
-    FolderStore.addChangeListener(this._onChange);
     UserStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function() {
     AppStore.removeChangeListener(this._onChange);
-    FolderStore.removeChangeListener(this._onChange);
     UserStore.removeChangeListener(this._onChange);
   },
 
-  _onChange: function() {
-    this.setState(getState());
-  },
 
   getStyles: function() {
     let darkWhite = Colors.darkWhite;
@@ -122,21 +122,7 @@ let Master = React.createClass({
 
   getContent: function() {
 
-    let menuItems = [
-      {
-        route: 'home',
-        text: '首頁'
-      }, {
-        route: 'new-pack',
-        text: '新增懶人包'
-      }, {
-        route: 'delete-pack',
-        text: '刪除懶人包'
-      }, {
-        route: 'folder-manerger',
-        text: '管理資料夾'
-      }
-    ];
+
 
     let folderTitle = (
       <h3>資料夾</h3>
@@ -194,8 +180,8 @@ let Master = React.createClass({
       <AppCanvas>
 
         <AppBar onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap} iconElementRight={logoutBtn} title={title} zDepth={zDepth}/>
+        <AppLeftNav />
 
-        <AppLeftNav ref="leftNav" />
 
         {content}
 
