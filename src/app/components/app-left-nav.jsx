@@ -2,8 +2,18 @@ let React = require('react');
 let FolderStore = require('../stores/folder-store.jsx');
 let {
   LeftNav,
-  MenuItem
+  Styles,
+  MenuItem,
+  Mixins
 } = require('material-ui');
+
+let {
+  Typography,
+  Spacing,
+  Colors
+} = Styles;
+
+let { StylePropable, StyleResizable } = Mixins;
 
 function getState() {
   return {
@@ -12,6 +22,7 @@ function getState() {
 }
 
 let AppLeftNav = React.createClass({
+  mixins: [StylePropable, StyleResizable],
 
   getInitialState: function() {
     return {
@@ -21,6 +32,15 @@ let AppLeftNav = React.createClass({
 
   componentDidMount: function() {
     FolderStore.addChangeListener(this._onChange);
+    let self = this;
+    window.addEventListener("resize", function() {
+      if (self.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
+          self.refs.leftNav.close();
+          self.refs.leftNav.toggle();
+      } else {
+        self.refs.leftNav.close();
+      }
+    });
   },
 
   componentWillUnmount: function() {
@@ -31,7 +51,28 @@ let AppLeftNav = React.createClass({
     this.setState(getState());
   },
 
+  getStyles() {
+    return {
+      cursor: 'pointer',
+      //.mui-font-style-headline
+      fontSize: '24px',
+      color: Typography.textFullWhite,
+      lineHeight: Spacing.desktopKeylineIncrement + 'px',
+      fontWeight: Typography.fontWeightLight,
+      backgroundColor: Colors.cyan500,
+      paddingLeft: Spacing.desktopGutter,
+      paddingTop: '0px',
+      marginBottom: '8px'
+    };
+  },
+
   render: function() {
+    let header = (
+      <div style={this.getStyles()} onTouchTap={this._onHeaderClick}>
+        EasyLearn
+      </div>
+    );
+
     let menuItems = [
       {
         route: 'new-pack',
@@ -51,9 +92,25 @@ let AppLeftNav = React.createClass({
     for(let item of this.state.folder){
       menuItems.push(item);
     }
+
+    let docked;
+    if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
+      docked = true;
+    } else {
+      docked = false;
+    }
+
     return (
-      <LeftNav menuItems={menuItems}/>
+      <LeftNav
+        docked={docked}
+        ref="leftNav"
+        header={header}
+        menuItems={menuItems}/>
     );
+  },
+
+  toggle() {
+    this.refs.leftNav.toggle();
   }
 
 });

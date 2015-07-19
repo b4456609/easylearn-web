@@ -180,7 +180,8 @@ let Master = React.createClass({
       <AppCanvas>
 
         <AppBar onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap} iconElementRight={logoutBtn} title={title} zDepth={zDepth}/>
-        <AppLeftNav />
+
+        <AppLeftNav ref="leftNav"/>
 
 
         {content}
