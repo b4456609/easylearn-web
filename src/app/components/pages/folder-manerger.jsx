@@ -12,6 +12,7 @@ let {
   TextField,
   ListItem,
   IconMenu,
+  Mixins,
   IconButton,
   FlatButton
 } = require('material-ui');
@@ -19,7 +20,10 @@ let MenuItem = require('material-ui/lib/menus/menu-item');
 
 let Colors = Styles.Colors;
 let FolderStore = require('../../stores/folder-store.jsx');
-
+let {
+  StyleResizable,
+  StylePropable
+} = Mixins;
 function getState() {
   return {
     folder: FolderStore.getFolder()
@@ -27,6 +31,10 @@ function getState() {
 }
 
 let FolderManerger = React.createClass({
+
+    mixins: [
+      StylePropable, StyleResizable
+    ],
 
   getInitialState: function() {
     return {
@@ -50,16 +58,25 @@ let FolderManerger = React.createClass({
 
 
   getStyles: function() {
-    return {
-      paper: {
+    let styles = {
+      paper:{
+        width: '100%'
+      },
+      paperWhenMedium: {
         margin: '0 auto',
         marginBottom: 16,
-        maxWidth: 300
+        width: 300
       },
       btn:{
         width: '100%',
       },
     };
+
+    if(this.isDeviceSize(StyleResizable.statics.Sizes.MEDIUM)){
+      styles.paper = this.mergeStyles(styles.paper, styles.paperWhenMedium);
+    }
+
+    return styles;
   },
 
   getRightIconMenu(key) {
