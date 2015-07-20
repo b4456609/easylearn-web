@@ -4,12 +4,17 @@ let {
   State
 } = require('react-router');
 let EasyLearnActions = require('../action/easylearn-actions.jsx');
+let DirectionsWalk = require('../svg-icons/directions-walk');
 let FolderStore = require('../stores/folder-store.jsx');
+let UserStore = require('../stores/user-store.jsx');
 let {
   LeftNav,
+  IconButton,
   Styles,
   MenuItem,
-  Mixins
+  Mixins,
+  ClearFix,
+  Avatar
 } = require('material-ui');
 
 let {
@@ -25,6 +30,8 @@ let {
 
 function getState() {
   return {
+    userId: UserStore.getUserId(),
+    username: UserStore.getUserName(),
     folder: FolderStore.getFolderMenu()
   }
 }
@@ -37,12 +44,13 @@ let AppLeftNav = React.createClass({
   getInitialState: function() {
     return {
       folder: [],
+      userId: UserStore.getUserId(),
+      username: UserStore.getUserName(),
       docked: true
     };
   },
 
   componentDidMount: function() {
-    FolderStore.addChangeListener(this._onChange);
     let self = this;
     window.addEventListener("resize", function() {
       self.determinOpenOrClose();
@@ -52,43 +60,71 @@ let AppLeftNav = React.createClass({
       this.refs.leftNav.close();
       this.refs.leftNav.toggle();
     }
+    FolderStore.addChangeListener(this._onChange);
+    UserStore.addChangeListener(this._onChange);
 
-  },
-
-  determinOpenOrClose() {
-    if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
-      this.refs.leftNav.close();
-      this.refs.leftNav.toggle();
-      this.setState({docked : true});
-    } else {
-      this.refs.leftNav.close();
-      this.setState({docked : false});
-    }
   },
 
   componentWillUnmount: function() {
     FolderStore.removeChangeListener(this._onChange);
+    UserStore.addChangeListener(this._onChange);
   },
 
   _onChange: function() {
     this.setState(getState());
   },
 
+  determinOpenOrClose() {
+    if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
+      this.refs.leftNav.close();
+      this.refs.leftNav.toggle();
+      this.setState({
+        docked: true
+      });
+    } else {
+      this.refs.leftNav.close();
+      this.setState({
+        docked: false
+      });
+    }
+  },
   getStyles() {
     return {
-      cursor: 'pointer',
+      appName: {
+        cursor: 'pointer',
 //.mui-font-style-headline
-      fontSize: '24px',
-      color: Typography.textFullWhite,
-      lineHeight: Spacing.desktopKeylineIncrement + 'px',
-      fontWeight: Typography.fontWeightLight,
-      backgroundColor: Colors.cyan500,
-      paddingLeft: Spacing.desktopGutter,
-      paddingTop: '0px',
-      marginBottom: '8px'
+        fontSize: '24px',
+        color: Typography.textFullWhite,
+        lineHeight: Spacing.desktopKeylineIncrement + 'px',
+        fontWeight: Typography.fontWeightLight,
+        backgroundColor: Colors.cyan500,
+        paddingLeft: Spacing.desktopGutter,
+        paddingTop: '0px'
+      },
+      userAvatar: {
+        position: 'relative',
+        top: '5px'
+      },
+      user: {
+        paddingTop: '0px',
+        paddingLeft: Spacing.desktopGutter,
+        color: Typography.textFullWhite,
+        backgroundColor: Colors.cyan500,
+        height: 56
+      },
+      userName: {
+        display: 'inline',
+        marginLeft: 16,
+        marginBottom: 15,
+        letterSpacing: 0,
+        fontSize: 15,
+        lineHeight: '48px',
+        fontWeight: 400,
+        position: 'relative',
+        top: '-10px'
+      }
     };
   },
-
   getMenuItem() {
 
     let menuItems = [
@@ -113,11 +149,25 @@ let AppLeftNav = React.createClass({
 
     return menuItems;
   },
-
   render: function() {
     let header = (
-      <div onTouchTap={this._onHeaderClick} style={this.getStyles()}>
-        EasyLearn
+      <div>
+        <div onTouchTap={this._onHeaderClick} style={this.getStyles().appName}>
+          EasyLearn
+        </div>
+        <ClearFix>
+          <div style={this.getStyles().user}>
+            <Avatar src={"http://graph.facebook.com/" + this.state.userId + "/picture"} style={this.getStyles().userAvatar}/>
+            <div style={this.getStyles().userName}>
+              {this.state.username}
+            </div>
+            <IconButton style={{
+              float: 'right'
+            }}>
+              <DirectionsWalk color="white"/>
+            </IconButton>
+          </div>
+        </ClearFix>
       </div>
     );
 
@@ -141,9 +191,7 @@ let AppLeftNav = React.createClass({
 
   _onHeaderClick() {
     this.context.router.transitionTo('root');
-    if (!this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
-      this.refs.leftNav.close();
-    }
+    this.refs.leftNav.close();
   },
 
   _onLeftNavChange(e, key, payload) {

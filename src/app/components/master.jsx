@@ -19,15 +19,18 @@ let {
   IconButton,
   Menu,
   Styles,
-  LeftNav
+  LeftNav,
+  Mixins
 } = require('material-ui');
 
 let RouteHandler = Router.RouteHandler;
 let {
   Colors,
-  Typography
+  Typography,
 } = Styles;
 let ThemeManager = new Styles.ThemeManager();
+
+let { StylePropable, StyleResizable } = Mixins;
 
 function getState() {
   return {
@@ -39,7 +42,7 @@ function getState() {
 
 let Master = React.createClass({
   mixins: [
-    Router.State, Navigation
+    Router.State, Navigation, StyleResizable, StylePropable
   ],
 
   contextTypes: {
@@ -140,9 +143,16 @@ let Master = React.createClass({
 
 
     if (this.isActive('home') || this.isActive('/')) {
-      content = (
-        <Home/>
-      );
+      if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)){
+        content = (
+          <Home onClickStart={this._onLeftIconButtonTouchTap}/>
+        );
+      }
+      else{
+        content = (
+          <Home />
+        );
+      }
     }
     else if(this.state.syncFail){
       content = (
