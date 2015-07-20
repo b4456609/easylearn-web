@@ -21,11 +21,12 @@ let PageTemplete = React.createClass({
       content:{
         margin: '0 auto',
         maxWidth: 660,
-        padding: Spacing.desktopGutter + 'px',
+        padding: Spacing.desktopGutterMini + 'px',
       },
       contentWhenLarge:{
         margin: '0 auto',
         maxWidth: 960,
+        padding: Spacing.desktopGutter + 'px',
       },
       sidebarMargin:{
         marginLeft: 0

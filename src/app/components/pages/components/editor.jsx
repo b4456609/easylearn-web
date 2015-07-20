@@ -26,10 +26,10 @@ function getExtension(filename) {
 function isImage(filename) {
   let ext = getExtension(filename);
   switch (ext.toLowerCase()) {
-  case 'jpg':
-  case 'gif':
-  case 'bmp':
-  case 'png':
+  case 'jpg' :
+  case 'gif' :
+  case 'bmp' :
+  case 'png' :
 //etc
     return true;
   }
@@ -46,10 +46,10 @@ function readURL(input) {
     $('#error-img').text("此瀏覽器不支援此上傳方式");
     return false;
   } else if (!input.files[0]) {
-    //$('#error-img').text("請選擇圖片");
+//$('#error-img').text("請選擇圖片");
     return false;
   } else if (!isImage(input.files[0].name)) {
-    //$('#error-img').text("請選擇圖片");
+//$('#error-img').text("請選擇圖片");
     return false;
   } else if (input.files[0].size > 10000000) {
     $('#error-img').text("檔案大小不能超過10MB");
@@ -70,7 +70,7 @@ function readURL(input) {
 
 let Editor = React.createClass({
   propTypes: {
-    content: React.PropTypes.string,
+    content: React.PropTypes.string
   },
 
   getDefaultProps: function() {
@@ -90,8 +90,10 @@ let Editor = React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     console.log('[Editor]componentDidUpdate');
-    if(this.props.content !== '')
-      EditorApi.setContent(this.props.content);
+    if (this.isMounted()) {
+      if (this.props.content !== '')
+        EditorApi.setContent(this.props.content);
+    }
   },
 
   componentWillUnmount: function() {
@@ -99,13 +101,15 @@ let Editor = React.createClass({
   },
 
   componentDidMount: function() {
-    if (this.props.content !== '')
-      EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton, this.props.content);
-    else
-      EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton);
+    if (this.isMounted()) {
+      if (this.props.content !== '')
+        EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton, this.props.content);
+      else
+        EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton);
+    }
   },
 
-  getFile: function () {
+  getFile: function() {
     return this.state.file;
   },
 
@@ -197,10 +201,10 @@ let Editor = React.createClass({
 
     return (
       <Dialog actions={standardActions} ref="slideshareDialog" title="插入Slideshare">
-        <TextField floatingLabelText="Slideshare網址" ref="slideshareInput" style={styles.textFullWidth} />
+        <TextField floatingLabelText="Slideshare網址" ref="slideshareInput" style={styles.textFullWidth}/>
         <h3 style={styles.dialogHeader}>進階選項</h3>
-        <TextField floatingLabelText="開始頁數" ref="slideshareStartInput" style={styles.textHalfWidth} />
-        <TextField floatingLabelText="結束頁數" ref="slideshareEndInput" style={styles.textHalfWidth} />
+        <TextField floatingLabelText="開始頁數" ref="slideshareStartInput" style={styles.textHalfWidth}/>
+        <TextField floatingLabelText="結束頁數" ref="slideshareEndInput" style={styles.textHalfWidth}/>
       </Dialog>
     );
 
@@ -262,7 +266,11 @@ let Editor = React.createClass({
           </div>
           <textarea id="editor"/>
         </div>
-        {imgDialog} {slideshareDialog} {YoutubeDialog} {loadingDialog} {progressDialog}
+        {imgDialog}
+        {slideshareDialog}
+        {YoutubeDialog}
+        {loadingDialog}
+        {progressDialog}
       </ClearFix>
     );
   },
@@ -321,7 +329,8 @@ let Editor = React.createClass({
           for (let i in items) {
             let filename = items[i].link.substring(items[i].link.lastIndexOf('/') + 1);
             self.state.file.push(filename);
-            let img = "<img id='" + items[i].id + "' class='slideshare-img " + result.path + " ' src='" + items[i].link + "' style='max-width:100% !important; height:auto;' >";
+            let img = "<img id='" + items[i].id +
+              "' class='slideshare-img " + result.path + " ' src='" + items[i].link + "' style='max-width:100% !important; height:auto;' >";
             code += img;
           }
           EditorApi.insertContent(code);
@@ -361,7 +370,8 @@ let Editor = React.createClass({
       self.state.file.push(filename);
 
 //img html code
-      let img = "<img id='" + item.id + " ' src='" + item.link + "' style='max-width:100% !important; height:auto; display:block;' >";
+      let img = "<img id='" + item.id +
+        " ' src='" + item.link + "' style='max-width:100% !important; height:auto; display:block;' >";
       EditorApi.insertContent(img);
     };
 

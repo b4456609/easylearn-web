@@ -30,6 +30,7 @@ function addYoutubeButton(editor, callback) {
 
 let Editor = {
   init: function(imgcallback, slideshareCallback, youtubeCallback, content) {
+     $( document ).ready(function (imgcallback, slideshareCallback, youtubeCallback, content) {
     console.log('[Editor]init');
     tinymce.init({
       selector: "#editor",
@@ -47,7 +48,7 @@ let Editor = {
         addSlideshareButton(editor, slideshareCallback);
         addImgButton(editor, imgcallback);
       }
-    });
+    });});
   },
 
   setContent: function(content) {

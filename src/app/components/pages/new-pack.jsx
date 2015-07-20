@@ -19,6 +19,11 @@ let {
   Colors
 } = Styles;
 
+let {
+  StyleResizable,
+  StylePropable
+} = Mixins;
+
 
 let Navigation = Router.Navigation;
 
@@ -26,7 +31,7 @@ let Navigation = Router.Navigation;
 let newPack = React.createClass({
 
   mixins: [
-     Navigation
+    StylePropable, StyleResizable, Navigation
   ],
 
   getInitialState: function() {
@@ -42,55 +47,45 @@ let newPack = React.createClass({
 
   getStyles: function() {
     let styles = {
-      center:{
+      col3:{
+        width: '100%'
+      },
+      col3WhenMedium:{
         width: '30.3%',
         float: 'left',
         marginRight: '3%'
+      },
+      col2:{
 
+        float: 'left',
+          width: '50%'
       },
       block: {
         padding: '8px',
         lineHeight: '20px'
       },
-      group: {
-        marginBottom: 32
-      },
       textfield: {
-        marginTop: 10,
         width: '100%',
-        paddingRight: '8px',
       },
-      checkbox: {
-        marginTop: 20
+      img:{
+        maxWidth: '100%'
       },
-      button: {
-        marginTop: 30
-      },
-      left: {
-        float: 'left'
+      checkbox:{
+        marginTop: '8px',
+        marginBottom: '8px'
       },
       submitBtn:{
-        float:'right'
-      },
-      root : {
-        margin: '0 auto',
-        maxWidth: 660,
-      },
-      rootWhenLarge:{
-        margin: '0 auto',
-        maxWidth: 960,
-      },
-      sidebarMargin:{
-        marginLeft: 0
-      },
-      sidebarMarginWhenLarge:{
-        marginLeft: 256
+        float: 'right'
       }
     };
 
     if(this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)){
       styles.root = this.mergeStyles(styles.root, styles.rootWhenLarge);
       styles.sidebarMargin = this.mergeStyles(styles.sidebarMargin, styles.sidebarMarginWhenLarge);
+    }
+
+    if(this.isDeviceSize(StyleResizable.statics.Sizes.MEDIUM)||this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)){
+      styles.col3 = this.mergeStyles(styles.col3, styles.col3WhenMedium);
     }
 
     return styles;
@@ -102,52 +97,57 @@ let newPack = React.createClass({
     return (
 
       <PageTemplete >
-        <div style={styles.sidebarMargin}>
-          <Paper zDepth={1} style={styles.root}>
-            <div style={styles.block}>
-              <div style={styles.center}>
-              <TextField
-                floatingLabelText="標題"
-                style={styles.textfield}
-                errorText={this.state.errorTitle}
-                onChange={this._handleTitleInputChange}/>
+        <Paper zDepth={1}>
+          <div style={styles.block}>
+            <ClearFix>
+              <div style={styles.col3}>
+                <TextField
+                  floatingLabelText="標題"
+                  style={styles.textfield}
+                  errorText={this.state.errorTitle}
+                  onChange={this._handleTitleInputChange}/>
               </div>
-              <div style={styles.center}>
+              <div style={styles.col3}>
+                <TextField
+                  floatingLabelText="描述"
+                  multiLine={true}
+                  style={styles.textfield}
+                  onChange={this._handleDesInputChange}/>
+              </div>
+              <div style={styles.col3}>
+                <TextField
+                  floatingLabelText="標籤"
+                  style={styles.textfield}/>
+              </div>
 
-              <TextField
-                floatingLabelText="描述"
-                multiLine={true}
-                style={styles.textfield}
-                onChange={this._handleDesInputChange}/>
-                </div>
-                <div style={styles.center}>
-              <TextField
-                floatingLabelText="標籤"
-                style={styles.textfield}
-                onChange={this._handleTagInputChange}/>
-                </div>
-              <Checkbox
-                label="公開懶人包"
-                name="is-pulic"
-                style={styles.checkbox}
-                value="is-pulic-value"
-                onCheck={this._handlePublicChech}/>
-              <RaisedButton
-                label="選擇封面照片"
-                secondary={true}
-                style={styles.button}/>
+              <div style={styles.col2}>
+                <Checkbox
+                  label="公開懶人包"
+                  name="is-pulic"
+                  style={styles.checkbox}
+                  value="is-pulic-value"/>
+              </div>
+              <div style={styles.col2}>
+                <RaisedButton
+                  label="選擇封面照片"
+                  secondary={true}/>
+              </div>
 
-              <ClearFix>
+            </ClearFix>
+          </div>
+          <img src={"img/IMG_5687.jpg"} style={styles.img}/>
+            <Editor ref="editor"/>
+          <div style={styles.block}>
+
+            <ClearFix>
                 <RaisedButton
                   label="完成"
                   onTouchTap={this._onSubmit}
                   primary={true}
                   style={styles.submitBtn}/>
-              </ClearFix>
-              <Editor ref="editor"/>
-            </div>
-          </Paper>
-        </div>
+            </ClearFix>
+          </div>
+        </Paper>
       </PageTemplete>
     );
   },
