@@ -5,7 +5,7 @@ let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 let EasyLearnActions = require('../../action/easylearn-actions.jsx');
 let PackInfo = require('./components/pack-info.jsx');
 let PackItem = require('./components/pack-item.jsx');
-let PageTemplete = require('../page-templete.jsx');
+let PageFullTemplete = require('../page-full-templete.jsx');
 let {
   Styles,
   Paper,
@@ -60,10 +60,6 @@ let FolderList = React.createClass({
       rightBlock: {
         position: 'fixed',
         right: 50
-      },
-      content: {
-        margin: '0 auto',
-        maxWidth: 8.3 * 6 + '%', // 12 of 6 col
       }
     };
   },
@@ -87,13 +83,13 @@ let FolderList = React.createClass({
     let packNodes = this.getPackPaperNode();
     let styles = this.getStyles();
     return (
-      <PageTemplete>
+      <PageFullTemplete>
         <div style={styles.content}>
           <ClearFix>
               {packNodes}
           </ClearFix>
         </div>
-      </PageTemplete>
+      </PageFullTemplete>
     );
   },
 
