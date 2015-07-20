@@ -131,10 +131,6 @@ let Master = React.createClass({
       <h3>資料夾</h3>
     );
 
-    // let content = (
-    //   <AppMenuWithContent folderItems={this.state.folder} folderTitle={folderTitle} menuItems={menuItems}/>
-    // );
-
     let content = (
       <div>
         <RouteHandler />
@@ -166,22 +162,16 @@ let Master = React.createClass({
   render: function() {
     let styles = this.getStyles();
     let title = 'EasyLearn';
-    let homeIcon = (
-      <div/>
-    );
+    let homeIcon = null;
 
-    let logoutBtn = (
-      <div>
-        <h3 style={styles.userName}>{this.state.username}</h3>
-        <IconButton>
-          <DirectionsWalk color="white"/></IconButton>
-      </div>
-    );
     let zDepth = 1;
 
     if (this.isActive('home') || this.isActive('/')){
       title = '';
       zDepth = 0;
+      homeIcon = (
+        <div/>
+      );
     }
 
     let content = this.getContent();
@@ -189,7 +179,7 @@ let Master = React.createClass({
     return (
       <AppCanvas>
 
-        <AppBar onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap} iconElementRight={logoutBtn} title={title} zDepth={zDepth}/>
+        <AppBar iconElementLeft={homeIcon} onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap} title={title} zDepth={zDepth}/>
 
         <AppLeftNav ref="leftNav"/>
 

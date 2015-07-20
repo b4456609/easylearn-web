@@ -378,9 +378,11 @@ let PackStore = assign({}, EventEmitter.prototype, {
             create_time: timeString,
             tags: _packs[j].tags,
             is_public: _packs[j].is_public,
+            creator_user_id:  _packs[j].creator_user_id,
             creator_user_name: _packs[j].creator_user_name,
             img: img
           }
+          console.log(item);
           list.push(item);
           break;
         }

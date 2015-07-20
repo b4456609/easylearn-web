@@ -9,7 +9,8 @@ let {
   CardText,
   CardActions,
   FlatButton,
-  Mixins
+  Mixins,
+  Avatar
 } = require('material-ui');
 
 let {
@@ -97,11 +98,19 @@ let PackItem= React.createClass({
 
   render: function() {
     let styles = this.getStyles();
+    let publicInfo = "不公開";
+    if(this.props.pack.is_public){
+      publicInfo = "公開";
+    }
     return (
       <Paper style={styles.paper} zDepth={this.state.zDepth} onMouseOver={this._onMouseOver} onMouseOut={this._onMouseOut} onMouseEnter={this.props.onMouseEnter} onClick={this.props.onClick}>
         <CardMedia overlay={<CardTitle title={this.props.pack.name} />}>
           <img src="img/IMG_5687.jpg"/>
         </CardMedia>
+        <CardHeader
+            title={this.props.pack.creator_user_name}
+            subtitle={this.props.pack.create_time + '  ' + publicInfo}
+            avatar={<Avatar src={"http://graph.facebook.com/" + this.props.pack.creator_user_id + "/picture"} style={this.getStyles().userAvatar}/>}/>
         <CardText>
           {this.props.pack.description}
         </CardText>
