@@ -12,14 +12,13 @@ let {
 } = require('material-ui');
 let Editor = require('./components/editor.jsx');
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
+let PageTemplete = require('../page-templete.jsx');
 
 let {
   Spacing,
   Colors
 } = Styles;
-let {
-  StyleResizable
-} = Mixins;
+
 
 let Navigation = Router.Navigation;
 
@@ -27,7 +26,7 @@ let Navigation = Router.Navigation;
 let newPack = React.createClass({
 
   mixins: [
-    StyleResizable, React.addons.LinkedStateMixin, Navigation
+     Navigation
   ],
 
   getInitialState: function() {
@@ -43,6 +42,12 @@ let newPack = React.createClass({
 
   getStyles: function() {
     let styles = {
+      center:{
+        width: '30.3%',
+        float: 'left',
+        marginRight: '3%'
+
+      },
       block: {
         padding: '8px',
         lineHeight: '20px'
@@ -51,8 +56,9 @@ let newPack = React.createClass({
         marginBottom: 32
       },
       textfield: {
-        display: 'block',
-        marginTop: 10
+        marginTop: 10,
+        width: '100%',
+        paddingRight: '8px',
       },
       checkbox: {
         marginTop: 20
@@ -65,8 +71,27 @@ let newPack = React.createClass({
       },
       submitBtn:{
         float:'right'
+      },
+      root : {
+        margin: '0 auto',
+        maxWidth: 660,
+      },
+      rootWhenLarge:{
+        margin: '0 auto',
+        maxWidth: 960,
+      },
+      sidebarMargin:{
+        marginLeft: 0
+      },
+      sidebarMarginWhenLarge:{
+        marginLeft: 256
       }
     };
+
+    if(this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)){
+      styles.root = this.mergeStyles(styles.root, styles.rootWhenLarge);
+      styles.sidebarMargin = this.mergeStyles(styles.sidebarMargin, styles.sidebarMarginWhenLarge);
+    }
 
     return styles;
   },
@@ -75,24 +100,32 @@ let newPack = React.createClass({
     let styles = this.getStyles();
 
     return (
-      <ClearFix>
-        <Paper zDepth={1}>
-          <div style={styles.block}>
-            <div style={styles.left}>
+
+      <PageTemplete >
+        <div style={styles.sidebarMargin}>
+          <Paper zDepth={1} style={styles.root}>
+            <div style={styles.block}>
+              <div style={styles.center}>
               <TextField
                 floatingLabelText="標題"
                 style={styles.textfield}
                 errorText={this.state.errorTitle}
                 onChange={this._handleTitleInputChange}/>
+              </div>
+              <div style={styles.center}>
+
               <TextField
                 floatingLabelText="描述"
                 multiLine={true}
                 style={styles.textfield}
                 onChange={this._handleDesInputChange}/>
+                </div>
+                <div style={styles.center}>
               <TextField
                 floatingLabelText="標籤"
                 style={styles.textfield}
                 onChange={this._handleTagInputChange}/>
+                </div>
               <Checkbox
                 label="公開懶人包"
                 name="is-pulic"
@@ -103,19 +136,19 @@ let newPack = React.createClass({
                 label="選擇封面照片"
                 secondary={true}
                 style={styles.button}/>
-            </div>
 
-            <ClearFix>
-              <RaisedButton
-                label="完成"
-                onTouchTap={this._onSubmit}
-                primary={true}
-                style={styles.submitBtn}/>
-            </ClearFix>
-            <Editor ref="editor"/>
-          </div>
-        </Paper>
-      </ClearFix>
+              <ClearFix>
+                <RaisedButton
+                  label="完成"
+                  onTouchTap={this._onSubmit}
+                  primary={true}
+                  style={styles.submitBtn}/>
+              </ClearFix>
+              <Editor ref="editor"/>
+            </div>
+          </Paper>
+        </div>
+      </PageTemplete>
     );
   },
 

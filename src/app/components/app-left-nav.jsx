@@ -132,7 +132,6 @@ let AppLeftNav = React.createClass({
 
     return (
       <LeftNav docked={this.state.docked} header={header} menuItems={menuItems} onChange={this._onLeftNavChange} ref="leftNav" selectedIndex={this._getSelectedIndex()}/>
-
     );
   },
 
@@ -140,11 +139,22 @@ let AppLeftNav = React.createClass({
     this.refs.leftNav.toggle();
   },
 
+  _onHeaderClick() {
+    this.context.router.transitionTo('root');
+    if (!this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
+      this.refs.leftNav.close();
+    }
+  },
+
   _onLeftNavChange(e, key, payload) {
     if (payload.route === 'folder-list') {
       EasyLearnActions.folderView(payload.id);
     }
     this.transitionTo(payload.route);
+    if (!this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
+      this.refs.leftNav.close();
+    }
+
   },
 
   _getSelectedIndex() {

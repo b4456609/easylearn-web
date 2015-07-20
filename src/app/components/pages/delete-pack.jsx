@@ -9,6 +9,7 @@ let {
 
 let PackStore = require('../../stores/pack-store.jsx');
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
+let PageTemplete = require('../page-templete.jsx');
 
 function getData() {
   return {rowData: PackStore.getDeleteList()};
@@ -37,8 +38,18 @@ let DeletePack = React.createClass({
     this.setState(getData());
   },
 
+  getStyles: function() {
+    return {
+      root: {
+        marginLeft: 256,
+        maxWidth: 8.3 * 8 + '%', // 12 of 8 col
+      }
+    };
+  },
+
   render: function() {
 
+    let styles = this.getStyles();
 
     // Column configuration
     let headerCols = {
@@ -72,7 +83,8 @@ let DeletePack = React.createClass({
     ];
 
     return (
-      <Paper>
+      <PageTemplete>
+      <Paper style={styles.root}>
         <div>
           <ClearFix>
             <RaisedButton onTouchTap={this._onDeleteClick} style={bottonStyle} primary={true} label="刪除懶人包" />
@@ -98,6 +110,7 @@ let DeletePack = React.createClass({
           autoHideDuration={5000}
           onActionTouchTap={this._handleAction}/>
       </Paper>
+    </PageTemplete>
     );
   },
 

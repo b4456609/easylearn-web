@@ -1,5 +1,6 @@
 let React = require('react');
 let MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
+let PageTemplete = require('../page-templete.jsx');
 
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
 
@@ -46,15 +47,18 @@ let FolderManerger = React.createClass({
     this.setState(getState());
   },
 
+
+
   getStyles: function() {
     return {
       paper: {
+        margin: '0 auto',
         marginBottom: 16,
         maxWidth: 300
       },
       btn:{
         width: '100%',
-      }
+      },
     };
   },
 
@@ -179,17 +183,19 @@ let FolderManerger = React.createClass({
     let renameDialog = this.getRenameDialog();
     let newFolderDialog = this.getNewFolderDialog();
     return (
-      <Paper style={styles.paper} zDepth={1}>
-        <List subheader="系統資料夾">
-          <ListItem primaryText="All"/>
-        </List>
-        <List subheader="使用者資料夾">
-          {userFolder}
-        </List>
-        <FlatButton style={styles.btn} label="新增資料夾" onClick={this._onNewFolderClick} secondary={true}/>
-        {renameDialog}
-        {newFolderDialog}
-      </Paper>
+      <PageTemplete>
+        <Paper style={styles.paper} zDepth={1}>
+          <List subheader="系統資料夾">
+            <ListItem primaryText="All"/>
+          </List>
+          <List subheader="使用者資料夾">
+            {userFolder}
+          </List>
+          <FlatButton style={styles.btn} label="新增資料夾" onClick={this._onNewFolderClick} secondary={true}/>
+          {renameDialog}
+          {newFolderDialog}
+        </Paper>
+    </PageTemplete>
     );
   }
 });
