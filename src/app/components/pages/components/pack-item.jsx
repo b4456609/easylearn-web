@@ -85,6 +85,7 @@ let PackItem = React.createClass({
         userSelect: 'none'
       },
       paperWhenMedium: {
+        position: 'relative',
         width: '48%',
         float: 'left',
         marginBottom: 24,
@@ -92,6 +93,7 @@ let PackItem = React.createClass({
         marginRight: '1%'
       },
       paperWhenLarge: {
+        position: 'relative',
         width: '31.3%',
         float: 'left',
         marginBottom: 24,
@@ -137,8 +139,13 @@ let PackItem = React.createClass({
       styles.paper = this.mergeStyles(styles.paper, styles.paperWhenMedium);
     }
 
-    if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
-      styles.paper = this.mergeStyles(styles.paper, styles.paperWhenLarge);
+    // if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
+    //   styles.paper = this.mergeStyles(styles.paper, styles.paperWhenLarge);
+    // }
+
+    if(window.innerWidth > 990){
+        styles.paper = styles.paperWhenLarge;
+
     }
 
     return styles;

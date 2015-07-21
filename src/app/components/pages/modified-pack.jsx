@@ -12,6 +12,7 @@ let EditorApi = require('../../api/editor-api.js');
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
 let PackStore = require('../../stores/pack-store.jsx');
 let Editor = require('./components/editor.jsx');
+let PageTemplete = require('../page-templete.jsx');
 
 let {
   Colors
@@ -104,9 +105,8 @@ let ModifiedPack = React.createClass({
   render: function() {
     let styles = this.getStyles();
     let backupButton = this.getBackupButton();
-
     return (
-      <ClearFix>
+        <PageTemplete>
         <Paper zDepth={1}>
           <div style={styles.block}>
 
@@ -125,7 +125,7 @@ let ModifiedPack = React.createClass({
 
           </div>
         </Paper>
-      </ClearFix>
+      </PageTemplete>
     );
   },
 

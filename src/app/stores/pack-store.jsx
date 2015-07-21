@@ -292,7 +292,7 @@ function redoDeletePack() {
 function getContentForModified() {
   let content = [];
   for (let item of _pack.version) {
-    if (item.id === _versionId || item.private_id === _version.private_id) {
+    if (item.id === _versionId || (item.private_id === _version.private_id && item.is_public === false)) {
       content.push({
         is_public: item.is_public,
         content: item.content,

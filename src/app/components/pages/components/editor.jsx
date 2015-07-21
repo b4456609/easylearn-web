@@ -88,22 +88,16 @@ let Editor = React.createClass({
     };
   },
 
-  componentDidUpdate: function(prevProps, prevState) {
-    console.log('[Editor]componentDidUpdate');
-    if (this.isMounted()) {
-      if (this.props.content !== '')
-        EditorApi.setContent(this.props.content);
-    }
-  },
-
   componentWillUnmount: function() {
     EditorApi.remove();
   },
 
   componentDidMount: function() {
     if (this.isMounted()) {
-      if (this.props.content !== '')
+      if (this.props.content !== ''){
+        console.log('editor',typeof this.props.content);
         EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton, this.props.content);
+      }
       else
         EditorApi.init(this._onClickImgButton, this._onClickSlideshareButton, this._onClickYoutubeButton);
     }
