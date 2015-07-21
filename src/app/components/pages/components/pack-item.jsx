@@ -12,7 +12,11 @@ let {
   Mixins,
   Avatar,
   IconButton,
-  FloatingActionButton
+  FloatingActionButton,
+  RadioButton,
+  RadioButtonGroup,
+  Dialog,
+  Snackbar,
 } = require('material-ui');
 
 let IconMenu = require('material-ui/lib/menus/icon-menu');
@@ -29,6 +33,7 @@ let {
 
 function getState() {
   return {
+    folder: FolderStore.getFolderIdName(),
     folderId: FolderStore.getViewFolderId()
   };
 }
@@ -43,8 +48,11 @@ let PackItem = React.createClass({
   ],
   getInitialState() {
     return {
+      action: '',
+      folder: FolderStore.getFolderIdName(),
       zDepth: 1,
-      folderId: FolderStore.getViewFolderId()
+      folderId: FolderStore.getViewFolderId(),
+      message: ''
     };
   },
 
@@ -160,10 +168,113 @@ let PackItem = React.createClass({
     );
   },
 
+  getCopyMoveDialog() {
+    let self = this;
+    let standardActions = [
+      {
+        text: '取消'
+      }, {
+        text: '送出',
+        onTouchTap: this._handleMoveDialogSubmit
+      }
+    ];
+    //disable current folder item
+    let RadioItem = this.state.folder.map(function(item) {
+      if (self.state.folderId === item.id) {
+        return (
+          <RadioButton disabled={true} key={item.id} label={item.name} style={{
+            marginBottom: 16
+          }} value={item.id}/>
+        );
+      } else {
+        return (
+          <RadioButton key={item.id} label={item.name} style={{
+            marginBottom: 16
+          }} value={item.id}/>
+        );
+      }
+    });
+    //dialog title
+    let title;
+    if(this.state.action === 'copy'){
+      title = '複製懶人包';
+    }  else{
+      title = '移動懶人包';
+    }
+
+    return (
+      <Dialog actions={standardActions} ref="moveDialog" title={title}>
+        <RadioButtonGroup name="folder-choose" ref="folderRadio">
+          {RadioItem}
+        </RadioButtonGroup>
+      </Dialog>
+    );
+  },
+
+  getDeleteDialog(){
+    //no props no need to render
+    if(!this.props.pack) return null;
+
+    let self = this;
+    let standardActions = [
+      {
+        text: '取消'
+      }, {
+        text: '確定',
+        onTouchTap: this._handleDeleteDialogSubmit
+      }
+    ];
+
+    let content = (
+      <p>
+        是否要移除在任何資料夾中的<br></br>"{this.props.pack.name}"?
+      </p>
+    );
+
+    if(this.state.folderId !== 'allPackId'){
+      content = (
+        <p>
+          是否要移除此資料夾中的<br></br>"{self.props.pack.name}"?
+        </p>
+      );
+    }
+
+    return (
+      <Dialog actions={standardActions} ref="deleteDialog" title="刪除懶人包">
+        {content}
+      </Dialog>
+    );
+  },
+
+
+  _onPackDelete() {
+    this.refs.deleteDialog.show();
+  },
+
+  _handleDeleteDialogSubmit(){
+    if(this.state.folderId === 'allPackId'){
+      EasylearnActions.deletePackInAllFolders(this.props.pack.id);
+      EasylearnActions.sync();
+    }
+    else{
+      EasylearnActions.deletePackInFolder(this.props.pack.id, this.state.folderId)
+      EasylearnActions.sync();
+    }
+    this.refs.deleteDialog.dismiss();
+  },
+
   _onPackCopyMove(action) {
     this.setState({action: action});
     this.refs.moveDialog.show();
   },
+
+  getSnackBar(){
+    return (<Snackbar
+      ref="snackbar"
+      message={this.state.message}
+      autoHideDuration={5000}/>);
+  },
+
 
   render: function() {
     let styles = this.getStyles();
@@ -172,8 +283,10 @@ let PackItem = React.createClass({
       publicInfo = "公開";
     }
     let menuIcon = this.getManageMenu();
+    let moveDialog = this.getCopyMoveDialog();
+    let snackBar = this.getSnackBar();
+    let deleteDialog = this.getDeleteDialog();
 
-    //<span style={styles.time}>{this.props.pack.create_time} {this.props.pack.creator_user_name}</span>
     return (
       <Paper onMouseEnter={this.props.onMouseEnter} onMouseOut={this._onMouseOut} onMouseOver={this._onMouseOver} style={styles.paper} zDepth={this.state.zDepth}>
         <div onClick={this.props.onClick}>
@@ -190,6 +303,9 @@ let PackItem = React.createClass({
         <FloatingActionButton style={styles.floatBtn}  onClick={this.props.onClick}>
           <KeyboardArrowRight />
         </FloatingActionButton>
+        {moveDialog}
+        {deleteDialog}
+        {snackBar}
       </Paper>
     );
   },
@@ -204,7 +320,34 @@ let PackItem = React.createClass({
     this.setState({
       zDepth: 1
     });
-  }
+  },
+
+  _handleMoveDialogSubmit() {
+    let target = this.refs.folderRadio.getSelectedValue();
+    console.log(target, this.props.pack.id, this.state.folderId);
+    //user not select
+    if(target === ''){
+      console.log(null);
+      this.setState({message: '請選擇項目'});
+      this.refs.snackbar.show();
+    }
+    //copy action system folder
+    else if(this.state.action === 'copy'){
+      EasylearnActions.copyPack(this.props.pack.id, target);
+      EasylearnActions.sync();
+      this.refs.moveDialog.dismiss();
+    }
+    else{
+      EasylearnActions.movePack(this.props.pack.id, this.state.folderId, target);
+      EasylearnActions.sync();
+      this.refs.moveDialog.dismiss();
+    }
+  },
+
+  _onPackCopyMove(action) {
+    this.setState({action: action});
+    this.refs.moveDialog.show();
+  },
 
 });
 
