@@ -176,7 +176,24 @@ let PackInfo = React.createClass({
     this.refs.deleteDialog.dismiss();
   },
 
+  getManageMenu(){
+    let copyAction = null;
+    //
+    if(this.state.folderId !== 'allPackId'){
+      copyAction = (
+        <ListItem onClick={this._onPackCopyMove.bind(this, 'move')}
+          primaryText="移至..."/>
+      );
+    }
 
+    return (
+      <List subheader="管理此懶人包">
+        <ListItem onClick={this._onPackCopyMove.bind(this, 'copy')} primaryText="複製至..."/>
+        {copyAction}
+        <ListItem onClick={this._onPackDelete} primaryText="移除"/>
+      </List>
+    );
+  },
 
   getSnackBar(){
     return (<Snackbar

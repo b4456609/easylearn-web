@@ -25,6 +25,7 @@ let MenuDivider = require('material-ui/lib/menus/menu-divider');
 let MoreVertIcon = require('material-ui/lib/svg-icons/navigation/more-vert');
 let KeyboardArrowRight = require('material-ui/lib/svg-icons/hardware/keyboard-arrow-right');
 let FolderStore = require('../../../stores/folder-store.jsx');
+let EasylearnActions = require('../../../action/easylearn-actions.jsx');
 
 let {
   StyleResizable,
@@ -152,9 +153,9 @@ let PackItem = React.createClass({
         <IconMenu
             iconButtonElement={iconButtonElement}
             openDirection="top-left">
-          <MenuItem primaryText="複製至..." />
+          <MenuItem primaryText="複製至..."  onClick={this._onPackCopyMove.bind(this, 'copy')}/>
           <MenuItem onClick={this._onPackCopyMove.bind(this, 'move')} primaryText="移至..."/>
-          <MenuItem primaryText="移除" />
+          <MenuItem primaryText="移除" onClick={this._onPackDelete}/>
         </IconMenu>
       );
     }
@@ -162,8 +163,8 @@ let PackItem = React.createClass({
       <IconMenu
           iconButtonElement={iconButtonElement}
           openDirection="top-left">
-          <MenuItem primaryText="複製至..." />
-          <MenuItem primaryText="移除" />
+          <MenuItem primaryText="複製至..."  onClick={this._onPackCopyMove.bind(this, 'copy')}/>
+          <MenuItem primaryText="移除" onClick={this._onPackDelete}/>
       </IconMenu>
     );
   },

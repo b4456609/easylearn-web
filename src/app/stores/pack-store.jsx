@@ -382,7 +382,6 @@ let PackStore = assign({}, EventEmitter.prototype, {
             creator_user_name: _packs[j].creator_user_name,
             img: img
           }
-          console.log(item);
           list.push(item);
           break;
         }
