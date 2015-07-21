@@ -15,6 +15,7 @@ let {
   Paper,
   Styles,
   Dialog,
+  Mixins,
   Snackbar,
   ClearFix,
   TextField,
@@ -23,6 +24,11 @@ let {
   RadioButtonGroup,
   FloatingActionButton
 } = require('material-ui');
+
+let {
+  StyleResizable,
+  StylePropable
+} = Mixins;
 
 function getViewPackState() {
   return {
@@ -88,7 +94,7 @@ function getWindowSize() {
   let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
   return {
-    x: w - 100,
+    x: w - 50,
     y: h - 50
   }
 }
@@ -102,7 +108,7 @@ function paintNote(range, noteId, classColor) {
 }
 
 let ViewPack = React.createClass({
-  mixins: [Navigation],
+  mixins: [Navigation, StylePropable, StyleResizable],
 
   getInitialState: function() {
     return {
@@ -158,8 +164,10 @@ let ViewPack = React.createClass({
   getStyles: function() {
     let styles = {
       contentPaper: {
-        marginRight: '324px',
-        marginBottom: '16px'
+        marginRight: '0px',
+      },
+      contentPaperWhenMedium: {
+        marginRight: '275px',
       },
       contentPadding: {
         padding: '16px'
@@ -175,11 +183,13 @@ let ViewPack = React.createClass({
       },
       rightBlock: {
         float: 'right',
-        width: '300px'
+        width: '250px',
+        display: 'none'
+      },
+      rightBlockWhenMedium:{
+        display:'block'
       },
       root: {
-        maxWidth: 8.3 * 8 + '%',
-        margin: '0 auto'
       },
       floatBtn: {
         position: 'absolute',
@@ -187,6 +197,12 @@ let ViewPack = React.createClass({
         left: this.state.x + 20
       }
     };
+
+    if (this.isDeviceSize(StyleResizable.statics.Sizes.MEDIUM)) {
+      styles.rightBlock = this.mergeStyles(styles.rightBlock, styles.rightBlockWhenMedium);
+      styles.contentPaper = this.mergeStyles(styles.contentPaper, styles.contentPaperWhenMedium);
+    }
+
 
     let windowSize = getWindowSize();
 
