@@ -236,7 +236,7 @@ let PackInfo = React.createClass({
       return (
         <Paper className="pack-paper" style={styles.rightBlock} zDepth={1}>
           <div style={styles.center}>
-        <InfoOutlineIcon color={Colors.cyan500} style={styles.icon}/>
+        <InfoOutlineIcon color={Colors.teal500} style={styles.icon}/>
         <p>滑鼠移到懶人包上，即可觀看詳細資訊</p>
         </div>
       </Paper>)

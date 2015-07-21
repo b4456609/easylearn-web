@@ -97,7 +97,7 @@ let AppLeftNav = React.createClass({
         color: Typography.textFullWhite,
         lineHeight: Spacing.desktopKeylineIncrement + 'px',
         fontWeight: Typography.fontWeightLight,
-        backgroundColor: Colors.cyan500,
+        backgroundColor: Colors.teal500,
         paddingLeft: Spacing.desktopGutter,
         paddingTop: '0px'
       },
@@ -109,7 +109,7 @@ let AppLeftNav = React.createClass({
         paddingTop: '0px',
         paddingLeft: Spacing.desktopGutter,
         color: Typography.textFullWhite,
-        backgroundColor: Colors.cyan500,
+        backgroundColor: Colors.teal500,
         height: 56
       },
       userName: {

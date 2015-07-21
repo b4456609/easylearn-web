@@ -11,7 +11,7 @@ let Fail = React.createClass({
   _getHomePageHero: function() {
     let styles = {
       root: {
-        backgroundColor: Colors.cyan500,
+        backgroundColor: Colors.teal500,
         overflow: 'hidden'
       },
       svgLogo: {
@@ -29,7 +29,7 @@ let Fail = React.createClass({
       startBtnLable: {
         fontSize: '1.25em',
         fontWeight: 'bold',
-        color: Colors.cyan500,
+        color: Colors.teal500,
       },
       facebookStyle: {
         margin: '16px 32px 0px 32px',

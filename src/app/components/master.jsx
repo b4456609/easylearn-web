@@ -81,6 +81,11 @@ let Master = React.createClass({
       this.transitionTo('folder-list');
       EasyLearnActions.sync();
     }
+
+    ThemeManager.setPalette({
+      primary1Color: Colors.teal500,
+      //accent1Color: String,
+    });
   },
 
   componentDidMount: function() {
