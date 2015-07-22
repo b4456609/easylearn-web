@@ -43,7 +43,7 @@ let AppLeftNav = React.createClass({
 
   getInitialState: function() {
     return {
-      folder: [],
+      folder: FolderStore.getFolderMenu(),
       userId: UserStore.getUserId(),
       username: UserStore.getUserName(),
       docked: true
