@@ -53,7 +53,7 @@ let AppLeftNav = React.createClass({
   componentDidMount: function() {
     let self = this;
 
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 992) {
       this.refs.leftNav.close();
       this.setState({
         docked: false
@@ -77,7 +77,7 @@ let AppLeftNav = React.createClass({
   },
 
   determinOpenOrClose() {
-    if (window.innerWidth > 768) {
+    if (window.innerWidth > 992) {
       this.refs.leftNav.close();
       this.refs.leftNav.toggle();
       this.setState({

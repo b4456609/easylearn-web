@@ -148,7 +148,8 @@ let PackItem = React.createClass({
       overlay:{
         position: 'absolute',
         bottom: 0,
-        width: '100%',
+        right: 0,
+        left: 0,
         background: 'rgba(0, 0, 0, 0.54)',
         padding: 8
       },
@@ -162,7 +163,7 @@ let PackItem = React.createClass({
         fontSize:'14px',
         color:'rgba(255, 255, 255, 0.54)',
         display:'block',
-        lineHeight:'36px',
+        lineHeight:'20px',
       }
 
     };
@@ -334,14 +335,16 @@ let PackItem = React.createClass({
         <div onClick={this.props.onClick}>
 
         <div style={styles.container}>
+          <ClearFix>
           <div style={styles.overlay}>
-          <span style={styles.overlayTitle}>
-            {this.props.pack.name}
-          </span>
-          <span style={styles.overlaySub}>
-            {this.props.pack.description}
-          </span>
+            <span style={styles.overlayTitle}>
+              {this.props.pack.name}
+            </span>
+            <span style={styles.overlaySub}>
+              {this.props.pack.description}
+            </span>
           </div>
+          </ClearFix>
         </div>
         </div>
 
