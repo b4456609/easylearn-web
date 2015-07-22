@@ -218,7 +218,7 @@ let HomePage = React.createClass({
         <h3 style={styles.h3}>
           Want to help make this <span style={styles.nowrap}>project awesome?</span> <span style={styles.nowrap}>Check out our repo.</span>
         </h3>
-        <RaisedButton label="GitHub" primary={true} linkButton={true} href="https://github.com/callemall/material-ui" style={styles.button}/>
+        <RaisedButton label="GitHub" primary={true} linkButton={true} href="https://github.com/b4456609/easylearn-web" style={styles.button}/>
       </FullWidthSection>
     );
   },
