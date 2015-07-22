@@ -56,7 +56,7 @@ let AppLeftNav = React.createClass({
       self.determinOpenOrClose();
     });
 
-    if (window.innerWidth < 900) {
+    if (window.innerWidth > 992) {
       this.refs.leftNav.close();
       this.refs.leftNav.toggle();
     }
@@ -170,13 +170,6 @@ let AppLeftNav = React.createClass({
         </ClearFix>
       </div>
     );
-
-    let docked;
-    if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
-      docked = true;
-    } else {
-      docked = false;
-    }
 
     let menuItems = this.getMenuItem();
 

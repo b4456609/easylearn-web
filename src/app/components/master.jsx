@@ -138,22 +138,16 @@ let Master = React.createClass({
 
     let content = (
       <div>
+        <AppLeftNav ref="leftNav"/>
         <RouteHandler />
       </div>
     );
 
 
     if (this.isActive('home') || this.isActive('/')) {
-      if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)){
         content = (
           <Home onClickStart={this._onLeftIconButtonTouchTap}/>
         );
-      }
-      else{
-        content = (
-          <Home />
-        );
-      }
     }
     else if(this.state.syncFail){
       content = (
@@ -186,7 +180,6 @@ let Master = React.createClass({
 
         <AppBar iconElementLeft={homeIcon} onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap} title={title} zDepth={zDepth}/>
 
-        <AppLeftNav ref="leftNav"/>
 
 
         {content}

@@ -230,8 +230,6 @@ let HomePage = React.createClass({
   _onStartClick: function() {
     EasyLearnActions.folderView('allPackId');
     this.context.router.transitionTo('folder-list');
-    if(this.props.onClickStart)
-      this.props.onClickStart();
   }
 });
 
