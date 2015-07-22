@@ -135,7 +135,7 @@ let newPack = React.createClass({
 
             </ClearFix>
           </div>
-          <img src={"img/IMG_5687.jpg"} style={styles.img}/>
+          <img src={"img/305.png"} style={styles.img}/>
             <Editor ref="editor"/>
           <div style={styles.block}>
 

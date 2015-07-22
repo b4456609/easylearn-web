@@ -299,7 +299,7 @@ let PackItem = React.createClass({
       <Paper onMouseEnter={this.props.onMouseEnter} onMouseOut={this._onMouseOut} onMouseOver={this._onMouseOver} style={styles.paper} zDepth={this.state.zDepth}>
         <div onClick={this.props.onClick}>
           <CardMedia overlay={<CardTitle title={this.props.pack.name} subtitle={this.props.pack.description}/>}>
-            <img src="img/IMG_5687.jpg"/>
+            <img src="img/305.png"/>
           </CardMedia>
         </div>
 
