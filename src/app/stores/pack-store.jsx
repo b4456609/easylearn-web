@@ -357,7 +357,7 @@ let PackStore = assign({}, EventEmitter.prototype, {
       for (let j in _packs) {
         if (packIdArray[i] === _packs[j].id) {
 //set img
-          let img = 'img/light102.png';
+          let img = 'img/305.png';
           if (_packs[j].cover_filename !== "") {
             img = EasylearnConfig.IMG_URL + _packs[j].cover_filename;
           }

@@ -19,7 +19,7 @@ function uploadImgUseUrl(imgUrl, successCallback, failCallback) {
     },
     success: function(result) {
       console.log('[uploadImgUseUrl]success', result);
-      if (result.success == true) {
+      if (result.success === true) {
         var item = {
           id: result.data.id,
           link: result.data.link,

@@ -274,9 +274,6 @@ let Editor = React.createClass({
     this.refs.imgDialog.show();
     this.refs.imgInput.focus();
 
-    $('#imgChooseButton').on('click', function() {
-      $('#yourinputname').trigger('click');
-    });
 
     $("#imgInp").change(function() {
       let result = readURL(this);

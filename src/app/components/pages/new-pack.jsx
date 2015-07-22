@@ -13,6 +13,7 @@ let {
 let Editor = require('./components/editor.jsx');
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
 let PageTemplete = require('../page-templete.jsx');
+let ImgDialog = require('./components/img-dialog.jsx');
 
 let {
   Spacing,
@@ -39,7 +40,6 @@ let newPack = React.createClass({
       title: '',
       description: '',
       tag: '',
-      is_public: false,
       cover_filename: '',
       errorContent: ''
     };
@@ -122,6 +122,7 @@ let newPack = React.createClass({
 
               <div style={styles.col2}>
                 <Checkbox
+                  ref="publicInfo"
                   label="公開懶人包"
                   name="is-pulic"
                   style={styles.checkbox}
@@ -129,13 +130,14 @@ let newPack = React.createClass({
               </div>
               <div style={styles.col2}>
                 <RaisedButton
+                  onClick={this._onChangeCoverClick}
                   label="選擇封面照片"
                   secondary={true}/>
               </div>
 
             </ClearFix>
           </div>
-          <img src={"img/305.png"} style={styles.img}/>
+          <img id="cover-img" src={"img/305.png"} style={styles.img}/>
             <Editor ref="editor"/>
           <div style={styles.block}>
 
@@ -148,21 +150,18 @@ let newPack = React.createClass({
             </ClearFix>
           </div>
         </Paper>
+        <ImgDialog ref="imgDialog" success={this.successCallback}/>
       </PageTemplete>
     );
   },
 
-  _handlePublicChech:function (event) {
-    console.log(event.target.checked);
-    this.setState({
-      is_public: event.target.checked
-    });
+  successCallback(link, filename){
+    $('#cover-img').attr('src', link);
+    this.setState({cover_filename:filename});
   },
 
-  _handleTagInputChange: function (event) {
-    this.setState({
-      tag: event.target.value.trim()
-    });
+  _onChangeCoverClick(){
+    this.refs.imgDialog.show();
   },
 
   _handleDesInputChange: function (event) {
@@ -197,7 +196,7 @@ let newPack = React.createClass({
         title: this.state.title,
         description: this.state.description,
         tag: this.state.tag,
-        is_public: this.state.is_public,
+        is_public: this.refs.publicInfo.isChecked(),
         cover_filename: this.state.cover_filename,
         content: content,
         file: this.refs.editor.getFile()

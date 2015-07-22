@@ -55,8 +55,6 @@ let FolderList = React.createClass({
 
   getStyles: function() {
     return {
-      root: {
-      },
       rightBlock: {
         position: 'fixed',
         right: 50
@@ -69,7 +67,7 @@ let FolderList = React.createClass({
 
     return this.state.packArray.map(function(pack, i) {
       return (
-        <PackItem key={i} pack={pack} onClick={self._onPackClick.bind(self, pack.id)} onMouseEnter={self._onPackMouseEnter.bind(self, i)}/>
+        <PackItem key={pack.id} pack={pack} onClick={self._onPackClick.bind(self, pack.id)} onMouseEnter={self._onPackMouseEnter.bind(self, i)}/>
       );
     });
   },
@@ -84,10 +82,8 @@ let FolderList = React.createClass({
     let styles = this.getStyles();
     return (
       <PageFullTemplete>
-        <div style={styles.content}>
-          <ClearFix>
-              {packNodes}
-          </ClearFix>
+        <div>
+            {packNodes}
         </div>
       </PageFullTemplete>
     );

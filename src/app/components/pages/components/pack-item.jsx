@@ -19,6 +19,7 @@ let {
   Snackbar,
 } = require('material-ui');
 
+let EasylearnConfig = require('../../../api/easylearn-config.js');
 let IconMenu = require('material-ui/lib/menus/icon-menu');
 let MenuItem = require('material-ui/lib/menus/menu-item');
 let MenuDivider = require('material-ui/lib/menus/menu-divider');
@@ -82,7 +83,7 @@ let PackItem = React.createClass({
         KhtmlUserSelect: 'none',
         MozUserSelect: 'none',
         MsUserSelect: 'none',
-        userSelect: 'none'
+        userSelect: 'none',
       },
       paperWhenMedium: {
         position: 'relative',
@@ -98,7 +99,7 @@ let PackItem = React.createClass({
         float: 'left',
         marginBottom: 24,
         marginLeft: '1%',
-        marginRight: '1%'
+        marginRight: '1%',
       },
       paperPadding: {
         padding: '16px'
@@ -132,7 +133,38 @@ let PackItem = React.createClass({
         position: 'absolute',
         right:30,
         bottom: 45
+      },
+      container :{
+          display: 'block',
+          width: '100%',
+          height: 'auto',
+          position: 'relative',
+          overflow: 'hidden',
+          padding: '56.25% 0 0 0',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+          backgroundImage: ""
+      },
+      overlay:{
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        background: 'rgba(0, 0, 0, 0.54)',
+        padding: 8
+      },
+      overlayTitle:{
+        fontSize:'24px',
+        color:'rgba(255, 255, 255, 0.87)',
+        display:'block',
+        lineHeight:'36px',
+      },
+      overlaySub:{
+        fontSize:'14px',
+        color:'rgba(255, 255, 255, 0.54)',
+        display:'block',
+        lineHeight:'36px',
       }
+
     };
 
     if (this.isDeviceSize(StyleResizable.statics.Sizes.MEDIUM)) {
@@ -145,7 +177,7 @@ let PackItem = React.createClass({
 
     if(window.innerWidth > 990){
         styles.paper = styles.paperWhenLarge;
-
+        styles.overlay.padding = 16;
     }
 
     return styles;
@@ -295,13 +327,24 @@ let PackItem = React.createClass({
     let snackBar = this.getSnackBar();
     let deleteDialog = this.getDeleteDialog();
 
+    styles.container.backgroundImage = "url('"+ this.props.pack.img +"')";
+
     return (
       <Paper onMouseEnter={this.props.onMouseEnter} onMouseOut={this._onMouseOut} onMouseOver={this._onMouseOver} style={styles.paper} zDepth={this.state.zDepth}>
         <div onClick={this.props.onClick}>
-          <CardMedia overlay={<CardTitle title={this.props.pack.name} subtitle={this.props.pack.description}/>}>
-            <img src="img/305.png"/>
-          </CardMedia>
+
+        <div style={styles.container}>
+          <div style={styles.overlay}>
+          <span style={styles.overlayTitle}>
+            {this.props.pack.name}
+          </span>
+          <span style={styles.overlaySub}>
+            {this.props.pack.description}
+          </span>
+          </div>
         </div>
+        </div>
+
 
         <CardHeader
           title={this.props.pack.creator_user_name}
