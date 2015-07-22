@@ -52,17 +52,19 @@ let AppLeftNav = React.createClass({
 
   componentDidMount: function() {
     let self = this;
-    window.addEventListener("resize", function() {
-      self.determinOpenOrClose();
-    });
 
-    if (window.innerWidth > 992) {
+    if (window.innerWidth <= 768) {
       this.refs.leftNav.close();
-      this.refs.leftNav.toggle();
+      this.setState({
+        docked: false
+      });
     }
     FolderStore.addChangeListener(this._onChange);
     UserStore.addChangeListener(this._onChange);
 
+    window.addEventListener("resize", function() {
+      self.determinOpenOrClose();
+    });
   },
 
   componentWillUnmount: function() {
@@ -75,7 +77,7 @@ let AppLeftNav = React.createClass({
   },
 
   determinOpenOrClose() {
-    if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
+    if (window.innerWidth > 768) {
       this.refs.leftNav.close();
       this.refs.leftNav.toggle();
       this.setState({
