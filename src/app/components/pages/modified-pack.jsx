@@ -46,6 +46,7 @@ let ModifiedPack = React.createClass({
 
   componentWillUnmount: function() {
     PackStore.removeChangeListener(this._onChange);
+    tinymce.remove('#editor');
   },
 
   _onChange: function() {
@@ -85,10 +86,6 @@ let ModifiedPack = React.createClass({
     };
 
     return styles;
-  },
-
-  componentWillUnmount: function() {
-    tinymce.remove('#editor');
   },
 
   getBackupButton: function() {

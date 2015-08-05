@@ -398,11 +398,6 @@ let PackItem = React.createClass({
     }
   },
 
-  _onPackCopyMove(action) {
-    this.setState({action: action});
-    this.refs.moveDialog.show();
-  },
-
 });
 
 module.exports = PackItem;
