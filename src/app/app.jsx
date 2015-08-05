@@ -1,3 +1,5 @@
+
+require("babelify/polyfill");
 (function () {
 
   let React = require('react'),
