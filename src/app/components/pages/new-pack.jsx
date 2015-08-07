@@ -122,6 +122,7 @@ let newPack = React.createClass({
 
               <div style={styles.col2}>
                 <Checkbox
+                  defaultChecked={true}
                   ref="publicInfo"
                   label="公開懶人包"
                   name="is-pulic"
