@@ -124,10 +124,14 @@ let Editor = React.createClass({
       dialogHeader: {
         marginTop: 24
       },
+      spinner:{
+        float: 'left',
+      },
       loadingText: {
-        margin: 'auto 0',
+        float: 'left',
+        marginLeft: '50px',
         fontSize: 24,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
       },
       previewImg: {
         width: '100px',
@@ -231,7 +235,7 @@ let Editor = React.createClass({
     let styles = this.getStyles();
     return (
       <Dialog ref="loadingDialog">
-        <CircularProgress mode="indeterminate"/>
+        <CircularProgress style={styles.spinner} mode="indeterminate"/>
         <p style={styles.loadingText}>請稍後</p>
       </Dialog>
     );
