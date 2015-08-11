@@ -58,7 +58,7 @@ function setVersionToLatest() {
   let time = 0;
 
   version.sort(function(a, b) {
-    return b.create_time = a.create_time
+    return b.create_time - a.create_time;
   });
   _versionId = version[0].id;
   _version = version[0];
@@ -203,7 +203,7 @@ function setComment(comments, noteId) {
 }
 
 function getVersionInfo() {
-
+  console.log(_pack);
   let result = [];
 
 //sort by private id and version
@@ -214,6 +214,11 @@ function getVersionInfo() {
   for (let item of _pack.version) {
 //it's backup version
     if (result.length !== 0 && result[result.length - 1].private_id === item.private_id && item.is_public === false) {
+      continue;
+    }
+
+    //it delete version no display
+    if (item.modified === 'delete') {
       continue;
     }
 

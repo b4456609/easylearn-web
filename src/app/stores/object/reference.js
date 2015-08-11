@@ -77,12 +77,21 @@ module.exports = function () {
     var self = this;
     var result;
     //ajax slideshare info and put into array
-    $.get(ajaxUrl,
-      function(data) {
+    $.ajax({
+      url: ajaxUrl,
+      type: 'GET',
+      dataType: 'jsonp',
+      success: function(data) {
         result = '<li><a href="#" onclick="window.open(\'' + slideshareUrl + '\', \'_system\');">' + data.title + ' - ' + data.author_name + '</a></li>';
         slideshareResult.push(result);
         self.isFinish();
-      });
+      },
+      error: function(e, s, t) {
+        console.log('[Slideshare]Fail');
+        console.log(e, s, t);
+        fail();
+      }
+    });
   };
 
   //check is all complete

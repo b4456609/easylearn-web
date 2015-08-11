@@ -32,9 +32,9 @@ let VersionInfo = React.createClass({
 
   getVersion: function() {
     let self = this;
-    let items = this.props.versionInfo.map(function(item, i) {
+    let items = this.props.versionInfo.map(function(item) {
       return (
-        <ListItem key={i} onClick={self._onVersionTapTouch.bind(self, item.id)} primaryText={item.text}/>
+        <ListItem key={item.id} onClick={self._onVersionTapTouch.bind(self, item.id)} primaryText={item.text}/>
       );
     });
 
