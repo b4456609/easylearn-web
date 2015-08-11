@@ -32,6 +32,7 @@ let ModifiedPack = React.createClass({
 
   getInitialState: function() {
     let pack = PackStore.getVersionForModified();
+    console.log(pack);
     return {
       is_public: pack.version[0].is_public,
       modifyIndex: 0,
@@ -110,7 +111,7 @@ let ModifiedPack = React.createClass({
             <h1 style={styles.title}>{this.state.pack.title}</h1>
             <div style={styles.tool}>
               <ClearFix>
-                <Checkbox label="公開懶人包" name="is-pulic" onCheck={this._handlePublicChech} style={styles.checkbox} value="is-pulic-value"/>
+                <Checkbox defaultChecked={this.state.is_public} label="公開懶人包" name="is-pulic" onCheck={this._handlePublicCheck} style={styles.checkbox} value="is-pulic-value"/>
                 <RaisedButton label="完成" onTouchTap={this._onSubmit} primary={true} style={styles.submitBtn}/>
                 {backupButton}
               </ClearFix>
@@ -138,9 +139,11 @@ let ModifiedPack = React.createClass({
         backupBtnText: '切換至上次編輯內容'
       });
     }
+    this.refs.editor.setContent(this.state.pack.version[this.state.modifyIndex].content);
+    
   },
 
-  _handlePublicChech: function(event) {
+  _handlePublicCheck: function(event) {
     this.setState({
       is_public: event.target.checked
     });

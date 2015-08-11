@@ -103,6 +103,10 @@ let Editor = React.createClass({
     }
   },
 
+  setContent: function (content) {
+    EditorApi.setContent(content);
+  },
+
   getFile: function() {
     return this.state.file;
   },

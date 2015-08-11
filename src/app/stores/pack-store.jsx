@@ -4,6 +4,8 @@ let EventEmitter = require('events').EventEmitter;
 let assign = require('object-assign');
 let EasylearnConfig = require('../api/easylearn-config.js');
 let UserStore = require('./user-store.jsx');
+let Reference = require('./object/reference.js');
+let Clone = require('./object/clone.js');
 
 const CHANGE_EVENT = 'change';
 
@@ -72,113 +74,118 @@ function newNote(newNote, versionContent) {
 function newPack(data) {
   console.log('[PackStore]newPack');
   let time = new Date().getTime();
-
-  let newPackItem = {
-    id: data.id,
-    create_time: time,
-    name: data.title,
-    description: data.description,
-    tags: data.tag,
-    is_public: data.is_public,
-    cover_filename: data.cover_filename,
-    creator_user_id: UserStore.getUserId(),
-    creator_user_name: UserStore.getUserName(),
-    version: [
-      {
-        id: "version" + time,
-        content: data.content,
-        create_time: time,
-        is_public: data.is_public,
-        creator_user_id: UserStore.getUserId(),
-        creator_user_name: UserStore.getUserName(),
-        bookmark: [],
-        note: [],
-        file: data.file,
-        version: 0,
-        private_id: '',
-        view_count: 0,
-        user_view_count: 0
-      }
-    ]
-  };
+  var r = new Reference();
+  var deffer = r.getInfo(data.content);
+  $.when(deffer).then(function() {
+    data.content += r.get();
+    let newPackItem = {
+      id: data.id,
+      create_time: time,
+      name: data.title,
+      description: data.description,
+      tags: data.tag,
+      is_public: data.is_public,
+      cover_filename: data.cover_filename,
+      creator_user_id: UserStore.getUserId(),
+      creator_user_name: UserStore.getUserName(),
+      version: [
+        {
+          id: "version" + time,
+          content: data.content,
+          create_time: time,
+          is_public: data.is_public,
+          creator_user_id: UserStore.getUserId(),
+          creator_user_name: UserStore.getUserName(),
+          bookmark: [],
+          note: [],
+          file: data.file,
+          version: 0,
+          private_id: '',
+          view_count: 0,
+          user_view_count: 0,
+          modified: 'false'
+        }
+      ]
+    };
 
 //not private give a private id
-  if (!data.is_public) {
-    newPackItem.version[0].private_id = 'private' + time;
-  }
+    if (!data.is_public) {
+      newPackItem.version[0].private_id = 'private' + time;
+    }
 
-  console.log(newPackItem);
+    console.log(newPackItem);
 
-  _packs.push(newPackItem);
+    _packs.push(newPackItem);
+  });
 }
 
 function modifiedPackVersion(is_public, content, files) {
   console.log('[PackStore]modifiedPackVersion');
   let time = new Date().getTime();
 
-//TODO replace file path
+//add aritcle reference
+  var r = new Reference();
+  var deffer = r.getInfo(content);
+  $.when(deffer).then(function() {
+    content += r.get();
 
-//TODO add reference
+    let newVersion = {
+      id: "version" + time,
+      content: content,
+      create_time: time,
+      is_public: is_public,
+      creator_user_id: UserStore.getUserId(),
+      creator_user_name: UserStore.getUserName(),
+      bookmark: [],
+      note: _version.note,
+      file: files.concat(_version.file),
+      version: _version.version,
+      private_id: _version.private_id,
+      view_count: 0,
+      user_view_count: 0,
+      modified: 'false'
+    };
 
-  let newVersion = {
-    id: "version" + time,
-    content: content,
-    create_time: time,
-    is_public: is_public,
-    creator_user_id: UserStore.getUserId(),
-    creator_user_name: UserStore.getUserName(),
-    bookmark: [],
-    note: _version.note,
-    file: files.concat(_version.file),
-    version: _version.version,
-    private_id: _version.private_id,
-    view_count: 0,
-    user_view_count: 0
-  };
-
-  console.log('[publicInfo]oldVersion', _version.is_public, 'newVersion', is_public);
+    console.log('[publicInfo]oldVersion', _version.is_public, 'newVersion', is_public);
 
 //origin is private, new is private
 //remain one not public
-  if (!_version.is_public && !is_public) {
+    if (!_version.is_public && !is_public) {
 // modify origin to second one
-    let find = _version.private_id;
-    newVersion.version++;
+      newVersion.version++;
 
 //remove the other backup
-    for (let index in _pack.version) {
-      if (_pack.version[index].id === _version.id) {
-        continue;
+      for (let index in _pack.version) {
+        if (_pack.version[index].id === _version.id) {
+          continue;
+        }
+        if (_pack.version[index].private_id === _version.private_id) {
+          _pack.version[index].modified = "delete";
+        }
       }
-      if (_pack.version[index].private_id === find) {
-        _pack.version.splice(index, 1);
-        break;
-//should be only one
-//public version, remove all old version
-      }
-    }
-  } else if (!_version.is_public && is_public) {
-    newVersion.version++;
+    } else if (!_version.is_public && is_public) {
+      newVersion.version++;
 
-    for (let j in _pack.version) {
-      if (_pack.version[j].private_id === _version.private_id) {
-        _pack.version.splice(j, 1);
-//because delete one i
-        j--;
+      for (let j in _pack.version) {
+        if (_pack.version[j].private_id === _version.private_id) {
+          _pack.version[j].modified = "delete";
+        }
       }
-    }
 //version is public the pack will be public
-    _pack.is_public = true;
+      _pack.is_public = true;
 // old is public and new private
-  } else if (_version.is_public && !is_public) {
+    } else if (_version.is_public && !is_public) {
 //set new private id
-    newVersion.private_id = 'private' + time;
-  }
+      newVersion.private_id = 'private' + time;
+    }
 
-  _pack.version.push(newVersion);
-  checkoutVersion(newVersion.id);
-  console.log(_packs);
+    _pack.version.push(newVersion);
+    checkoutVersion(newVersion.id);
+    console.log(_packs);
+
+  });
 }
+
 function replaceImgPath(content, packId) {
   let url = EasylearnConfig.IMG_URL;
   let find = 'FILE_STORAGE_PATH' + packId + '/';
@@ -293,9 +300,14 @@ function getContentForModified() {
   let content = [];
   for (let item of _pack.version) {
     if (item.id === _versionId || (item.private_id === _version.private_id && item.is_public === false)) {
+//new string to not modified origin content
+      let newContentString = Clone(item.content);
+      let r = new Reference();
+      newContentString = r.deleteRef(newContentString);
+
       content.push({
         is_public: item.is_public,
-        content: item.content,
+        content: newContentString,
         create_time: item.create_time
       });
     }
@@ -378,7 +390,7 @@ let PackStore = assign({}, EventEmitter.prototype, {
             create_time: timeString,
             tags: _packs[j].tags,
             is_public: _packs[j].is_public,
-            creator_user_id:  _packs[j].creator_user_id,
+            creator_user_id: _packs[j].creator_user_id,
             creator_user_name: _packs[j].creator_user_name,
             img: img
           }
@@ -396,7 +408,8 @@ let PackStore = assign({}, EventEmitter.prototype, {
 
     for (let pack of packs) {
       for (let version of pack.version) {
-        let target = 'FILE_STORAGE_PATH' + pack.id + '/';
+        let target = 'FILE_STORAGE_PATH' + pack.id +
+          '/';
         let find = EasylearnConfig.IMG_URL;
         let re = new RegExp(find, 'g');
 
@@ -441,59 +454,59 @@ let PackStore = assign({}, EventEmitter.prototype, {
 // Register callback to handle all updates
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
-  case EasyLearnConstants.PACK_VIEW:
+  case EasyLearnConstants.PACK_VIEW :
     _packId = action.packId;
     setPackById();
     setVersionToLatest();
     PackStore.emitChange();
     break;
 
-  case EasyLearnConstants.SYNC_SUCCESS:
+  case EasyLearnConstants.SYNC_SUCCESS :
     setPacks(action.data);
     PackStore.emitChange();
     break;
 
-  case EasyLearnConstants.NEW_PACK:
+  case EasyLearnConstants.NEW_PACK :
     newPack(action.data);
     PackStore.emitChange();
     break;
 
-  case EasyLearnConstants.CHECKOUT_VERSION:
+  case EasyLearnConstants.CHECKOUT_VERSION :
     checkoutVersion(action.versionId);
     PackStore.emitChange();
     break;
 
-  case EasyLearnConstants.MODIFIED_PACK:
+  case EasyLearnConstants.MODIFIED_PACK :
     modifiedPackVersion(action.is_public, action.content, action.files);
     PackStore.emitChange();
     break;
 
-  case EasyLearnConstants.DELETE_PACK:
+  case EasyLearnConstants.DELETE_PACK :
     deletePack(action.idArray);
     PackStore.emitChange();
     break;
 
-  case EasyLearnConstants.REDO_DELETE_PACK:
+  case EasyLearnConstants.REDO_DELETE_PACK :
     redoDeletePack();
     PackStore.emitChange();
     break;
 
-  case EasyLearnConstants.NEW_NOTE:
+  case EasyLearnConstants.NEW_NOTE :
     newNote(action.note, action.versionContent);
     PackStore.emitChange();
     break;
 
-  case EasyLearnConstants.NEW_COMMENT:
+  case EasyLearnConstants.NEW_COMMENT :
     newComment(action.newComment, action.noteId);
     PackStore.emitChange();
     break;
 
-  case EasyLearnConstants.GET_COMMENT:
+  case EasyLearnConstants.GET_COMMENT :
     setComment(action.notes, action.noteId);
     PackStore.emitChange();
     break;
 
-  default:
+  default :
 // no op
   }
 });
