@@ -68,6 +68,7 @@ function setVersionToLatest() {
 function newNote(newNote, versionContent) {
   _version.note.push(newNote);
   _version.content = versionContent;
+  _version.modified = 'true';
   console.log('newNote', newNote, _version.note);
 }
 
