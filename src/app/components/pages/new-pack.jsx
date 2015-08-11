@@ -2,13 +2,7 @@ let React = require('react');
 let Router = require('react-router');
 let FullWidthSection = require('../full-width-section');
 let {
-  Mixins,
-  Styles,
-  TextField,
-  Paper,
-  ClearFix,
-  Checkbox,
-  RaisedButton
+  Mixins, Styles, TextField, Paper, ClearFix, Checkbox, RaisedButton
 } = require('material-ui');
 let Editor = require('./components/editor.jsx');
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
@@ -16,18 +10,14 @@ let PageTemplete = require('../page-templete.jsx');
 let ImgDialog = require('./components/img-dialog.jsx');
 
 let {
-  Spacing,
-  Colors
+  Spacing, Colors
 } = Styles;
 
 let {
-  StyleResizable,
-  StylePropable
+  StyleResizable, StylePropable
 } = Mixins;
 
-
 let Navigation = Router.Navigation;
-
 
 let newPack = React.createClass({
 
@@ -47,44 +37,44 @@ let newPack = React.createClass({
 
   getStyles: function() {
     let styles = {
-      col3:{
+      col3: {
         width: '100%'
       },
-      col3WhenMedium:{
+      col3WhenMedium: {
         width: '30.3%',
         float: 'left',
         marginRight: '3%'
       },
-      col2:{
+      col2: {
 
         float: 'left',
-          width: '50%'
+        width: '50%'
       },
       block: {
         padding: '8px',
         lineHeight: '20px'
       },
       textfield: {
-        width: '100%',
+        width: '100%'
       },
-      img:{
+      img: {
         maxWidth: '100%'
       },
-      checkbox:{
+      checkbox: {
         marginTop: '8px',
         marginBottom: '8px'
       },
-      submitBtn:{
+      submitBtn: {
         float: 'right'
       }
     };
 
-    if(this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)){
+    if (this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
       styles.root = this.mergeStyles(styles.root, styles.rootWhenLarge);
       styles.sidebarMargin = this.mergeStyles(styles.sidebarMargin, styles.sidebarMarginWhenLarge);
     }
 
-    if(this.isDeviceSize(StyleResizable.statics.Sizes.MEDIUM)||this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)){
+    if (this.isDeviceSize(StyleResizable.statics.Sizes.MEDIUM) || this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
       styles.col3 = this.mergeStyles(styles.col3, styles.col3WhenMedium);
     }
 
@@ -101,53 +91,30 @@ let newPack = React.createClass({
           <div style={styles.block}>
             <ClearFix>
               <div style={styles.col3}>
-                <TextField
-                  floatingLabelText="標題"
-                  style={styles.textfield}
-                  errorText={this.state.errorTitle}
-                  onChange={this._handleTitleInputChange}/>
+                <TextField errorText={this.state.errorTitle} floatingLabelText="標題" onChange={this._handleTitleInputChange} style={styles.textfield}/>
               </div>
               <div style={styles.col3}>
-                <TextField
-                  floatingLabelText="描述"
-                  multiLine={true}
-                  style={styles.textfield}
-                  onChange={this._handleDesInputChange}/>
+                <TextField floatingLabelText="描述" multiLine={true} onChange={this._handleDesInputChange} style={styles.textfield}/>
               </div>
               <div style={styles.col3}>
-                <TextField
-                  floatingLabelText="標籤"
-                  style={styles.textfield}/>
+                <TextField floatingLabelText="標籤" style={styles.textfield}/>
               </div>
 
               <div style={styles.col2}>
-                <Checkbox
-                  defaultChecked={true}
-                  ref="publicInfo"
-                  label="公開懶人包"
-                  name="is-pulic"
-                  style={styles.checkbox}
-                  value="is-pulic-value"/>
+                <Checkbox defaultChecked={true} label="公開懶人包" name="is-pulic" ref="publicInfo" style={styles.checkbox} value="is-pulic-value"/>
               </div>
               <div style={styles.col2}>
-                <RaisedButton
-                  onClick={this._onChangeCoverClick}
-                  label="選擇封面照片"
-                  secondary={true}/>
+                <RaisedButton label="選擇封面照片" onClick={this._onChangeCoverClick} secondary={true}/>
               </div>
 
             </ClearFix>
           </div>
           <img id="cover-img" src={"img/305.png"} style={styles.img}/>
-            <Editor ref="editor"/>
+          <Editor ref="editor"/>
           <div style={styles.block}>
 
             <ClearFix>
-                <RaisedButton
-                  label="完成"
-                  onTouchTap={this._onSubmit}
-                  primary={true}
-                  style={styles.submitBtn}/>
+              <RaisedButton label="完成" onTouchTap={this._onSubmit} primary={true} style={styles.submitBtn}/>
             </ClearFix>
           </div>
         </Paper>
@@ -156,43 +123,44 @@ let newPack = React.createClass({
     );
   },
 
-  successCallback(link, filename){
+  successCallback(link, filename) {
     $('#cover-img').attr('src', link);
-    this.setState({cover_filename:filename});
+    this.setState({
+      cover_filename: filename
+    });
   },
 
-  _onChangeCoverClick(){
+  _onChangeCoverClick() {
     this.refs.imgDialog.show();
   },
 
-  _handleDesInputChange: function (event) {
+  _handleDesInputChange: function(event) {
     this.setState({
       description: event.target.value.trim()
     });
   },
 
-  _onSubmit:function () {
+  _onSubmit: function() {
     let content = '';
     let title = this.state.title;
     let canSubmit = true;
 
-    if(this.refs.editor.isEmpty()){
+    if (this.refs.editor.isEmpty()) {
       canSubmit = false;
-    }
-    else{
+    } else {
       content = this.refs.editor.getContent();
     }
 
-    if(title === ''){
+    if (title === '') {
       this.setState({
         errorTitle: '標題不能為空白'
       });
       canSubmit = false;
     }
 
-
-    //if no error send submit pack action
-    if(canSubmit === true){
+//if no error send submit pack action
+    if (canSubmit === true) {
+      //action with sync call back because reference async
       EasylearnActions.newPack({
         title: this.state.title,
         description: this.state.description,
@@ -201,16 +169,18 @@ let newPack = React.createClass({
         cover_filename: this.state.cover_filename,
         content: content,
         file: this.refs.editor.getFile()
+      }, function() {
+        EasylearnActions.sync();
       });
-      EasylearnActions.sync();
+
       this.transitionTo('folder-list');
     }
   },
 
-  _handleTitleInputChange:function (event) {
+  _handleTitleInputChange: function(event) {
     let value = event.target.value.trim();
     let errorText = '';
-    if(value === ''){
+    if (value === '') {
       errorText = '標題不能為空白';
     }
 

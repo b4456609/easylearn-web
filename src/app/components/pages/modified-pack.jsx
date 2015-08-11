@@ -1,12 +1,7 @@
 let React = require('react');
 let Router = require('react-router');
 let {
-  Mixins,
-  Styles,
-  Paper,
-  ClearFix,
-  RaisedButton,
-  Checkbox
+  Mixins, Styles, Paper, ClearFix, RaisedButton, Checkbox
 } = require('material-ui');
 let EditorApi = require('../../api/editor-api.js');
 let EasylearnActions = require('../../action/easylearn-actions.jsx');
@@ -104,7 +99,7 @@ let ModifiedPack = React.createClass({
     let styles = this.getStyles();
     let backupButton = this.getBackupButton();
     return (
-        <PageTemplete>
+      <PageTemplete>
         <Paper zDepth={1}>
           <div style={styles.block}>
 
@@ -140,7 +135,7 @@ let ModifiedPack = React.createClass({
       });
     }
     this.refs.editor.setContent(this.state.pack.version[this.state.modifyIndex].content);
-    
+
   },
 
   _handlePublicCheck: function(event) {
@@ -168,8 +163,10 @@ let ModifiedPack = React.createClass({
         is_public: this.state.is_public,
         content: content,
         files: []
+      }, function() {
+        EasylearnActions.sync();
       });
-      EasylearnActions.sync();
+
       this.transitionTo('view-pack');
     }
   }

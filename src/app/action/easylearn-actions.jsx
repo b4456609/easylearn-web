@@ -3,6 +3,7 @@ let EasyLearnConstants = require('../constants/easylearn-constants.jsx');
 let EasylearnApi = require('../api/easylearn-api.jsx');
 let FBApi = require('../api/facebook-api.js');
 let UserStore = require('../stores/user-store.jsx');
+let Reference = require('../stores/object/reference.js');
 
 let EasyLearnActions = {
 
@@ -103,27 +104,42 @@ let EasyLearnActions = {
     FBApi.login(callback);
   },
 
-  newPack: function(data) {
+  newPack: function(data, callback) {
 // set packid
     let time = new Date().getTime();
     data['id'] = 'pack' + time;
 
     console.log('[Action]newPack', data);
 
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.NEW_PACK,
-      data: data
+    var r = new Reference();
+    var deffer = r.getInfo(data.content);
+    $.when(deffer).then(function() {
+      data.content += r.get();
+
+      AppDispatcher.dispatch({
+        actionType: EasyLearnConstants.NEW_PACK,
+        data: data
+      });
+
+      callback();
     });
   },
 
-  modifiedPack: function(data) {
+  modifiedPack: function(data, callback) {
     console.log('[Action]modifiedPack', data);
+    var r = new Reference();
+    var deffer = r.getInfo(data.content);
+    $.when(deffer).then(function() {
+      data.content += r.get();
 
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.MODIFIED_PACK,
-      is_public: data.is_public,
-      content: data.content,
-      files: data.files
+      AppDispatcher.dispatch({
+        actionType: EasyLearnConstants.MODIFIED_PACK,
+        is_public: data.is_public,
+        content: data.content,
+        files: data.files
+      });
+
+      callback();
     });
   },
 
@@ -182,21 +198,20 @@ let EasyLearnActions = {
     EasylearnApi.postComment(noteId, newComment);
   },
 
-  getComment: function (noteId) {
+  getComment: function(noteId) {
     console.log('[Action]getComment', noteId);
 
-    let success = function (data) {
+    let success = function(data) {
       AppDispatcher.dispatch({
         actionType: EasyLearnConstants.GET_COMMENT,
         notes: data,
         noteId: noteId
       });
     }
-
-    EasylearnApi.getComment(noteId,success);
+    EasylearnApi.getComment(noteId, success);
   },
 
-  renameFolder: function (folderId, name) {
+  renameFolder: function(folderId, name) {
     console.log('[Action]renameFolder', folderId, name);
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.RENAME_FOLDER,
@@ -205,8 +220,8 @@ let EasyLearnActions = {
     });
   },
 
-  movePack: function (packId, originFolderId, targetFolderId) {
-    console.log('[Action]movePack',packId, originFolderId, targetFolderId);
+  movePack: function(packId, originFolderId, targetFolderId) {
+    console.log('[Action]movePack', packId, originFolderId, targetFolderId);
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.MOVE_PACK,
       packId: packId,
@@ -215,8 +230,8 @@ let EasyLearnActions = {
     });
   },
 
-  copyPack: function (packId, targetFolderId) {
-    console.log('[Action]copyPack',packId, targetFolderId);
+  copyPack: function(packId, targetFolderId) {
+    console.log('[Action]copyPack', packId, targetFolderId);
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.COPY_PACK,
       packId: packId,
@@ -224,16 +239,16 @@ let EasyLearnActions = {
     });
   },
 
-  deletePackInAllFolders: function (packId) {
-    console.log('[Action]deletePackInAllFolders',packId);
+  deletePackInAllFolders: function(packId) {
+    console.log('[Action]deletePackInAllFolders', packId);
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.DELETE_PACK_IN_ALL_FOLDERS,
       packId: packId
     });
   },
 
-  deletePackInFolder: function (packId, fodlerId) {
-    console.log('[Action]deletePackInFolder',packId,fodlerId);
+  deletePackInFolder: function(packId, fodlerId) {
+    console.log('[Action]deletePackInFolder', packId, fodlerId);
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.DELETE_PACK_IN_FOLDER,
       packId: packId,
@@ -241,8 +256,8 @@ let EasyLearnActions = {
     });
   },
 
-  addFolder: function (folderName) {
-    console.log('[Action]addFolder',folderName);
+  addFolder: function(folderName) {
+    console.log('[Action]addFolder', folderName);
     AppDispatcher.dispatch({
       actionType: EasyLearnConstants.ADD_FOLDER,
       folderName: folderName
