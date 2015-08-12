@@ -87,7 +87,16 @@ let ImgDialog = React.createClass({
         left: '0',
         width: '100%',
         opacity: '0'
-      }
+      },
+      spinner:{
+        float: 'left',
+      },
+      loadingText: {
+        float: 'left',
+        marginLeft: '50px',
+        fontSize: 24,
+        fontWeight: 'bold',
+      },
     }
   },
 
@@ -105,7 +114,7 @@ let ImgDialog = React.createClass({
     let styles = this.getStyles();
     return (
       <Dialog ref="loadingDialog">
-        <CircularProgress mode="indeterminate"/>
+        <CircularProgress style={styles.spinner} mode="indeterminate"/>
         <p style={styles.loadingText}>請稍後</p>
       </Dialog>
     );
