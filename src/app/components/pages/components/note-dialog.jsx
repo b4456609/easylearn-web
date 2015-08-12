@@ -58,7 +58,7 @@ let NoteDialog = React.createClass({
     let content = (
       <h3>{this.props.note.content}</h3>
     );
-
+    this.props.note.comment.sort(function (a,b) {return a.create_time - b.create_time});
     let comment = (this.props.note.comment.map(function(item) {
       let time = new Date(item.create_time);
       let timeString = time.toLocaleString("zh-TW", {
