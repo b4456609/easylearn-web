@@ -19,12 +19,10 @@ let EasylearnApi = {
 
     var syncAjax = $.ajax({
       method: "POST",
-      url: EasylearnConfig.SERVER_URL + 'easylearn/sync',
-      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      url: EasylearnConfig.SERVER_URL + 'sync',
+      contentType: "application/json; charset=UTF-8",
       crossDomain: true,
-      data: {
-        sync_data: JSON.stringify(sendData)
-      }
+      data: JSON.stringify(sendData)
     });
 
 //success
@@ -45,7 +43,7 @@ let EasylearnApi = {
 
   fileDataUpload: function(id, deletehash) {
     $.ajax({
-      url: EasylearnConfig.SERVER_URL + 'easylearn/file_data',
+      url: EasylearnConfig.SERVER_URL + 'file_data',
       type: 'POST',
       data: {
         id: id,
@@ -65,7 +63,7 @@ let EasylearnApi = {
     var jsonObj = JSON.stringify(newComment);
     $.ajax({
       type: "POST",
-      url: EasylearnConfig.SERVER_URL + 'easylearn/comment',
+      url: EasylearnConfig.SERVER_URL + 'comment',
       data: {
         noteId: noteId,
         newComment: jsonObj
@@ -85,7 +83,7 @@ let EasylearnApi = {
   getComment: function(NoteId,callback) {
     console.log('[getComment]',NoteId);
     //set url for get comment
-    var url = EasylearnConfig.SERVER_URL + 'easylearn/comment?note_id=' + NoteId;
+    var url = EasylearnConfig.SERVER_URL + 'comment?note_id=' + NoteId;
     console.log(url);
     $.ajax({
       type: "GET",
