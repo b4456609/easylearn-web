@@ -16,17 +16,7 @@ let _versionId = '';
 let _version = {};
 
 function setPacks(data) {
-  let packs = [];
-  let keys = Object.keys(data);
-
-  for (let i in keys) {
-    if (keys[i].indexOf('pack') !== -1) {
-      packs.push(data[keys[i]]);
-
-//add pack's id
-      packs[packs.length - 1].id = keys[i];
-    }
-  }
+  let packs = data.pack;
 
   for (let pack of packs) {
     for (let version of pack.version) {

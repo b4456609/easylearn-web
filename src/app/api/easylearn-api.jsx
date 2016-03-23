@@ -5,15 +5,16 @@ let EasylearnConfig = require('../api/easylearn-config.js');
 
 let EasylearnApi = {
 	sync: function(success, fail) {
-		var sendData = {
-			user: UserStore.getUser(),
-			folder: FolderStore.getFolder()
-		};
+		let user = UserStore.getUser();
+		let setting = user.setting;
+		delete user.setting;
 
-		let packs = PackStore.getSyncAllPack();
-		for (let j in packs) {
-			sendData[packs[j].id] = packs[j];
-		}
+		var sendData = {
+			user: user,
+			setting: setting,
+			folder: FolderStore.getFolder(),
+			pack: PackStore.getSyncAllPack()
+		};
 
 		console.log('[sync]Start', sendData);
 
