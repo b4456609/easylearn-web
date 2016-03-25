@@ -61,14 +61,10 @@ let EasylearnApi = {
 
 	postComment: function(noteId, newComment) {
 		console.log('[postComment]', noteId, newComment);
-		var jsonObj = JSON.stringify(newComment);
 		$.ajax({
 			type: "POST",
-			url: EasylearnConfig.SERVER_URL + 'comment',
-			data: {
-				noteId: noteId,
-				newComment: jsonObj
-			},
+			url: EasylearnConfig.SERVER_URL + 'comment/' + noteId,
+			data: JSON.stringify(newComment),
 			success: function() {
 				console.log('[postComment]success');
 			},
@@ -81,10 +77,10 @@ let EasylearnApi = {
 		});
 	},
 
-	getComment: function(NoteId, callback) {
-		console.log('[getComment]', NoteId);
+	getComment: function(noteId, callback) {
+		console.log('[getComment]', noteId);
 		//set url for get comment
-		var url = EasylearnConfig.SERVER_URL + 'comment?note_id=' + NoteId;
+		var url = EasylearnConfig.SERVER_URL + 'comment/' + noteId;
 		console.log(url);
 		$.ajax({
 			type: "GET",
