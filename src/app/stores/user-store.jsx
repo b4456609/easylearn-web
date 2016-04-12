@@ -9,7 +9,7 @@ const CHANGE_EVENT = 'change';
 let _user = {
   id: '100000233589366',
   name: '遊客',
-  "setting": {
+  setting: {
     wifi_sync: true,
     mobile_network_sync: true,
     last_sync_time: 1419519614000,
