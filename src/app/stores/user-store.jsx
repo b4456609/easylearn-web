@@ -7,7 +7,7 @@ let assign = require('object-assign');
 const CHANGE_EVENT = 'change';
 
 let _user = {
-  id: '',
+  id: '100000233589366',
   name: '遊客',
   "setting": {
     wifi_sync: true,
