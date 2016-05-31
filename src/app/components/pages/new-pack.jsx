@@ -91,13 +91,13 @@ let newPack = React.createClass({
           <div style={styles.block}>
             <ClearFix>
               <div style={styles.col3}>
-                <TextField errorText={this.state.errorTitle} floatingLabelText="標題" onChange={this._handleTitleInputChange} style={styles.textfield}/>
+                <TextField id="title" errorText={this.state.errorTitle} floatingLabelText="標題" onChange={this._handleTitleInputChange} style={styles.textfield}/>
               </div>
               <div style={styles.col3}>
-                <TextField floatingLabelText="描述" multiLine={true} onChange={this._handleDesInputChange} style={styles.textfield}/>
+                <TextField id="des" floatingLabelText="描述" multiLine={true} onChange={this._handleDesInputChange} style={styles.textfield}/>
               </div>
               <div style={styles.col3}>
-                <TextField floatingLabelText="標籤" style={styles.textfield}/>
+                <TextField id="tag" floatingLabelText="標籤" style={styles.textfield}/>
               </div>
 
               <div style={styles.col2}>
@@ -114,7 +114,7 @@ let newPack = React.createClass({
           <div style={styles.block}>
 
             <ClearFix>
-              <RaisedButton label="完成" onTouchTap={this._onSubmit} primary={true} style={styles.submitBtn}/>
+              <RaisedButton id="finish" label="完成" onClick={this._onSubmit} primary={true} style={styles.submitBtn}/>
             </ClearFix>
           </div>
         </Paper>
