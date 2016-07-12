@@ -102,7 +102,7 @@ let EasylearnApi = {
 	auth: function(id, token,name, callback){
 	$.ajax({
 		type: "POST",
-		url: EasylearnConfig.SERVER_URL,
+		url: EasylearnConfig.AUTH_URL,
 		contentType: "application/json; charset=UTF-8",
 		data: JSON.stringify({id:id,token:token}),
 		success: function(data) {
