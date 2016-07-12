@@ -7,262 +7,199 @@ let Reference = require('../stores/object/reference.js');
 
 let EasyLearnActions = {
 
-  appInit: function() {
-    console.log('[Action]appInit');
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.APP_INIT
-    });
-  },
+    appInit: function() {
+        console.log('[Action]appInit');
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.APP_INIT});
+    },
 
-  packView: function(packId) {
-    console.log('[Action]packView packId: ' + packId);
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.PACK_VIEW,
-      packId: packId
-    });
-  },
+    packView: function(packId) {
+        console.log('[Action]packView packId: ' + packId);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.PACK_VIEW, packId: packId});
+    },
 
-  folderView: function(folderId) {
-    console.log('[Action]folderView folderId:' + folderId);
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.FOLDER_VIEW,
-      folderId: folderId
-    });
-  },
+    folderView: function(folderId) {
+        console.log('[Action]folderView folderId:' + folderId);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.FOLDER_VIEW, folderId: folderId});
+    },
 
-  sync: function() {
-    console.log('[Action]Sync');
-    let success = function(data) {
-      AppDispatcher.dispatch({
-        actionType: EasyLearnConstants.SYNC_SUCCESS,
-        data: data
-      });
-    };
+    sync: function() {
+        console.log('[Action]Sync');
+        let success = function(data) {
+            AppDispatcher.dispatch({actionType: EasyLearnConstants.SYNC_SUCCESS, data: data});
+        };
 
-    let fail = function() {
-      AppDispatcher.dispatch({
-        actionType: EasyLearnConstants.SYNC_FAIL
-      });
-    };
+        let fail = function() {
+            AppDispatcher.dispatch({actionType: EasyLearnConstants.SYNC_FAIL});
+        };
 
-    EasylearnApi.sync(success, fail);
-  },
+        EasylearnApi.sync(success, fail);
+    },
 
-  fbInit: function() {
-    console.log('[Action]fbInit');
-    let callback = function(response) {
-      if (response.status === 'connected') {
-// Logged into your app and Facebook.
-//this.testAPI();
-        console.log('[fbInit]connected');
-        FBApi.me(function(response) {
-          console.log('Successful login for: ' + response.name);
-          AppDispatcher.dispatch({
-            actionType: EasyLearnConstants.LOGIN_SUCCESS,
-            id: response.id,
-            name: response.name
-          });
-          EasyLearnActions.sync();
+    fbInit: function() {
+        console.log('[Action]fbInit');
+
+        let loginCallback = function(id, name, token) {
+            AppDispatcher.dispatch({actionType: EasyLearnConstants.GET_ACCESS_TOKEN, token: token});
+            AppDispatcher.dispatch({actionType: EasyLearnConstants.LOGIN_SUCCESS, id: id, name: name});
+            EasyLearnActions.sync();
+        }
+
+        let callback = function(response) {
+            var token = response.authResponse.accessToken;
+            console.log(token);
+            if (response.status === 'connected') {
+                // Logged into your app and Facebook.
+                //this.testAPI();
+                console.log('[fbInit]connected');
+                FBApi.me(function(response) {
+                    console.log('Successful login for: ' + response.name);
+                    console.log(response);
+                    EasylearnApi.auth(response.id, token, response.name, loginCallback);
+                });
+            } else if (response.status === 'not_authorized') {
+                // The person is logged into Facebook, but not your app.
+                console.log('[fbInit]Please log into this app.');
+            } else {
+                // The person is not logged into Facebook, so we're not sure if
+                // they are logged into this app or not.
+                console.log('[fbInit]Please log into Facebook.');
+            }
+        };
+        FBApi.initial(callback);
+    },
+
+    fbLogin: function() {
+        let callback = function(response) {
+            if (response.status === 'connected') {
+                // Logged into your app and Facebook.
+                //this.testAPI();
+                console.log('[fbInit]connected');
+                FBApi.me(function(response) {
+                    console.log('Successful login for: ' + response.name);
+                    AppDispatcher.dispatch({actionType: EasyLearnConstants.LOGIN_SUCCESS, id: response.id, name: response.name});
+                    EasyLearnActions.sync();
+                });
+            } else if (response.status === 'not_authorized') {
+                // The person is logged into Facebook, but not your app.
+                console.log('[fbInit]Please log into this app.');
+            } else {
+                // The person is not logged into Facebook, so we're not sure if
+                // they are logged into this app or not.
+                console.log('[fbInit]Please log into Facebook.');
+            }
+        };
+
+        FBApi.login(callback);
+    },
+
+    newPack: function(data, callback) {
+        // set packid
+        let time = new Date().getTime();
+        data['id'] = 'pack' + time;
+
+        console.log('[Action]newPack', data);
+
+        var r = new Reference();
+        var deffer = r.getInfo(data.content);
+        $.when(deffer).then(function() {
+            data.content += r.get();
+
+            AppDispatcher.dispatch({actionType: EasyLearnConstants.NEW_PACK, data: data});
+
+            callback();
         });
-      } else if (response.status === 'not_authorized') {
-// The person is logged into Facebook, but not your app.
-        console.log('[fbInit]Please log into this app.');
-      } else {
-// The person is not logged into Facebook, so we're not sure if
-// they are logged into this app or not.
-        console.log('[fbInit]Please log into Facebook.');
-      }
-    };
-    FBApi.initial(callback);
-  },
+    },
 
-  fbLogin: function() {
-    let callback = function(response) {
-      if (response.status === 'connected') {
-// Logged into your app and Facebook.
-//this.testAPI();
-        console.log('[fbInit]connected');
-        FBApi.me(function(response) {
-          console.log('Successful login for: ' + response.name);
-          AppDispatcher.dispatch({
-            actionType: EasyLearnConstants.LOGIN_SUCCESS,
-            id: response.id,
-            name: response.name
-          });
-          EasyLearnActions.sync();
+    modifiedPack: function(data, callback) {
+        console.log('[Action]modifiedPack', data);
+        var r = new Reference();
+        var deffer = r.getInfo(data.content);
+        $.when(deffer).then(function() {
+            data.content += r.get();
+
+            AppDispatcher.dispatch({actionType: EasyLearnConstants.MODIFIED_PACK, is_public: data.is_public, content: data.content, files: data.files});
+
+            callback();
         });
-      } else if (response.status === 'not_authorized') {
-// The person is logged into Facebook, but not your app.
-        console.log('[fbInit]Please log into this app.');
-      } else {
-// The person is not logged into Facebook, so we're not sure if
-// they are logged into this app or not.
-        console.log('[fbInit]Please log into Facebook.');
-      }
-    };
+    },
 
-    FBApi.login(callback);
-  },
+    deletePack: function(idArray) {
+        console.log('[Action]deletePack', idArray);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.DELETE_PACK, idArray: idArray});
+    },
 
-  newPack: function(data, callback) {
-// set packid
-    let time = new Date().getTime();
-    data['id'] = 'pack' + time;
+    checkoutVersion: function(versionId) {
+        console.log('[Action]checkoutVersion versionId', versionId);
 
-    console.log('[Action]newPack', data);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.CHECKOUT_VERSION, versionId: versionId});
+    },
 
-    var r = new Reference();
-    var deffer = r.getInfo(data.content);
-    $.when(deffer).then(function() {
-      data.content += r.get();
+    redoDeletePack: function() {
+        console.log('[Action]redoDeletePack');
 
-      AppDispatcher.dispatch({
-        actionType: EasyLearnConstants.NEW_PACK,
-        data: data
-      });
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.REDO_DELETE_PACK});
+    },
 
-      callback();
-    });
-  },
+    newNote: function(note, versionContent) {
+        console.log('[Action]newNote', note, versionContent);
 
-  modifiedPack: function(data, callback) {
-    console.log('[Action]modifiedPack', data);
-    var r = new Reference();
-    var deffer = r.getInfo(data.content);
-    $.when(deffer).then(function() {
-      data.content += r.get();
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.NEW_NOTE, note: note, versionContent: versionContent});
+    },
 
-      AppDispatcher.dispatch({
-        actionType: EasyLearnConstants.MODIFIED_PACK,
-        is_public: data.is_public,
-        content: data.content,
-        files: data.files
-      });
+    newComment: function(content, noteId) {
+        console.log('[Action]newComment', content, noteId);
+        //create new comment
+        let time = new Date();
+        let newComment = {
+            id: 'comment' + time.getTime(),
+            content: content,
+            create_time: time.getTime(),
+            user_id: UserStore.getUserId(),
+            user_name: UserStore.getUserName()
+        };
 
-      callback();
-    });
-  },
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.NEW_COMMENT, newComment: newComment, noteId: noteId});
+        EasylearnApi.postComment(noteId, newComment);
+    },
 
-  deletePack: function(idArray) {
-    console.log('[Action]deletePack', idArray);
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.DELETE_PACK,
-      idArray: idArray
-    });
-  },
+    getComment: function(noteId) {
+        console.log('[Action]getComment', noteId);
 
-  checkoutVersion: function(versionId) {
-    console.log('[Action]checkoutVersion versionId', versionId);
+        let success = function(data) {
+            AppDispatcher.dispatch({actionType: EasyLearnConstants.GET_COMMENT, notes: data, noteId: noteId});
+        }
+        EasylearnApi.getComment(noteId, success);
+    },
 
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.CHECKOUT_VERSION,
-      versionId: versionId
-    });
-  },
+    renameFolder: function(folderId, name) {
+        console.log('[Action]renameFolder', folderId, name);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.RENAME_FOLDER, folderId: folderId, name: name});
+    },
 
-  redoDeletePack: function() {
-    console.log('[Action]redoDeletePack');
+    movePack: function(packId, originFolderId, targetFolderId) {
+        console.log('[Action]movePack', packId, originFolderId, targetFolderId);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.MOVE_PACK, packId: packId, originFolderId: originFolderId, targetFolderId: targetFolderId});
+    },
 
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.REDO_DELETE_PACK
-    });
-  },
+    copyPack: function(packId, targetFolderId) {
+        console.log('[Action]copyPack', packId, targetFolderId);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.COPY_PACK, packId: packId, targetFolderId: targetFolderId});
+    },
 
-  newNote: function(note, versionContent) {
-    console.log('[Action]newNote', note, versionContent);
+    deletePackInAllFolders: function(packId) {
+        console.log('[Action]deletePackInAllFolders', packId);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.DELETE_PACK_IN_ALL_FOLDERS, packId: packId});
+    },
 
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.NEW_NOTE,
-      note: note,
-      versionContent: versionContent
-    });
-  },
+    deletePackInFolder: function(packId, fodlerId) {
+        console.log('[Action]deletePackInFolder', packId, fodlerId);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.DELETE_PACK_IN_FOLDER, packId: packId, fodlerId: fodlerId});
+    },
 
-  newComment: function(content, noteId) {
-    console.log('[Action]newComment', content, noteId);
-//create new comment
-    let time = new Date();
-    let newComment = {
-      id: 'comment' + time.getTime(),
-      content: content,
-      create_time: time.getTime(),
-      user_id: UserStore.getUserId(),
-      user_name: UserStore.getUserName()
-    };
-
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.NEW_COMMENT,
-      newComment: newComment,
-      noteId: noteId
-    });
-    EasylearnApi.postComment(noteId, newComment);
-  },
-
-  getComment: function(noteId) {
-    console.log('[Action]getComment', noteId);
-
-    let success = function(data) {
-      AppDispatcher.dispatch({
-        actionType: EasyLearnConstants.GET_COMMENT,
-        notes: data,
-        noteId: noteId
-      });
+    addFolder: function(folderName) {
+        console.log('[Action]addFolder', folderName);
+        AppDispatcher.dispatch({actionType: EasyLearnConstants.ADD_FOLDER, folderName: folderName});
     }
-    EasylearnApi.getComment(noteId, success);
-  },
-
-  renameFolder: function(folderId, name) {
-    console.log('[Action]renameFolder', folderId, name);
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.RENAME_FOLDER,
-      folderId: folderId,
-      name: name
-    });
-  },
-
-  movePack: function(packId, originFolderId, targetFolderId) {
-    console.log('[Action]movePack', packId, originFolderId, targetFolderId);
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.MOVE_PACK,
-      packId: packId,
-      originFolderId: originFolderId,
-      targetFolderId: targetFolderId
-    });
-  },
-
-  copyPack: function(packId, targetFolderId) {
-    console.log('[Action]copyPack', packId, targetFolderId);
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.COPY_PACK,
-      packId: packId,
-      targetFolderId: targetFolderId
-    });
-  },
-
-  deletePackInAllFolders: function(packId) {
-    console.log('[Action]deletePackInAllFolders', packId);
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.DELETE_PACK_IN_ALL_FOLDERS,
-      packId: packId
-    });
-  },
-
-  deletePackInFolder: function(packId, fodlerId) {
-    console.log('[Action]deletePackInFolder', packId, fodlerId);
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.DELETE_PACK_IN_FOLDER,
-      packId: packId,
-      fodlerId: fodlerId
-    });
-  },
-
-  addFolder: function(folderName) {
-    console.log('[Action]addFolder', folderName);
-    AppDispatcher.dispatch({
-      actionType: EasyLearnConstants.ADD_FOLDER,
-      folderName: folderName
-    });
-  }
 };
 
 module.exports = EasyLearnActions;

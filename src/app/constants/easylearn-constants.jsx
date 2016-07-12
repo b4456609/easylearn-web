@@ -20,5 +20,6 @@ module.exports = keyMirror({
   COPY_PACK: null,
   DELETE_PACK_IN_FOLDER: null,
   DELETE_PACK_IN_ALL_FOLDERS: null,
-  ADD_FOLDER: null
+  ADD_FOLDER: null,
+  GET_ACCESS_TOKEN:null
 });

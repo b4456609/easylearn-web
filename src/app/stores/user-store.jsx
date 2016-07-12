@@ -6,8 +6,10 @@ let assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
+let _accessToken = null;
+
 let _user = {
-  id: '100000233589366',
+  id: '',
   name: '遊客',
   setting: {
     wifi_sync: true,
@@ -53,6 +55,10 @@ _user.setting = {
 };
 
 let UserStore = assign({}, EventEmitter.prototype, {
+
+  getToken: function() {
+    return _accessToken;
+  },
 
   getUser: function() {
     return _user;
@@ -124,6 +130,11 @@ AppDispatcher.register(function(action) {
     console.log(_user);
     UserStore.emitChange();
     setLocalStorage();
+    break;
+
+  case EasyLearnConstants.GET_ACCESS_TOKEN :
+    _accessToken = action.token;
+    console.log(_accessToken);
     break;
 
   default :

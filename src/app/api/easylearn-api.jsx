@@ -20,9 +20,9 @@ let EasylearnApi = {
 
 		var syncAjax = $.ajax({
 			method: "POST",
+			headers: { 'X-Auth-Token': UserStore.getToken() },
 			url: EasylearnConfig.SERVER_URL + 'sync',
 			contentType: "application/json; charset=UTF-8",
-			crossDomain: true,
 			data: JSON.stringify(sendData)
 		});
 
@@ -97,6 +97,26 @@ let EasylearnApi = {
 				console.log(errorThrown);
 			}
 		});
+	},
+
+	auth: function(id, token,name, callback){
+	$.ajax({
+		type: "POST",
+		url: "http://localhost:8080/auth",
+		contentType: "application/json; charset=UTF-8",
+		data: JSON.stringify({id:id,token:token}),
+		success: function(data) {
+			console.log('success auth');
+			console.log(data);
+			callback(id, name, data.token);
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log('error');
+			console.log(jqXHR);
+			console.log(textStatus);
+			console.log(errorThrown);
+		}
+	});
 	}
 }
 module.exports = EasylearnApi;
