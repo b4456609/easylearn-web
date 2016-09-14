@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Drawer from 'material-ui/Drawer';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
@@ -40,7 +40,7 @@ const style = {
   },
 }
 
-const AppDrawer = () => (
+const AppDrawer = ({onClick, name, folder, addFolder}) => (
   <Drawer open={true} zDepth={1}>
     <div style={style.appName}>
       EasyLearn
@@ -48,11 +48,11 @@ const AppDrawer = () => (
     <List style={style.list}>
       <ListItem
         disabled={true}
-        leftAvatar={<Avatar>A</Avatar>}
+        leftAvatar={<Avatar>{name[0]}</Avatar>}
         style={style.list}
         rightIconButton={iconButtonElement}
         >
-        User
+        {name}
       </ListItem>
     </List>
     <List>
@@ -69,11 +69,30 @@ const AppDrawer = () => (
       <ListItem
         primaryText="全部懶人包"
         />
+      {folder.map(
+        item => <ListItem
+        key={item.id}
+        primaryText={item.name}
+        />
+      )
+      }
       <ListItem
         primaryText="James Anderson"
+        onClick={onClick}
+        />
+      <ListItem
+        primaryText="James Anderson"
+        onClick={addFolder}
         />
     </List>
   </Drawer>
 );
+
+AppDrawer.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  addFolder: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  folder: PropTypes.array.isRequired
+}
 
 export default AppDrawer;

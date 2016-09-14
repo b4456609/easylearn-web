@@ -3,8 +3,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import {spacing} from 'material-ui/styles';
 
-import PackCard from './container/PackCard'
-import AppDrawer from './component/AppDrawer'
+import PackCard from './components/PackCard'
+import DrawerContainer from './containers/DrawerContainer'
 
 class App extends Component {
     getStyles() {
@@ -21,7 +21,7 @@ class App extends Component {
         <MuiThemeProvider>
           <div>
             <AppBar title="Title" iconClassNameRight="muidocs-icon-navigation-expand-more"/>
-            <AppDrawer />
+            <DrawerContainer />
             <div style={this.getStyles().root}>
               <div className="row">
                 <div className="col-xs-12 col-sm-6 col-md-4">
