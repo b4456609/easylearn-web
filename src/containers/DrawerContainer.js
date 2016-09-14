@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { loginSuccess,addFolder } from '../actions'
+import { loginSuccess,addFolder,showDialog } from '../actions'
 import AppDrawer from '../components/AppDrawer'
 
 
@@ -12,11 +12,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClick: () => {
-      dispatch(loginSuccess('test','test'))
-    },
-    addFolder: () => {
-      dispatch(addFolder('a'))
+    showDialog: () => {
+      dispatch(showDialog('NEW_FOLDER_DIALOG', 'adf'))
     }
   }
 }

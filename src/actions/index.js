@@ -15,3 +15,18 @@ export function addFolder(name) {
     name: name
   }
 }
+
+export const SHOW_DIALOG = 'SHOW_DIALOG'
+export function showDialog(modalType, modalProps){
+  return{
+    type: SHOW_DIALOG,
+    modalType, modalProps
+  }
+}
+
+export const HIDE_DIALOG = 'HIDE_DIALOG'
+export function hideDialog(){
+  return{
+    type: HIDE_DIALOG
+  }
+}

@@ -7,6 +7,8 @@ import DirectionsRun from 'material-ui/svg-icons/maps/directions-run';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
+import RaisedButton from 'material-ui/RaisedButton';
+import NewFolderDialog from './NewFolderDialog';
 import {
 cyan500,
 white
@@ -40,9 +42,8 @@ const style = {
   },
 }
 
-const AppDrawer = ({onClick, name, folder, addFolder}) => (
+const AppDrawer = ({name, folder, showDialog}) => (
   <Drawer open={true} zDepth={1}>
-
     <div style={style.appName}>
       EasyLearn
     </div>
@@ -77,21 +78,16 @@ const AppDrawer = ({onClick, name, folder, addFolder}) => (
         />
       )
       }
-      <ListItem
-        primaryText="James Anderson"
-        onClick={onClick}
-        />
-      <ListItem
-        primaryText="James Anderson"
-        onClick={addFolder}
-        />
     </List>
+    <div style={{width: '100%', textAlign: 'center'}}>
+      <RaisedButton
+        label="新增資料夾"
+        onClick={showDialog}/>
+    </div>
   </Drawer>
 );
 
 AppDrawer.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  addFolder: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   folder: PropTypes.array.isRequired
 }
