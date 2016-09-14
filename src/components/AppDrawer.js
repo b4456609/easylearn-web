@@ -17,7 +17,7 @@ const iconButtonElement = (
   <IconButton
     touch={true}
     tooltip="logout"
-    tooltipPosition="bottom-center"
+    tooltipPosition="bottom-left"
   >
     <DirectionsRun color={white}/>
   </IconButton>
@@ -42,6 +42,7 @@ const style = {
 
 const AppDrawer = ({onClick, name, folder, addFolder}) => (
   <Drawer open={true} zDepth={1}>
+
     <div style={style.appName}>
       EasyLearn
     </div>
