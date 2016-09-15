@@ -1,7 +1,6 @@
-import React, {PropTypes, Component} from 'react'
+import React, {PropTypes} from 'react'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import {connect} from 'react-redux'
 import {hideDialog, addFolder} from '../actions'
 import TextField from 'material-ui/TextField'
@@ -11,7 +10,6 @@ const mapStateToProps = (state) => {
 }
 
 const NewFolderDialog = ({modalProps,dispatch}) => {
-  let input;
   return(
     <Dialog
       title="新增資料夾"

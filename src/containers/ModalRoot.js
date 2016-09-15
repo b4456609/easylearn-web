@@ -1,5 +1,5 @@
 // These are regular React components we will write soon
-import React, {Component} from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
 import NewFolderDialog from '../components/NewFolderDialog.js'
 

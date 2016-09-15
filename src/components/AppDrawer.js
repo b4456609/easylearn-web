@@ -2,28 +2,15 @@ import React, { PropTypes } from 'react';
 import Drawer from 'material-ui/Drawer';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
-import IconButton from 'material-ui/IconButton';
-import DirectionsRun from 'material-ui/svg-icons/maps/directions-run';
-import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
-import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
-import NewFolderDialog from './NewFolderDialog';
+import UserDrawer from './UserDrawer';
 import {
 cyan500,
-white
 } from 'material-ui/styles/colors';
 import {spacing, typography} from 'material-ui/styles';
+import FolderList from './FolderList.js'
 
-const iconButtonElement = (
-  <IconButton
-    touch={true}
-    tooltip="logout"
-    tooltipPosition="bottom-left"
-  >
-    <DirectionsRun color={white}/>
-  </IconButton>
-);
 
 const style = {
   appName: {
@@ -35,11 +22,7 @@ const style = {
     backgroundColor: cyan500,
     color: typography.textFullWhite,
     paddingLeft: spacing.desktopGutter,
-  },
-  list:{
-    backgroundColor: cyan500,
-    color: typography.textFullWhite,
-  },
+  }
 }
 
 const AppDrawer = ({name, folder, showDialog}) => (
@@ -47,16 +30,7 @@ const AppDrawer = ({name, folder, showDialog}) => (
     <div style={style.appName}>
       EasyLearn
     </div>
-    <List style={style.list}>
-      <ListItem
-        disabled={true}
-        leftAvatar={<Avatar>{name[0]}</Avatar>}
-        style={style.list}
-        rightIconButton={iconButtonElement}
-        >
-        {name}
-      </ListItem>
-    </List>
+    <UserDrawer name={name}/>
     <List>
       <ListItem
         primaryText="新增懶人包"
@@ -66,19 +40,7 @@ const AppDrawer = ({name, folder, showDialog}) => (
         />
     </List>
     <Divider />
-    <List>
-      <Subheader>資料夾</Subheader>
-      <ListItem
-        primaryText="全部懶人包"
-        />
-      {folder.map(
-        item => <ListItem
-        key={item.id}
-        primaryText={item.name}
-        />
-      )
-      }
-    </List>
+    <FolderList folder={folder}/>
     <div style={{width: '100%', textAlign: 'center'}}>
       <RaisedButton
         label="新增資料夾"

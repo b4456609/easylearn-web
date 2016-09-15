@@ -13,7 +13,14 @@ import createLogger from 'redux-logger';
 injectTapEventPlugin();
 
 const logger = createLogger();
-const store = createStore(reducer, applyMiddleware(logger))
+
+let debugMidware=[];
+if (process.env.NODE_ENV !== 'production') {
+  debugMidware.push(window.devToolsExtension && window.devToolsExtension());
+  debugMidware.push(applyMiddleware(logger));
+}
+
+const store = createStore(reducer,...debugMidware)
 
 ReactDOM.render(
   <Provider store={store}>

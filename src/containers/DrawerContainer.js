@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { loginSuccess,addFolder,showDialog } from '../actions'
+import { showDialog } from '../actions'
 import AppDrawer from '../components/AppDrawer'
 
 

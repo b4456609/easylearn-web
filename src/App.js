@@ -22,7 +22,7 @@ class App extends Component {
       return (
         <MuiThemeProvider>
           <div>
-            <AppBar title="Title" iconClassNameRight="muidocs-icon-navigation-expand-more"/>
+            <AppBar title="Title"/>
             <DrawerContainer />
             <ModalRoot />
             <div style={this.getStyles().root}>
