@@ -1,9 +1,9 @@
 import { NEW_PACK } from '../actions';
 
-function newPack(name, description, isPublic, content, creatorUserId, creatorUserName) {
+function newPack(id, name, description, isPublic, content, creatorUserId, creatorUserName) {
   const time = new Date().getTime();
   return {
-    id: 'pack' + time,
+    id: id,
     createTime: time,
     name,
     description,
@@ -34,7 +34,7 @@ const pack = (state = [], action) => {
     case NEW_PACK:
       return [
         ...state,
-        newPack(action.title, action.description, action.isPublic,
+        newPack(action.id, action.title, action.description, action.isPublic,
            action.content, action.userId, action.userName),
       ];
     default:

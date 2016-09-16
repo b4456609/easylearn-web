@@ -3,9 +3,10 @@ import {
     NEW_PACK,
 } from '../actions';
 
+const ALL_FOLDER = 'all';
 const initState = {
   name: '全部懶人包',
-  id: new Date().getTime(),
+  id: ALL_FOLDER,
   pack: [],
 };
 
@@ -14,13 +15,17 @@ const folder = (state = [initState], action) => {
     case ADD_FOLDER:
       return [...state, {
         name: action.name,
-        id: new Date().getTime(),
+        id: '' + new Date().getTime(),
         pack: [],
       }];
     case NEW_PACK:
-      const target = state.find(i => i.name === '全部懶人包');
-      target.pack = [...target.pack, action.id]
-      return state;
+      return state.map((i) => {
+        if (i.id !== ALL_FOLDER) return i;
+        return Object.assign({}, i, { pack: [
+          ...i.pack,
+          action.id,
+        ] });
+      });
     default:
       return state;
   }

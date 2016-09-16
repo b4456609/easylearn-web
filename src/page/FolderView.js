@@ -22,15 +22,13 @@ const FolderView = ({ pack }) => {
 
 export default connect(
   (state, ownProps) => {
-    if(!ownProps.param) return {pack:[]}
-    const folderId = ownProps.param.id;
+    const folderId = ownProps.params.id || 'all';
     const folder = state.folder.find(i => i.id === folderId);
     const packArray = folder.pack.map(
-      i=>(
-          state.pack.find(pack=>pack.id===i)
+      item => state.pack.find(
+        p => p.id === item
       )
     );
-
     return {
       pack: packArray,
     };
