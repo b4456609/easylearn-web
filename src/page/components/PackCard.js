@@ -1,15 +1,15 @@
-import React from 'react';
-import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import Img from '../img/305.png'
 import spacing from 'material-ui/styles/spacing';
+import React from 'react';
+import { Card, CardActions, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import Img from '../../img/305.png';
 
 const CardExampleWithAvatar = () => (
-  <Card style={{marginBottom:spacing.desktopGutter}}>
+  <Card style={{ marginBottom: spacing.desktopGutter }}>
     <CardMedia
-      overlay={<CardTitle title="Overlay title"/>}
+      overlay={<CardTitle title="Overlay title" />}
     >
-      <img src={Img} alt="packimg"/>
+      <img src={Img} alt="packimg" />
     </CardMedia>
     <CardText>
       fasjdiof jfwoejfpwejfowejf fjweojfwoiefje wjeoifjwioejfoi wjeiofjweiofjio jiowejiof1
