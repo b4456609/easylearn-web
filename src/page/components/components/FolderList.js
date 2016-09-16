@@ -2,18 +2,17 @@ import React, { PropTypes } from 'react';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
 import Subheader from 'material-ui/Subheader';
+import { browserHistory } from 'react-router';
 
 
-const FolderList = ({folder}) => (
+const FolderList = ({ folder }) => (
     <List>
       <Subheader>資料夾</Subheader>
-      <ListItem
-        primaryText="全部懶人包"
-        />
       {folder.map(
         item => <ListItem
-        key={item.id}
-        primaryText={item.name}
+          key={item.id}
+          primaryText={item.name}
+          onClick={() => { browserHistory.push('/home/folder/' + item.id); }}
         />
       )
       }
@@ -21,7 +20,7 @@ const FolderList = ({folder}) => (
 );
 
 FolderList.propTypes = {
-  folder: PropTypes.array.isRequired
-}
+  folder: PropTypes.array.isRequired,
+};
 
 export default FolderList;

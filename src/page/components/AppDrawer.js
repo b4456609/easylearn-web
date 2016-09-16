@@ -49,6 +49,7 @@ const AppDrawer = ({ name, folder, showDialog }) => (
 AppDrawer.propTypes = {
   name: PropTypes.string.isRequired,
   folder: PropTypes.array.isRequired,
+  showDialog: PropTypes.func.isRequired,
 };
 
 export default AppDrawer;

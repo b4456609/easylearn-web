@@ -1,31 +1,38 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PackCard from './components/PackCard';
 
 
-const FolderView = () => (
-  <div>
-    <div className="row">
-      <div className="col-xs-12 col-sm-6 col-md-4">
-        <div className="box">
-          <PackCard />
-        </div>
-      </div>
-      <div className="col-xs-12 col-sm-6 col-md-4">
-        <div className="box">
-          <PackCard />
-        </div>
-      </div>
-      <div className="col-xs-12 col-sm-6 col-md-4">
-        <div className="box">
-          <PackCard />
-        </div>
-      </div>
-      <div className="col-xs-12 col-sm-6 col-md-4">
-        <div className="box">
-          <PackCard />
-        </div>
+const FolderView = ({ pack }) => {
+  const packs = (pack.map(
+    i => (
+      <PackCard key={i.id} name={i.name} description={i.description} id={i.id} />
+    )
+  ));
+
+  return (
+    <div>
+      <div className="row">
+        {packs}
       </div>
     </div>
-  </div>
-);
-export default FolderView;
+  );
+};
+
+
+export default connect(
+  (state, ownProps) => {
+    if(!ownProps.param) return {pack:[]}
+    const folderId = ownProps.param.id;
+    const folder = state.folder.find(i => i.id === folderId);
+    const packArray = folder.pack.map(
+      i=>(
+          state.pack.find(pack=>pack.id===i)
+      )
+    );
+
+    return {
+      pack: packArray,
+    };
+  }
+)(FolderView);

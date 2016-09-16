@@ -25,7 +25,8 @@ class NewPack extends React.Component {
     const content = tinymce.activeEditor.getContent();
     const { title, description, isPublic } = this.state;
     const { userId, userName } = this.props;
-    this.props.dispatch(newPack(title, description, isPublic, content, userId, userName));
+    const id = 'pack' + new Date().getTime();
+    this.props.dispatch(newPack(id, title, description, isPublic, content, userId, userName));
     // Go to /some/path.
     browserHistory.push('/home/');
   }

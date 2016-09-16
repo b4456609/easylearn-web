@@ -14,6 +14,7 @@ import GetStart from './page/GetStart';
 import Home from './page/Home';
 import NewPack from './page/NewPack';
 import FolderView from './page/FolderView';
+import Pack from './page/Pack';
 
 injectTapEventPlugin();
 
@@ -35,6 +36,8 @@ ReactDOM.render(
         <Route path="home/" component={Home} >
           <IndexRoute component={FolderView} />
           <Route path="new-pack" component={NewPack} />
+          <Route path="pack/:id" component={Pack} />
+          <Route path="folder/:id" component={FolderView} />
         </Route>
       </Route>
     </Router>

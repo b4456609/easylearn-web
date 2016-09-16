@@ -33,9 +33,10 @@ export function hideDialog() {
 }
 
 export const NEW_PACK = 'NEW_PACK';
-export function newPack(title, description, isPublic, content, userId, userName) {
+export function newPack(id, title, description, isPublic, content, userId, userName) {
   return {
     type: NEW_PACK,
+    id,
     title,
     description,
     isPublic,
