@@ -85,12 +85,12 @@ class NewPack extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = state => (
+  {
     userId: state.user.id,
     userName: state.user.name,
-  };
-};
+  }
+);
 
 export default connect(
   mapStateToProps

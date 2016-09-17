@@ -21,4 +21,9 @@ const Home = ({ children }) => (
     <ModalRoot />
   </div>
 );
+
+Home.propTypes = {
+  children: React.PropTypes.element,
+};
+
 export default Home;

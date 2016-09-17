@@ -3,7 +3,7 @@ import { NEW_PACK } from '../actions';
 function newPack(id, name, description, isPublic, content, creatorUserId, creatorUserName) {
   const time = new Date().getTime();
   return {
-    id: id,
+    id,
     createTime: time,
     name,
     description,
@@ -14,7 +14,7 @@ function newPack(id, name, description, isPublic, content, creatorUserId, creato
     viewCount: 0,
     version: [
       {
-        id: 'version' + time,
+        id: `version${time}`,
         content,
         createTime: time,
         isPublic,

@@ -6,17 +6,17 @@ import { browserHistory } from 'react-router';
 
 
 const FolderList = ({ folder }) => (
-    <List>
-      <Subheader>資料夾</Subheader>
-      {folder.map(
-        item => <ListItem
-          key={item.id}
-          primaryText={item.name}
-          onClick={() => { browserHistory.push('/home/folder/' + item.id); }}
-        />
-      )
-      }
-    </List>
+  <List>
+    <Subheader>資料夾</Subheader>
+    {folder.map(
+      item => <ListItem
+        key={item.id}
+        primaryText={item.name}
+        onClick={() => { browserHistory.push(`/home/folder/${item.id}`); }}
+      />
+    )
+    }
+  </List>
 );
 
 FolderList.propTypes = {

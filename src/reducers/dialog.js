@@ -1,21 +1,21 @@
-import {SHOW_DIALOG} from '../actions'
+import { SHOW_DIALOG } from '../actions';
 const initialState = {
   modalType: null,
-  modalProps: null
-}
+  modalProps: null,
+};
 
 const dialog = (state = initialState, action) => {
   switch (action.type) {
     case SHOW_DIALOG:
       return {
         modalType: action.modalType,
-        modalProps: action.modalProps
-      }
+        modalProps: action.modalProps,
+      };
     case 'HIDE_DIALOG':
-      return initialState
+      return initialState;
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default dialog
+export default dialog;
