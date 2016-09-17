@@ -4,9 +4,9 @@ import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton';
 import './NewPack.css';
-import Editor from './components/Editor';
 import { newPack } from '../actions';
 import { browserHistory } from 'react-router';
+import TinyMCE from 'react-tinymce';
 
 
 class NewPack extends React.Component {
@@ -72,7 +72,14 @@ class NewPack extends React.Component {
             </div>
           </div>
         </div>
-        <Editor />
+        <TinyMCE
+          content="<p>This is the initial content of the editor</p>"
+          config={{
+            plugins: 'autolink link image lists print preview',
+            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright',
+          }}
+          onChange={this.handleEditorChange}
+        />
         <div className="row end-xs">
           <div className="col-xs-12">
             <div className="box">

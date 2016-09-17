@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import PackCard from './components/PackCard';
 
 
-const FolderView = ({ pack }) => {
+const FolderView = ({ pack, folderId }) => {
   const packs = (pack.map(
     i => (
-      <PackCard key={i.id} name={i.name} description={i.description} id={i.id} />
+      <PackCard key={i.id} name={i.name} description={i.description}
+        id={i.id} folderId={folderId}
+      />
     )
   ));
 
@@ -19,9 +21,15 @@ const FolderView = ({ pack }) => {
   );
 };
 
+FolderView.propTypes = {
+  pack: React.PropTypes.array.isRequired,
+  folderId: React.PropTypes.string.isRequired,
+};
+
 
 export default connect(
   (state, ownProps) => {
+    console.log(JSON.stringify(state));
     const folderId = ownProps.params.id || 'all';
     const folder = state.folder.find(i => i.id === folderId);
     const packArray = folder.pack.map(
@@ -31,6 +39,7 @@ export default connect(
     );
     return {
       pack: packArray,
+      folderId,
     };
   }
 )(FolderView);

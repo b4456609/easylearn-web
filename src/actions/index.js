@@ -45,3 +45,29 @@ export function newPack(id, title, description, isPublic, content, userId, userN
     userName,
   };
 }
+
+export const MOVE_PACK_TO_FOLDER = 'MOVE_PACK_TO_FOLDER';
+export function movePackToFolder(packId, folderId) {
+  return {
+    type: MOVE_PACK_TO_FOLDER,
+    packId,
+    folderId,
+  };
+}
+
+export const REMOVE_PACK = 'REMOVE_PACK';
+export function removePack(packId) {
+  return {
+    type: REMOVE_PACK,
+    packId,
+  };
+}
+
+export const MOVE_PACK_OUT = 'MOVE_PACK_OUT';
+export function movePackOut(packId, folderId) {
+  return {
+    type: MOVE_PACK_OUT,
+    packId,
+    folderId,
+  };
+}
