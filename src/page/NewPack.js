@@ -18,6 +18,10 @@ class NewPack extends React.Component {
     this.onFinish = this.onFinish.bind(this);
   }
 
+  componentDidMount() {
+    new MediumEditor('#editable');
+  }
+
   onFinish() {
     const content = document.getElementById('editable').innerHTML;
     const title = document.getElementById('title').value;
@@ -28,10 +32,6 @@ class NewPack extends React.Component {
     this.props.dispatch(newPack(id, title, description, isPublic, content, userId, userName));
     // Go to /some/path.
     browserHistory.push('/');
-  }
-
-  componentDidMount() {
-    var editor = new MediumEditor('#editable');
   }
 
   render() {
@@ -76,7 +76,7 @@ class NewPack extends React.Component {
               </button>
             </div>
             <div className="mdl-cell--12-col">
-              <div id="editable" className="pack-content"></div>
+              <div id="editable" className="pack-content" />
             </div>
             <div className="mdl-cell--12-col">
               <button

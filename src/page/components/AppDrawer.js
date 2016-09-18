@@ -18,7 +18,7 @@ class AppDrawer extends React.Component {
       <div className="mdl-layout__drawer">
         <span className="mdl-layout-title">Easylearn</span>
         <UserDrawer name={this.props.name} id={this.props.id} userLogout={this.props.userLogout} />
-        <NewButton />
+        <NewButton showDialog={this.props.showDialog}/>
         <FolderList folder={this.props.folder} />
       </div>
     );

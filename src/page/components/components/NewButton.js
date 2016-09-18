@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 
 
-const NewButton = ({ pack, folderId }) => (
+const NewButton = ({ pack, folderId, showDialog }) => (
   <div style={{ textAlign: 'center' }}>
     <button
       id="demo-menu-lower-right"
@@ -21,7 +21,11 @@ const NewButton = ({ pack, folderId }) => (
         }}>
         新增懶人包
       </li>
-      <li className="mdl-menu__item">
+      <li className="mdl-menu__item" onClick={()=>{
+        showDialog();
+        document.querySelector('.mdl-layout__obfuscator').classList.remove('is-visible');
+        document.querySelector('.mdl-layout__drawer').classList.remove('is-visible');
+        }}>
         新增資料夾
       </li>
     </ul>

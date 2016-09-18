@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PackCard from './page/components/PackCard';
 import DrawerContainer from './page/containers/DrawerContainer';
 import Header from './page/components/Header';
+import ModalRoot from './page/containers/ModalRoot';
 
 class App extends Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class App extends Component {
             {this.props.children}
           </div>
         </main>
+        <ModalRoot />
       </div>
       );
   }

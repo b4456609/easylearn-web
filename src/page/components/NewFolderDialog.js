@@ -1,46 +1,69 @@
 import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import { connect } from 'react-redux';
 import { hideDialog, addFolder } from '../../actions';
-import TextField from 'material-ui/TextField';
+import mdlUpgrade from '../../utils/mdlUpgrade';
 
 const mapStateToProps = (state) => {
   return { modalProps: state.dialog.modalProps };
 };
+class NewFolderDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onCloseClick = this.onCloseClick.bind(this);
+    this.onSubmitClick = this.onSubmitClick.bind(this);
+  }
 
-const NewFolderDialog = ({ modalProps, dispatch }) => {
-  return (
-    <Dialog
-      title="新增資料夾"
-      actions={[
-        <FlatButton
-          label="取消"
-          primary
-          onClick={() => {
-            dispatch(hideDialog());
-          }}
-        />,
-        <FlatButton
-          label="送出"
-          primary
-          onClick={() => {
-            dispatch(addFolder(document.getElementById('new').value));
-            dispatch(hideDialog());
-          }}
-        />,
-      ]}
-      modal={false}
-      open
-    >
-      <TextField
-        id="new"
-        defaultValue="未命名資料夾"
-      />
-    </Dialog>
-  );
-};
+  componentDidMount() {
+    this.dialog = document.querySelector('dialog');
+    this.dialog.showModal();
+  }
+
+  onCloseClick() {
+    this.dialog.close();
+  }
+
+  onSubmitClick() {
+    this.props.dispatch(addFolder(document.getElementById('new-dir-name').value));
+    this.onCloseClick();
+    this.props.dispatch(hideDialog());
+  }
+
+  render() {
+    return (
+      <dialog className="mdl-dialog">
+        <h4 className="mdl-dialog__title">
+          Add a Folder
+        </h4>
+        <div className="mdl-dialog__content">
+          <div className="mdl-textfield mdl-js-textfield">
+            <input
+              className="mdl-textfield__input"
+              type="text"
+              id="new-dir-name"
+            />
+            <label
+              className="mdl-textfield__label"
+              htmlFor="sample1"
+            >Folder name...</label>
+          </div>
+        </div>
+        <div className="mdl-dialog__actions">
+          <button
+            type="button"
+            className="mdl-button"
+            onClick={this.onSubmitClick}
+          >Submit</button>
+          <button
+            type="button"
+            className="mdl-button close"
+            onClick={this.onCloseClick}
+          >Cancel</button>
+        </div>
+      </dialog>
+    );
+  }
+}
 
 export default connect(
   mapStateToProps
-)(NewFolderDialog);
+)(mdlUpgrade(NewFolderDialog));
