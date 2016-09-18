@@ -2,15 +2,15 @@ import { Children, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 
 export default class MDLComponent extends Component {
-    componentDidMount() {
-        window.componentHandler.upgradeElements(findDOMNode(this));
-    }
+  componentDidMount() {
+    window.componentHandler.upgradeElements(findDOMNode(this));
+  }
 
-    componentWillUnmount() {
-        window.componentHandler.downgradeElements(findDOMNode(this));
-    }
+  componentWillUnmount() {
+    window.componentHandler.downgradeElements(findDOMNode(this));
+  }
 
-    render() {
-        return Children.only(this.props.children);
-    }
+  render() {
+    return Children.only(this.props.children);
+  }
 }

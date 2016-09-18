@@ -15,7 +15,10 @@ class Pack extends React.Component {
           <h3>
             {this.props.pack.name}
           </h3>
-          <div className="pack-content" dangerouslySetInnerHTML={{ __html: this.props.version.content }} />
+          <div
+            className="pack-content"
+            dangerouslySetInnerHTML={{ __html: this.props.version.content }}
+          />
         </div>
       </div>
     );

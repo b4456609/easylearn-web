@@ -16,7 +16,6 @@ class PackCard extends React.Component {
   }
 
   handleChangeSingle(event, value) {
-    console.log(value);
     if (value === '1') {
       this.props.dispatch(showDialog('MOVE_PACK', { id: this.props.id }));
     } else if (value === '2') {
@@ -34,19 +33,23 @@ class PackCard extends React.Component {
       <div className="mdl-cell mdl-cell--4-col">
         <div className="demo-card-wide mdl-card mdl-shadow--2dp">
           <div className="mdl-card__title">
-              <h2 className="mdl-card__title-text">{this.props.name}</h2>
+            <h2 className="mdl-card__title-text">{this.props.name}</h2>
           </div>
           <div className="mdl-card__media">
-            <img className="card-img"
+            <img
+              className="card-img"
               src={img}
-              alt
+              alt="{this.props.name}"
             />
           </div>
           <div className="mdl-card__supporting-text">
             {this.props.description}
           </div>
           <div className="mdl-card__actions mdl-card--border">
-            <a className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" onClick={this.goto}>
+            <a
+              className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+              onClick={this.goto}
+            >
               Read
             </a>
           </div>

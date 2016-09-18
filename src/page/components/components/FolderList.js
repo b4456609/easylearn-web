@@ -8,7 +8,7 @@ const FolderList = ({ folder }) => (
     {
       folder.map(i =>
         (<a key={i.id} className="mdl-navigation__link"
-          onClick={()=>{
+          onClick={() => {
             browserHistory.push(`/folder/${i.id}`);
             document.querySelector('.mdl-layout__obfuscator').classList.remove('is-visible');
             document.querySelector('.mdl-layout__drawer').classList.remove('is-visible');
