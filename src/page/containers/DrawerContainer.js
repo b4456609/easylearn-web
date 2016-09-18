@@ -1,22 +1,26 @@
 import { connect } from 'react-redux';
-import { showDialog } from '../../actions';
+import { showDialog, notLogin } from '../../actions';
 import AppDrawer from '../components/AppDrawer';
 
 
-const mapStateToProps = (state) => {
+function mapStateToProps(state) {
   return {
     name: state.user.name,
+    id: state.user.id,
     folder: state.folder,
   };
-};
+}
 
-const mapDispatchToProps = (dispatch) => {
+function mapDispatchToProps(dispatch) {
   return {
     showDialog: () => {
       dispatch(showDialog('NEW_FOLDER_DIALOG', 'adf'));
     },
+    userLogout: () => {
+      dispatch(notLogin());
+    },
   };
-};
+}
 
 
 export default connect(

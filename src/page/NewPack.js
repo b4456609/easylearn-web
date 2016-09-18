@@ -28,7 +28,7 @@ class NewPack extends React.Component {
     const id = 'pack' + new Date().getTime();
     this.props.dispatch(newPack(id, title, description, isPublic, content, userId, userName));
     // Go to /some/path.
-    browserHistory.push('/home/');
+    browserHistory.push('/');
   }
 
   render() {

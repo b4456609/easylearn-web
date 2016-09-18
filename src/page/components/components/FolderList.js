@@ -12,7 +12,7 @@ const FolderList = ({ folder }) => (
       item => <ListItem
         key={item.id}
         primaryText={item.name}
-        onClick={() => { browserHistory.push(`/home/folder/${item.id}`); }}
+        onClick={() => { browserHistory.push(`/folder/${item.id}`); }}
       />
     )
     }

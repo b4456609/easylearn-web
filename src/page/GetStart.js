@@ -3,6 +3,8 @@ import { cyan500, grey100 } from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 import './GetStart.css';
 import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
+import { login } from '../actions';
 
 class GetStart extends Component {
   render() {
@@ -19,7 +21,12 @@ class GetStart extends Component {
               <h2 className="main-description">
                 結合社群網路、集體智慧與行動學習概念<br />提供互動式的社群行動學習平台
               </h2>
-              <RaisedButton label="開始使用" onClick={() => browserHistory.push('/home/')} secondary />
+              <RaisedButton
+                backgroundColor="#3B5998"
+                label="Login With Facebook"
+                labelColor="#FFFFFF"
+                onClick={() => { this.props.dispatch(login()); }}
+              />
             </div>
           </div>
         </div>
@@ -73,4 +80,4 @@ class GetStart extends Component {
   }
 }
 
-export default GetStart;
+export default connect()(GetStart);

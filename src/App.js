@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { init } from './api/fb';
+import { fbLoaded } from './actions';
+import { connect } from 'react-redux';
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    init(()=>{this.props.dispatch(fbLoaded())});
+  }
+
   render() {
     return (
       <MuiThemeProvider>
@@ -11,4 +19,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect()(App);

@@ -18,7 +18,7 @@ class PackCard extends React.Component {
   }
 
   goto() {
-    this.context.router.push(`/home/pack/${this.props.id}`);
+    this.context.router.push(`/pack/${this.props.id}`);
   }
 
   handleChangeSingle(event, value) {

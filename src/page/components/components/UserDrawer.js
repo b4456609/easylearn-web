@@ -4,47 +4,47 @@ import ListItem from 'material-ui/List/ListItem';
 import DirectionsRun from 'material-ui/svg-icons/maps/directions-run';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
-import {typography} from 'material-ui/styles';
+import { typography } from 'material-ui/styles';
+import { fbLogout } from '../../../api/fb';
 
 import {
 cyan500,
-white
+white,
 } from 'material-ui/styles/colors';
-
-const iconButtonElement = (
-  <IconButton
-    touch={true}
-    tooltip="logout"
-    tooltipPosition="bottom-left"
-  >
-    <DirectionsRun color={white}/>
-  </IconButton>
-);
 
 const style = {
   backgroundColor: cyan500,
   color: typography.textFullWhite,
-}
+};
 
-const UserDrawer = ({name}) => (
+const UserDrawer = ({ name, id, userLogout }) => (
   <List style={style}>
     <ListItem
-      disabled={true}
+      disabled
       leftAvatar={
-        <Avatar>
-          {name[0]}
-        </Avatar>
+        <Avatar src={`//graph.facebook.com/${id}/picture`} />
       }
       style={style}
-      rightIconButton={iconButtonElement}
-      >
+      rightIconButton={
+        <IconButton
+          touch
+          tooltip="logout"
+          tooltipPosition="bottom-left"
+          onClick={() => { fbLogout(userLogout()); }}
+        >
+        <DirectionsRun color={white} />
+        </IconButton>
+      }
+    >
       {name}
     </ListItem>
   </List>
 );
 
 UserDrawer.propTypes = {
-  name: PropTypes.string.isRequired
-}
+  name: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  userLogout: PropTypes.func.isRequired,
+};
 
 export default UserDrawer;

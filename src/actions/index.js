@@ -1,10 +1,60 @@
-export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
+import { fbCheckLogin, fbLogin } from '../api/fb';
+import { browserHistory } from 'react-router';
 
+export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
 export function loginSuccess(name, id) {
+  browserHistory.push('/folder/all');
   return {
     type: USER_LOGIN_SUCCESS,
     name,
     id,
+  };
+}
+
+export function fbLoaded() {
+  return (dispatch) => {
+    fbCheckLogin((name, id) => {
+      dispatch(loginSuccess(name, id));
+    }, () => {
+      dispatch(notLogin());
+    });
+  };
+}
+
+export const USER_NOT_LOGIN = 'USER_NOT_LOGIN';
+export function notLogin() {
+  return {
+    type: USER_NOT_LOGIN,
+  };
+}
+
+export function checkLogin() {
+  return (dispatch) => {
+    fbCheckLogin((name, id) => {
+      dispatch(loginSuccess(name, id));
+    }, () => {
+      dispatch(notLogin());
+    });
+  };
+}
+
+export function login() {
+  return (dispatch) => {
+    fbCheckLogin((name, id) => {
+      dispatch(loginSuccess(name, id));
+    }, () => {
+      fbLogin((response) => {
+        if (response.authResponse) {
+          console.log('Welcome!  Fetching your information.... ');
+          FB.api('/me', (response) => {
+            dispatch(loginSuccess(response.name, response.id));
+          });
+        } else {
+          dispatch(notLogin());
+          console.log('User cancelled login or did not fully authorize.');
+        }
+      });
+    });
   };
 }
 

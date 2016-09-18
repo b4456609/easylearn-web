@@ -40,6 +40,7 @@ export default connect(
         p => p.id === item
       )
     );
+    console.log(packArray)
     return {
       pack: packArray,
       folderId,

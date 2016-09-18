@@ -7,8 +7,9 @@ import reducer from './reducers';
 import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import createLogger from 'redux-logger';
+import thunk from 'redux-thunk';
 
-import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import { Router, Route, browserHistory, IndexRedirect } from 'react-router';
 import App from './App';
 import GetStart from './page/GetStart';
 import Home from './page/Home';
@@ -23,6 +24,9 @@ const logger = createLogger();
 const debugMidware = [];
 if (process.env.NODE_ENV !== 'production') {
   debugMidware.push(window.devToolsExtension && window.devToolsExtension());
+  debugMidware.push(applyMiddleware(thunk, logger));
+}
+else{
   debugMidware.push(applyMiddleware(logger));
 }
 
@@ -32,9 +36,9 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={App} >
-        <IndexRoute component={GetStart} />
-        <Route path="home/" component={Home} >
-          <IndexRoute component={FolderView} />
+        <Route path="start" component={GetStart} />
+        <IndexRedirect to="/folder/all" />
+        <Route component={Home} >
           <Route path="new-pack" component={NewPack} />
           <Route path="pack/:id" component={Pack} />
           <Route path="folder/:id" component={FolderView} />

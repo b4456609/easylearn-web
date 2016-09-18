@@ -59,7 +59,11 @@ class AppDrawer extends React.Component {
         <div style={style.appName}>
           EasyLearn
         </div>
-        <UserDrawer name={this.props.name} />
+        <UserDrawer
+          name={this.props.name}
+          id={this.props.id}
+          userLogout={this.props.userLogout}
+        />
         <div style={{ width: '100%', textAlign: 'center', marginTop: '15px' }}>
           <RaisedButton
             onTouchTap={this.handleTouchTap}
@@ -76,7 +80,7 @@ class AppDrawer extends React.Component {
               <MenuItem
                 primaryText="新增懶人包"
                 onClick={() => {
-                  browserHistory.push('/home/new-pack');
+                  browserHistory.push('/new-pack');
                   this.handleRequestClose();
                 }
                 }
@@ -101,6 +105,7 @@ AppDrawer.propTypes = {
   name: PropTypes.string.isRequired,
   folder: PropTypes.array.isRequired,
   showDialog: PropTypes.func.isRequired,
+  userLogout: PropTypes.func.isRequired,
 };
 
 export default AppDrawer;

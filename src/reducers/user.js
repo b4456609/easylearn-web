@@ -3,7 +3,7 @@ import {
 } from '../actions';
 
 const user = (state = {
-  id: null,
+  id: '',
   name: '遊客',
 }, action) => {
   switch (action.type) {
