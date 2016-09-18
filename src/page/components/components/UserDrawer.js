@@ -1,44 +1,22 @@
 import React, { PropTypes } from 'react';
-import List from 'material-ui/List/List';
-import ListItem from 'material-ui/List/ListItem';
-import DirectionsRun from 'material-ui/svg-icons/maps/directions-run';
-import Avatar from 'material-ui/Avatar';
-import IconButton from 'material-ui/IconButton';
-import { typography } from 'material-ui/styles';
 import { fbLogout } from '../../../api/fb';
 
-import {
-cyan500,
-white,
-} from 'material-ui/styles/colors';
-
-const style = {
-  backgroundColor: cyan500,
-  color: typography.textFullWhite,
-};
 
 const UserDrawer = ({ name, id, userLogout }) => (
-  <List style={style}>
-    <ListItem
-      disabled
-      leftAvatar={
-        <Avatar src={`//graph.facebook.com/${id}/picture`} />
-      }
-      style={style}
-      rightIconButton={
-        <IconButton
-          touch
-          tooltip="logout"
-          tooltipPosition="bottom-left"
-          onClick={() => { fbLogout(userLogout()); }}
-        >
-        <DirectionsRun color={white} />
-        </IconButton>
-      }
-    >
-      {name}
-    </ListItem>
-  </List>
+  <div className="demo-list-action mdl-list">
+      <div className="mdl-list__item">
+        <span className="mdl-list__item-primary-content">
+          <img className="mdl-list__item-avatar" src={`//graph.facebook.com/${id}/picture`} />
+          <span>{name}</span>
+        </span>
+          <a
+            className="mdl-list__item-action"
+            href="#"
+          >
+            <i className="material-icons">directions_run</i>
+          </a>
+      </div>
+  </div>
 );
 
 UserDrawer.propTypes = {

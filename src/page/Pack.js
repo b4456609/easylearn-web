@@ -1,31 +1,23 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import Paper from 'material-ui/Paper';
 import './Pack.css';
-
 
 class Pack extends React.Component {
   render() {
     return (
-      <Paper zDepth={1}>
-        <div className="paper row center-xs">
-          <div className="col-xs-12 col-sm-11">
-            <div
-              className="box"
-              style={{ textAlign: 'left' }}
-            >
-              <h1>
-                {this.props.pack.name}
-              </h1>
-            </div>
-            <div
-              className="box"
-              style={{ textAlign: 'left' }}
-              dangerouslySetInnerHTML={{ __html: this.props.version.content }}
-            />
-          </div>
+      <div className="demo-container mdl-grid">
+        <div className="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone" />
+        <div
+          className="demo-content
+          mdl-color--white mdl-shadow--4dp content
+          mdl-color-text--grey-800 mdl-cell mdl-cell--8-col"
+        >
+          <h3>
+            {this.props.pack.name}
+          </h3>
+          <div className="pack-content" dangerouslySetInnerHTML={{ __html: this.props.version.content }} />
         </div>
-      </Paper>
+      </div>
     );
   }
 }
@@ -33,10 +25,10 @@ class Pack extends React.Component {
 Pack.propTypes = {
   pack: React.PropTypes.shape({
     name: React.PropTypes.string,
-  }).isRequired,
+  }),
   version: React.PropTypes.shape({
     content: React.PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 const mapStateToProps = (state, ownProps) => {

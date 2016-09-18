@@ -1,22 +1,22 @@
 import React, { PropTypes } from 'react';
-import List from 'material-ui/List/List';
-import ListItem from 'material-ui/List/ListItem';
-import Subheader from 'material-ui/Subheader';
 import { browserHistory } from 'react-router';
 
 
 const FolderList = ({ folder }) => (
-  <List>
-    <Subheader>資料夾</Subheader>
-    {folder.map(
-      item => <ListItem
-        key={item.id}
-        primaryText={item.name}
-        onClick={() => { browserHistory.push(`/folder/${item.id}`); }}
-      />
-    )
+  <nav className="mdl-navigation">
+    <span className="mdl-navigation__link mdl-color-text--indigo-500" href>資料夾</span>
+    {
+      folder.map(i =>
+        (<a key={i.id} className="mdl-navigation__link"
+          onClick={()=>{
+            browserHistory.push(`/folder/${i.id}`);
+            document.querySelector('.mdl-layout__obfuscator').classList.remove('is-visible');
+            document.querySelector('.mdl-layout__drawer').classList.remove('is-visible');
+          }}
+        >{i.name}</a>)
+      )
     }
-  </List>
+  </nav>
 );
 
 FolderList.propTypes = {

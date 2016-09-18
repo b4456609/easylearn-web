@@ -1,3 +1,11 @@
-.paper{
-  padding:10px
+.demo-content {
+    padding: 40px 28px;
+    padding-top: 40px;
+    padding-right: 28px;
+    padding-bottom: 40px;
+    padding-left: 28px;
+}
+
+.pack-content p{
+  font-size: 1.5em !important;
 }

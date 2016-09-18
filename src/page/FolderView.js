@@ -17,10 +17,8 @@ const FolderView = ({ pack, folderId }) => {
   ));
 
   return (
-    <div>
-      <div className="row">
-        {packs}
-      </div>
+    <div className="mdl-grid">
+      {packs}
     </div>
   );
 };

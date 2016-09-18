@@ -1,4 +1,13 @@
-.sec{
-  padding-top: 10px;
-  padding-bottom: 20px;
+.text-field{
+  padding: 0px 5px 15px 5px;
+}
+
+.pack-content {
+  min-height: 200px;
+  margin: 16px 0;
+}
+
+
+.pack-content p{
+  font-size: 1.5em !important;
 }

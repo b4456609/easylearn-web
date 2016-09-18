@@ -1,14 +1,8 @@
 import { connect } from 'react-redux';
-import spacing from 'material-ui/styles/spacing';
 import React, { PropTypes } from 'react';
-import { Card, CardActions, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import Img from '../../img/305.png';
 import { showDialog, movePackOut } from '../../actions/';
+import './PackCard.css';
+import img from '../../img/305.png';
 
 class PackCard extends React.Component {
   constructor(props) {
@@ -22,49 +16,48 @@ class PackCard extends React.Component {
   }
 
   handleChangeSingle(event, value) {
-    console.log(value)
+    console.log(value);
     if (value === '1') {
       this.props.dispatch(showDialog('MOVE_PACK', { id: this.props.id }));
-    } else if (value === '2'){
+    } else if (value === '2') {
       this.props.dispatch(showDialog('REMOVE_PACK_DIALOG', { id: this.props.id, name: this.props.name }));
-    } else if (value === '3'){
-      this.props.dispatch(movePackOut( this.props.id, this.props.folderId ));
+    } else if (value === '3') {
+      this.props.dispatch(movePackOut(this.props.id, this.props.folderId));
     }
   }
 
   render() {
-    let menu = (<MenuItem value="3" primaryText="移出資料夾" />);
-    if (this.props.folderId === 'all')
-      menu = (<MenuItem value="1" primaryText="放到資料夾" />);
+    // let menu = (<MenuItem value="3" primaryText="移出資料夾" />);
+    // if (this.props.folderId === 'all')
+    //   menu = (<MenuItem value="1" primaryText="放到資料夾" />);
     return (
-      <div className="col-xs-12 col-sm-6 col-md-4">
-        <div className="box">
-          <Card style={{ marginBottom: spacing.desktopGutter }}>
-            <CardMedia
-              overlay={
-                <CardTitle title={this.props.name} />
-              }
-            >
-              <img src={Img} alt="packimg" />
-            </CardMedia>
-            <CardText>
-              {this.props.description}
-            </CardText>
-            <CardActions>
-              <FlatButton label="閱讀" onClick={this.goto} primary />
-              <span style={{ float: 'right' }} >
-                <IconMenu
-                  iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                  onChange={this.handleChangeSingle}
-                >
-                  {menu}
-                  <MenuItem value="2" primaryText="刪除" />
-                </IconMenu>
-              </span>
-            </CardActions>
-          </Card>
+      <div className="mdl-cell mdl-cell--4-col">
+        <div className="demo-card-wide mdl-card mdl-shadow--2dp">
+          <div className="mdl-card__title">
+              <h2 className="mdl-card__title-text">{this.props.name}</h2>
+          </div>
+          <div className="mdl-card__media">
+            <img className="card-img"
+              src={img}
+              alt
+            />
+          </div>
+          <div className="mdl-card__supporting-text">
+            {this.props.description}
+          </div>
+          <div className="mdl-card__actions mdl-card--border">
+            <a className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" onClick={this.goto}>
+              Read
+            </a>
+          </div>
+          <div className="mdl-card__menu">
+            <button className="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+              <i className="material-icons">share</i>
+            </button>
+          </div>
         </div>
       </div>
+
     );
   }
 }

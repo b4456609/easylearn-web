@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 
-import { Router, Route, browserHistory, IndexRedirect } from 'react-router';
+import { Router, Route, browserHistory, IndexRoute, IndexRedirect } from 'react-router';
 import App from './App';
 import GetStart from './page/GetStart';
 import Home from './page/Home';
@@ -36,13 +36,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={App} >
-        <Route path="start" component={GetStart} />
-        <IndexRedirect to="/folder/all" />
-        <Route component={Home} >
-          <Route path="new-pack" component={NewPack} />
-          <Route path="pack/:id" component={Pack} />
-          <Route path="folder/:id" component={FolderView} />
-        </Route>
+        <IndexRoute component={FolderView} />
+        <Route path="pack/:id" component={Pack} />
+        <Route path="folder/:id" component={FolderView} />
+        <Route path="new-pack" component={NewPack} />
       </Route>
     </Router>
   </Provider>, document.getElementById('root'));
