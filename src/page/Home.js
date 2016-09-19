@@ -19,7 +19,7 @@ class Home extends React.Component {
   constructor(props, context) {
     super(props, context);
   }
-  
+
   componentWillUpdate(nextProps, nextState) {
     if (nextProps.initState === USER_NOT_LOGIN) {
       this.context.router.push('/start');
@@ -27,13 +27,13 @@ class Home extends React.Component {
   }
 
   render() {
-    if(this.props.initState === 'init') {
-      return(
+    if (this.props.initState === 'init') {
+      return (
         <div>
           <AppBar title="Easylearn" />
-          <div style={{textAlign:'center', margin:'50px'}}>
+          <div style={{ textAlign: 'center', margin: '50px' }}>
             <CircularProgress size={2} />
-          </div>        
+          </div>
         </div>);
     } else {
       return (
@@ -51,8 +51,8 @@ class Home extends React.Component {
 
 Home.propTypes = {
   children: React.PropTypes.element,
-  initState:  React.PropTypes.string,
-  dispatch:  React.PropTypes.func,
+  initState: React.PropTypes.string,
+  dispatch: React.PropTypes.func,
 };
 
 Home.contextTypes = {

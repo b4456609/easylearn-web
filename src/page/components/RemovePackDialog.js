@@ -1,8 +1,4 @@
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import { connect } from 'react-redux';
 import { hideDialog, removePack } from '../../actions';
 

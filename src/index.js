@@ -11,8 +11,6 @@ import thunk from 'redux-thunk';
 
 import { Router, Route, browserHistory, IndexRoute, IndexRedirect } from 'react-router';
 import App from './App';
-import GetStart from './page/GetStart';
-import Home from './page/Home';
 import NewPack from './page/NewPack';
 import FolderView from './page/FolderView';
 import Pack from './page/Pack';
