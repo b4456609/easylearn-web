@@ -26,8 +26,7 @@ class PackAction extends React.Component {
           </li>
           <li
             className="mdl-menu__item"
-            onClick={() => {
-            }}
+            onClick={this.props.showListVersionDialog}
           >
             查看其他版本
           </li>
@@ -38,8 +37,9 @@ class PackAction extends React.Component {
 }
 
 PackAction.propTypes = {
-  versionId: React.PropTypes.string.isRequired,
+  versionId: React.PropTypes.string,
   packId: React.PropTypes.string.isRequired,
+  showListVersionDialog:  React.PropTypes.func.isRequired,
 };
 
 export default mdlUpgrade(PackAction);

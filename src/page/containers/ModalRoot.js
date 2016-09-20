@@ -4,25 +4,28 @@ import { connect } from 'react-redux';
 import NewFolderDialog from '../components/NewFolderDialog';
 import MovePackDialog from '../components/MovePackDialog';
 import RemovePackDialog from '../components/RemovePackDialog';
+import ListVersionDialog from '../components/ListVersionDialog';
 
 const MODAL_COMPONENTS = {
   NEW_FOLDER_DIALOG: NewFolderDialog,
   MOVE_PACK: MovePackDialog,
   REMOVE_PACK_DIALOG: RemovePackDialog,
+  LIST_VERSION_DIALOG: ListVersionDialog,
   /* other modals */
 };
 
-const ModalRoot = ({ modalType }) => {
+const ModalRoot = ({ modalType, ownProps }) => {
   if (!modalType) {
     return <span />; // after React v15 you can return null here
   }
 
   const SpecificModal = MODAL_COMPONENTS[modalType];
-  return <SpecificModal />;
+  return <SpecificModal {...ownProps}/>;
 };
 
 export default connect(
-  state => ({
+  (state, ownProps) => ({
+    ownProps: ownProps,
     modalType: state.dialog.modalType,
   })
 )(ModalRoot);

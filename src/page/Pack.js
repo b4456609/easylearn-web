@@ -38,11 +38,15 @@ Pack.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const packId = ownProps.params.id;
   const pack = state.pack.find(item => item.id === packId);
+  let version = null;
   pack.version.sort((a, b) => b.createTime - a.createTime);
   if (!ownProps.params.versionId) {
-    browserHistory.push(`/pack/${ownProps.params.id}/${pack.version[0].id}`);
+    // browserHistory.push(`/pack/${packId}/${pack.version[0].id}`);
+    version = pack.version[0];
+  } else {
+    version = pack.version.find(i => i.id === ownProps.params.versionId);
   }
-  const version = pack.version[0];
+  console.log(version);
   return {
     pack,
     version,

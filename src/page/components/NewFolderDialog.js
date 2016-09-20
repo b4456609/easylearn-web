@@ -20,6 +20,7 @@ class NewFolderDialog extends React.Component {
 
   onCloseClick() {
     this.dialog.close();
+    this.props.dispatch(hideDialog());
   }
 
   onSubmitClick() {

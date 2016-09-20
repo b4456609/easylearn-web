@@ -2,12 +2,12 @@ import React from 'react';
 import FolderAction from './components/FolderAction';
 import PackAction from './components/PackAction';
 
-const Header = ({ title, removeFolder, folderId, packId, versionId }) => {
+const Header = ({ title, removeFolder, folderId, packId, versionId, showListVersionDialog }) => {
   let action = undefined;
   if (folderId !== null && folderId !== 'all') {
     action = <FolderAction removeFolder={removeFolder} folderId={folderId} />;
   } else if (packId != null) {
-    action = <PackAction packId={packId} versionId={versionId} />
+    action = <PackAction packId={packId} versionId={versionId} showListVersionDialog={showListVersionDialog}/>
   }
   return (
     <header className="mdl-layout__header">
@@ -26,6 +26,7 @@ Header.propTypes = {
   folderId: React.PropTypes.string,
   versionId: React.PropTypes.string,
   removeFolder: React.PropTypes.func.isRequired,
+  showListVersionDialog: React.PropTypes.func.isRequired,
 };
 
 export default Header;

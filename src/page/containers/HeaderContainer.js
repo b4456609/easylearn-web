@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Header from '../components/Header';
-import { removeFolder } from '../../actions';
+import { removeFolder, showDialog } from '../../actions';
 
 
 function mapStateToProps(state, ownProps) {
@@ -16,7 +16,9 @@ function mapStateToProps(state, ownProps) {
   } else if (ownProps.location.pathname.indexOf('/pack') !== -1) {
     title = ownProps.params.id && state.pack.find(i => i.id === ownProps.params.id).name;
     packId = ownProps.params.id;
-    versionId = ownProps.params.versionId;
+    let pack = state.pack.find(i => i.id === ownProps.params.id);
+    pack.version.sort((a, b) => b.createTime - a.createTime);
+    versionId = ownProps.params.versionId || pack.version[0].id;
   } else if (ownProps.location.pathname.indexOf('/folder') !== -1) {
     title = ownProps.params.id && state.folder.find(i => i.id === ownProps.params.id).name;
     folderId = ownProps.params.id;
@@ -36,7 +38,10 @@ function mapDispatchToProps(dispatch) {
   return {
     removeFolder: (folderId) => {
       dispatch(removeFolder(folderId));
-    }
+    },
+    showListVersionDialog: () => {
+      dispatch(showDialog('LIST_VERSION_DIALOG'));
+    },
   };
 }
 
