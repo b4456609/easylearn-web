@@ -3,11 +3,15 @@ import { findDOMNode } from 'react-dom';
 
 export default class MDLComponent extends Component {
   componentDidMount() {
-    window.componentHandler.upgradeElements(findDOMNode(this));
+    if(window.componentHandler){
+      window.componentHandler.upgradeElements(findDOMNode(this));
+    }
   }
 
   componentWillUnmount() {
-    window.componentHandler.downgradeElements(findDOMNode(this));
+    if(window.componentHandler){
+      window.componentHandler.downgradeElements(findDOMNode(this));
+    }
   }
 
   render() {

@@ -121,3 +121,11 @@ export function movePackOut(packId, folderId) {
     folderId,
   };
 }
+
+export const REMOVE_FOLDER = 'REMOVE_FOLDER';
+export function removeFolder(folderId) {
+  return {
+    type: REMOVE_FOLDER,
+    folderId,
+  };
+}
