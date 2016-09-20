@@ -72,6 +72,14 @@ class PackCard extends React.Component {
               >
                 刪除
               </li>
+              <li
+                className="mdl-menu__item"
+                onClick={() => {
+                  this.props.dispatch(showDialog('MOVE_PACK', { id: this.props.id }));
+                }}
+              >
+                移到...
+              </li>
             </ul>
           </div>
         </div>

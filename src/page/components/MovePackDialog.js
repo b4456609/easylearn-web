@@ -1,50 +1,66 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { hideDialog, movePackToFolder } from '../../actions';
+import mdlUpgrade from '../../utils/mdlUpgrade';
 
 class MovePackDialog extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: 1 };
-    this.handleChange = this.handleChange.bind(this);
+    this.onCloseClick = this.onCloseClick.bind(this);
+    this.onSubmitClick = this.onSubmitClick.bind(this);
   }
 
-  handleChange(event, index, value) {
-    this.setState({ value });
+  componentDidMount() {
+    this.dialog = document.querySelector('dialog');
+    this.dialog.showModal();
+  }
+
+  onCloseClick() {
+    this.dialog.close();
+    this.props.dispatch(hideDialog());
+  }
+
+  onSubmitClick() {
+    const id = document.querySelector('input[name="folderlist"]:checked').value;
+    this.props.dispatch(movePackToFolder(this.props.modalProps.id, id));
+    this.dialog.close();
+    this.props.dispatch(hideDialog());
   }
 
   render() {
     return (
-      <Dialog
-        title="移動懶人包到..."
-        actions={[
-          <FlatButton
-            label="取消"
-            primary
-            onClick={() => {
-              this.props.dispatch(hideDialog());
-            }}
-          />,
-          <FlatButton
-            label="送出"
-            primary
-            onClick={() => {
-              this.props.dispatch(movePackToFolder(this.props.modalProps.id, this.state.value));
-              this.props.dispatch(hideDialog());
-            }}
-          />,
-        ]}
-        modal={false}
-        open
-      >
-        <SelectField value={this.state.value} onChange={this.handleChange}>
-        {this.props.folder.map((f) => {
-          // if (f.pack.indexOf(this.props.modalProps.id) === -1)
-          return (<MenuItem key={f.id} value={f.id} primaryText={f.name} />);
-        }
-        )}
-        </SelectField>
-      </Dialog>
+      <dialog className="mdl-dialog">
+        <h4 className="mdl-dialog__title">
+          移動懶人包到...
+        </h4>
+        <div className="mdl-dialog__content">
+          <ul className="demo-list-control mdl-list">
+            {this.props.folder.map((i) => (
+              <li key={i.id} className="mdl-list__item">
+                <span className="mdl-list__item-primary-content">
+                  {i.name}
+                </span>
+                <span className="mdl-list__item-secondary-action">
+                  <label className="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor={`folderlist-${i.id}`}>
+                    <input type="radio" id={`folderlist-${i.id}`} className="mdl-radio__button" name="folderlist" value={i.id} />
+                  </label>
+                </span>
+              </li>))}
+          </ul>
+        </div>
+        <div className="mdl-dialog__actions">
+          <button
+            type="button"
+            className="mdl-button"
+            onClick={this.onSubmitClick}
+          >移動</button>
+          <button
+            type="button"
+            className="mdl-button close"
+            onClick={this.onCloseClick}
+          >取消</button>
+        </div>
+      </dialog>
     );
   }
 }
@@ -54,4 +70,4 @@ export default connect(
     modalProps: state.dialog.modalProps,
     folder: state.folder,
   })
-)(MovePackDialog);
+)(mdlUpgrade(MovePackDialog));
