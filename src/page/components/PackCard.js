@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import { showDialog, movePackOut } from '../../actions/';
 import './PackCard.css';
 import img from '../../img/305.png';
+import mdlUpgrade from '../../utils/mdlUpgrade.js';
 
 class PackCard extends React.Component {
   constructor(props) {
@@ -54,13 +55,27 @@ class PackCard extends React.Component {
             </a>
           </div>
           <div className="mdl-card__menu">
-            <button className="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-              <i className="material-icons">share</i>
+            <button
+              id={`pack-menu-${this.props.id}`}
+              className="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+              <i className="material-icons">more_vert</i>
             </button>
+            <ul
+              className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+              htmlFor={`pack-menu-${this.props.id}`}
+            >
+              <li
+                className="mdl-menu__item"
+                onClick={() => {
+                  this.props.dispatch(showDialog('REMOVE_PACK_DIALOG', { id: this.props.id, name: this.props.name }));
+                }}
+              >
+                刪除
+              </li>
+            </ul>
           </div>
         </div>
       </div>
-
     );
   }
 }
@@ -78,4 +93,4 @@ PackCard.propTypes = {
 };
 
 export default connect(
-)(PackCard);
+)(mdlUpgrade(PackCard));

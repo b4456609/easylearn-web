@@ -1,44 +1,45 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { hideDialog, removePack } from '../../actions';
+import mdlUpgrade from '../../utils/mdlUpgrade';
 
 class RemovePackDialog extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: 1 };
-    this.handleChange = this.handleChange.bind(this);
+  componentDidMount() {
+    this.dialog = document.querySelector('dialog');
+    this.dialog.showModal();
   }
 
-  handleChange(event, index, value) {
-    this.setState({ value });
+  onCloseClick() {
+    this.dialog.close();
   }
 
   render() {
     return (
-      <Dialog
-        title="刪除懶人包"
-        actions={[
-          <FlatButton
-            label="取消"
-            primary
-            onClick={() => {
-              this.props.dispatch(hideDialog());
-            }}
-          />,
-          <FlatButton
-            label="送出"
-            primary
+      <dialog className="mdl-dialog">
+        <h4 className="mdl-dialog__title">
+          Add a Folder
+        </h4>
+        <div className="mdl-dialog__content">
+          {'確定要刪除 "'}{this.props.modalProps.name}{'"？'}
+        </div>
+        <div className="mdl-dialog__actions">
+          <button
+            type="button"
+            className="mdl-button"
             onClick={() => {
               this.props.dispatch(removePack(this.props.modalProps.id));
               this.props.dispatch(hideDialog());
             }}
-          />,
-        ]}
-        modal={false}
-        open
-      >
-        {'確定要刪除 "'}{this.props.modalProps.name}{'"？'}
-      </Dialog>
+          >Submit</button>
+          <button
+            type="button"
+            className="mdl-button"
+            onClick={() => {
+              this.props.dispatch(hideDialog());
+            }}
+          >Cancel</button>
+        </div>
+      </dialog>
     );
   }
 }
@@ -48,4 +49,4 @@ export default connect(
     modalProps: state.dialog.modalProps,
     folder: state.folder,
   })
-)(RemovePackDialog);
+)(mdlUpgrade(RemovePackDialog));
