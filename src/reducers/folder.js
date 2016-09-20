@@ -4,6 +4,7 @@ import {
     MOVE_PACK_TO_FOLDER,
     REMOVE_PACK,
     MOVE_PACK_OUT,
+    REMOVE_FOLDER,
 } from '../actions';
 
 const ALL_FOLDER = 'all';
@@ -76,6 +77,11 @@ const folder = (state = initState, action) => {
         }
         return i;
       });
+    case REMOVE_FOLDER:
+      const index = state.findIndex(ele => (ele.id === action.folderId));
+      return [...state.slice(0, index),
+        ...state.slice(index + 1),
+        ];
     default:
       return state;
   }

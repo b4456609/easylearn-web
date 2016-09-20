@@ -4,7 +4,7 @@ import FolderAction from './components/FolderAction';
 const Header = ({ title, removeFolder, folderId }) => {
   let action = undefined;
   if (folderId !== null && folderId !== 'all') {
-    action = <FolderAction removeFolder={removeFolder} fodlerId={folderId} />;
+    action = <FolderAction removeFolder={removeFolder} folderId={folderId} />;
   }
   return (<header className="mdl-layout__header">
     <div className="mdl-layout__header-row">
