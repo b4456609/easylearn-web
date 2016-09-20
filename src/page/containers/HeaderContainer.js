@@ -6,6 +6,7 @@ import { removeFolder } from '../../actions';
 function mapStateToProps(state, ownProps) {
   let title = '';
   let folderId = null;
+  let packId = null;
   if (!ownProps.location.pathname === '/') {
     title = 'All';
     folderId = 'all';
@@ -13,6 +14,7 @@ function mapStateToProps(state, ownProps) {
     title = '新增懶人包';
   } else if (ownProps.location.pathname.indexOf('/pack') !== -1) {
     title = ownProps.params.id && state.pack.find(i => i.id === ownProps.params.id).name;
+    packId = ownProps.params.id;
   } else if (ownProps.location.pathname.indexOf('/folder') !== -1) {
     title = ownProps.params.id && state.folder.find(i => i.id === ownProps.params.id).name;
     folderId = ownProps.params.id;
@@ -23,6 +25,7 @@ function mapStateToProps(state, ownProps) {
     initState: state.app.initState,
     title,
     folderId,
+    packId,
   };
 }
 
