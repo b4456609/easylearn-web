@@ -23,7 +23,7 @@ class FolderAction extends React.Component {
               this.props.removeFolder(this.props.folderId);
             }}
           >
-            Remove Folder
+            刪除資料夾
           </li>
         </ul>
       </div>

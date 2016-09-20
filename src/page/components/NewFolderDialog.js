@@ -32,7 +32,7 @@ class NewFolderDialog extends React.Component {
     return (
       <dialog className="mdl-dialog">
         <h4 className="mdl-dialog__title">
-          Add a Folder
+          新增資料夾
         </h4>
         <div className="mdl-dialog__content">
           <div className="mdl-textfield mdl-js-textfield">
@@ -44,7 +44,7 @@ class NewFolderDialog extends React.Component {
             <label
               className="mdl-textfield__label"
               htmlFor="sample1"
-            >Folder name...</label>
+            >資料夾名稱</label>
           </div>
         </div>
         <div className="mdl-dialog__actions">
@@ -52,12 +52,12 @@ class NewFolderDialog extends React.Component {
             type="button"
             className="mdl-button"
             onClick={this.onSubmitClick}
-          >Submit</button>
+          >新增</button>
           <button
             type="button"
             className="mdl-button close"
             onClick={this.onCloseClick}
-          >Cancel</button>
+          >取消</button>
         </div>
       </dialog>
     );
