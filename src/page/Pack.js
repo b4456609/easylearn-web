@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import './Pack.css';
+import { browserHistory } from 'react-router';
 
 class Pack extends React.Component {
   render() {
@@ -37,6 +38,10 @@ Pack.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const packId = ownProps.params.id;
   const pack = state.pack.find(item => item.id === packId);
+  pack.version.sort((a, b) => b.createTime - a.createTime);
+  if (!ownProps.params.versionId) {
+    browserHistory.push(`/pack/${ownProps.params.id}/${pack.version[0].id}`);
+  }
   const version = pack.version[0];
   return {
     pack,

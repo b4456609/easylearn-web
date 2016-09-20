@@ -7,6 +7,7 @@ function mapStateToProps(state, ownProps) {
   let title = '';
   let folderId = null;
   let packId = null;
+  let versionId = null;
   if (!ownProps.location.pathname === '/') {
     title = 'All';
     folderId = 'all';
@@ -15,6 +16,7 @@ function mapStateToProps(state, ownProps) {
   } else if (ownProps.location.pathname.indexOf('/pack') !== -1) {
     title = ownProps.params.id && state.pack.find(i => i.id === ownProps.params.id).name;
     packId = ownProps.params.id;
+    versionId = ownProps.params.versionId;
   } else if (ownProps.location.pathname.indexOf('/folder') !== -1) {
     title = ownProps.params.id && state.folder.find(i => i.id === ownProps.params.id).name;
     folderId = ownProps.params.id;
@@ -26,6 +28,7 @@ function mapStateToProps(state, ownProps) {
     title,
     folderId,
     packId,
+    versionId,
   };
 }
 

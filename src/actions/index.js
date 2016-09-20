@@ -129,3 +129,15 @@ export function removeFolder(folderId) {
     folderId,
   };
 }
+
+export const NEW_VERSION = 'NEW_VERSION';
+export function newVersion(packId, versionId, content, userId, userName) {
+  return {
+    type: NEW_VERSION,
+    packId,
+    versionId,
+    content,
+    userId,
+    userName,
+  };
+}

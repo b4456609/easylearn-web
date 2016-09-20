@@ -1,4 +1,4 @@
-import { NEW_PACK, REMOVE_PACK } from '../actions';
+import { NEW_PACK, REMOVE_PACK, NEW_VERSION } from '../actions';
 
 function newPack(id, name, description, isPublic, content, creatorUserId, creatorUserName) {
   const time = new Date().getTime();
@@ -48,7 +48,6 @@ const fake = {
           "creatorUserId": null,
           "creatorUserName": "遊客",
           "note": [],
-          "version": 0,
           "view_count": 0,
           "user_view_count": 0
         }
@@ -66,9 +65,26 @@ const pack = (state = [fake], action) => {
     case REMOVE_PACK:
       const index = state.findIndex(ele => ele.id === action.packId);
       return [
-            ...state.slice(0, index),
-            ...state.slice(index + 1),
-          ];
+        ...state.slice(0, index),
+        ...state.slice(index + 1),
+      ];
+    case NEW_VERSION:
+      return state.map((i)=>{
+        if(i.id === action.packId){
+          return {...i, version:[...i.version, {
+            "id": action.versionId,
+            "content": action.content,
+            "createTime": new Date().getTime(),
+            "isPublic": true,
+            "creatorUserId": action.userId,
+            "creatorUserName": action.userName,
+            "note": [],
+            "view_count": 0,
+            "user_view_count": 0
+          }]}
+        }
+        return i;
+      });
     default:
       return state;
   }

@@ -19,6 +19,7 @@ class PackAction extends React.Component {
           <li
             className="mdl-menu__item"
             onClick={() => {
+              browserHistory.push(`/pack/${this.props.packId}/${this.props.versionId}/edit`);
             }}
           >
             新增版本
@@ -37,8 +38,8 @@ class PackAction extends React.Component {
 }
 
 PackAction.propTypes = {
-  folderId: React.PropTypes.string,
-  removeFolder: React.PropTypes.func.isRequired,
+  versionId: React.PropTypes.string.isRequired,
+  packId: React.PropTypes.string.isRequired,
 };
 
 export default mdlUpgrade(PackAction);

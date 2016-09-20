@@ -14,6 +14,7 @@ import App from './App';
 import NewPack from './page/NewPack';
 import FolderView from './page/FolderView';
 import Pack from './page/Pack';
+import EditPack from './page/EditPack';
 
 injectTapEventPlugin();
 
@@ -23,8 +24,7 @@ const debugMidware = [];
 if (process.env.NODE_ENV !== 'production') {
   debugMidware.push(window.devToolsExtension && window.devToolsExtension());
   debugMidware.push(applyMiddleware(thunk, logger));
-}
-else{
+} else {
   debugMidware.push(applyMiddleware(logger));
 }
 
@@ -36,6 +36,8 @@ ReactDOM.render(
       <Route path="/" component={App} >
         <IndexRoute component={FolderView} />
         <Route path="pack/:id" component={Pack} />
+        <Route path="pack/:id/:versionId/edit" component={EditPack} />
+        <Route path="pack/:id/:versionId" component={Pack} />
         <Route path="folder/:id" component={FolderView} />
         <Route path="new-pack" component={NewPack} />
       </Route>
