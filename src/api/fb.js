@@ -1,3 +1,4 @@
+/* eslint-disable */
 export function init(callback) {
   window.fbAsyncInit = function() {
     FB.init({
@@ -20,8 +21,8 @@ export function init(callback) {
 export function fbCheckLogin(successCallback, failCallback) {
     FB.getLoginStatus((r) => {
       if (r.status === 'connected') {
-        FB.api('/me', (r) => {
-          successCallback(r.name, r.id);
+        FB.api('/me', (res) => {
+          successCallback(res.name, res.id);
         });
       }
       else {
