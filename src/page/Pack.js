@@ -3,6 +3,7 @@ import React from 'react';
 import './Pack.css';
 import { browserHistory } from 'react-router';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
+import { newNote } from '../actions/';
 
 function getWindowSize() {
   const w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -64,16 +65,29 @@ function getSelectionCoords(win) {
   };
 }
 
+function paintNote(range, noteId, classColor) {
+  let span = document.createElement("span");
+  span.className = "note " + classColor;
+  span.setAttribute('id', noteId);
+  range.surroundContents(span);
+}
 
 class Pack extends React.Component {
   constructor(props) {
     super(props);
     const cord = getWindowSize();
     this.state = {
+      noteText: '',
+      note: {},
       x: cord.x,
       y: cord.y,
+      range: null,
+      selectionText: null
     };
     this.buttonStyle = this.buttonStyle.bind(this);
+    this.onFloatBtnClick = this.onFloatBtnClick.bind(this);
+    this.onCloseClick = this.onCloseClick.bind(this);
+    this.onSubmitClick = this.onSubmitClick.bind(this);
   }
 
   componentDidMount() {
@@ -93,6 +107,41 @@ class Pack extends React.Component {
       left: this.state.x + 20,
       top: this.state.y + 20,
     };
+  }
+
+  onFloatBtnClick() {
+    let selection = window.getSelection();
+    let textNode = selection.focusNode;
+    let content = document.getElementById('content');
+    let text = selection.toString();
+
+    // select words and is in version content
+    if (text !== '' && content.contains(textNode)) {
+      this.setState({
+        range: selection.getRangeAt(0).cloneRange(),
+        selectionText: selection.toString().trim(),
+      })
+      this.dialog = document.querySelector('dialog');
+      this.dialog.showModal();
+    } else {
+      const snackbarContainer = document.querySelector('#demo-toast-example');
+      snackbarContainer.MaterialSnackbar.showSnackbar({message:'請選擇文章的文字'});
+    }
+  }
+
+  onCloseClick() {
+    this.dialog.close();
+    this.props.dispatch(hideDialog());
+  }
+
+  onSubmitClick() {
+    const { pack, version, userId, userName, dispatch } = this.props;
+    const noteId = `note${new Date().getTime()}`;
+    const content = document.getElementById('note-content').value;
+    const newContent = document.getElementById('content').innerHTML;
+    paintNote(this.state.range, noteId, 'mdl-color--indigo-100');
+    dispatch(newNote(pack.id, version.id, noteId, userId, userName, content, newContent));
+    this.dialog.close();
   }
 
   render() {
@@ -116,9 +165,43 @@ class Pack extends React.Component {
           </div>
         </div>
         <div className="floatbtn" style={this.buttonStyle()}>
-          <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+          <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" onClick={this.onFloatBtnClick}>
             <i className="material-icons">add</i>
           </button>
+        </div>
+        <dialog className="mdl-dialog">
+          <h4 className="mdl-dialog__title">
+            {this.state.selectionText}
+          </h4>
+          <div className="mdl-dialog__content">
+            <div className="mdl-textfield mdl-js-textfield">
+              <input
+                className="mdl-textfield__input"
+                type="text"
+                id="note-content"
+              />
+              <label
+                className="mdl-textfield__label"
+                htmlFor="note-content"
+              >便利貼內容</label>
+            </div>
+          </div>
+          <div className="mdl-dialog__actions">
+            <button
+              type="button"
+              className="mdl-button"
+              onClick={this.onSubmitClick}
+            >確定</button>
+            <button
+              type="button"
+              className="mdl-button close"
+              onClick={this.onCloseClick}
+            >取消</button>
+          </div>
+        </dialog>
+        <div id="demo-toast-example" className="mdl-js-snackbar mdl-snackbar">
+          <div className="mdl-snackbar__text"></div>
+          <button className="mdl-snackbar__action" type="button"></button>
         </div>
       </div>
     );
@@ -149,6 +232,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     pack,
     version,
+    userId: state.user.id,
+    userName: state.user.name,
   };
 };
 

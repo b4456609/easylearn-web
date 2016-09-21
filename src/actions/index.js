@@ -141,3 +141,17 @@ export function newVersion(packId, versionId, content, userId, userName) {
     userName,
   };
 }
+
+export const NEW_NOTE = 'NEW_NOTE';
+export function newNote(packId, versionId, noteId, userId, userName, content, newContent) {
+  return {
+    type: NEW_NOTE,
+    packId,
+    versionId,
+    userId,
+    userName,
+    noteId,
+    content,
+    newContent,
+  };
+}
