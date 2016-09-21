@@ -35,7 +35,7 @@ class MovePackDialog extends React.Component {
         </h4>
         <div className="mdl-dialog__content">
           <ul className="demo-list-control mdl-list">
-            {this.props.folder.map((i) => (
+            {this.props.folder.map(i => (
               <li key={i.id} className="mdl-list__item">
                 <span className="mdl-list__item-primary-content">
                   {i.name}
@@ -64,6 +64,17 @@ class MovePackDialog extends React.Component {
     );
   }
 }
+
+MovePackDialog.propTypes = {
+  dispatch: React.PropTypes.func.isRequired,
+  folder: React.PropTypes.arrayOf(React.PropTypes.shape({
+    id: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string.isRequired,
+  })).isRequired,
+  modalProps: React.PropTypes.shape({
+    id: React.PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default connect(
   state => ({

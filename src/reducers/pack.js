@@ -1,4 +1,4 @@
-import { NEW_PACK, REMOVE_PACK, NEW_VERSION } from '../actions';
+import { NEW_PACK, REMOVE_PACK, NEW_VERSION, NEW_NOTE } from '../actions';
 
 function newPack(id, name, description, isPublic, content, creatorUserId, creatorUserName) {
   const time = new Date().getTime();
@@ -84,6 +84,29 @@ const pack = (state = [fake], action) => {
           }]}
         }
         return i;
+      });
+    case NEW_NOTE:
+      const time = new Date().getTime();
+      return state.map((pack)=>{
+        if(pack.id === action.packId){
+          return Object.assign({}, pack, {version:pack.version.map((version)=>{
+            if(version.id === action.versionId){
+              return Object.assign({},version, {
+                content: action.newContent,
+                note:[...version.note, {
+                  id: `note${time}`,
+                  content: action.content,
+                  createTime: time,
+                  comment: [],
+                  userId: action.userId,
+                  userName: action.userName
+                }
+              ]});
+            }
+            return version;
+          })});
+        }
+        return pack;
       });
     default:
       return state;

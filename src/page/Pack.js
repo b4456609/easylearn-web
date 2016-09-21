@@ -3,6 +3,7 @@ import React from 'react';
 import './Pack.css';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
 import { newNote } from '../actions/';
+import { findDOMNode } from 'react-dom';
 
 function getWindowSize() {
   const w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -69,12 +70,12 @@ function paintNote(range, noteId, classColor, content) {
   span.className = 'note ' + classColor;
   span.setAttribute('id', noteId);
   range.surroundContents(span);
-  const div = document.createElement('div');
+  const div = document.createElement('span');
   div.className = 'mdl-tooltip mdl-tooltip--large';
   div.setAttribute('for', noteId);
   div.innerHTML = content;
   range.insertNode(div);
-  window.componentHandler.upgradeElement(div);
+  // window.componentHandler.upgradeElement(div);
 }
 
 class Pack extends React.Component {
@@ -109,6 +110,10 @@ class Pack extends React.Component {
     document.onmouseup = null;
   }
 
+  componentDidUpdate() {
+    window.componentHandler.upgradeElements(findDOMNode(this));
+  }
+
   onFloatBtnClick() {
     const selection = window.getSelection();
     const textNode = selection.focusNode;
@@ -121,7 +126,7 @@ class Pack extends React.Component {
         range: selection.getRangeAt(0).cloneRange(),
         selectionText: selection.toString().trim(),
       });
-      this.dialog = document.querySelector('dialog');
+      this.dialog = document.querySelector('#note-dialog');
       this.dialog.showModal();
     } else {
       const snackbarContainer = document.querySelector('#demo-toast-example');
@@ -137,8 +142,8 @@ class Pack extends React.Component {
     const { pack, version, userId, userName, dispatch } = this.props;
     const noteId = `note${new Date().getTime()}`;
     const content = document.getElementById('note-content').value;
-    const newContent = document.getElementById('content').innerHTML;
     paintNote(this.state.range, noteId, 'mdl-color--indigo-100', content);
+    const newContent = document.getElementById('content').innerHTML;
     dispatch(newNote(pack.id, version.id, noteId, userId, userName, content, newContent));
     this.dialog.close();
   }
@@ -179,7 +184,7 @@ class Pack extends React.Component {
             <i className="material-icons">add</i>
           </button>
         </div>
-        <dialog className="mdl-dialog">
+        <dialog className="mdl-dialog" id="note-dialog">
           <h4 className="mdl-dialog__title">
             {this.state.selectionText}
           </h4>

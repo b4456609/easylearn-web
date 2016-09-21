@@ -13,7 +13,7 @@ class ListVersionDialog extends React.Component {
   }
 
   componentDidMount() {
-    this.dialog = document.querySelector('dialog');
+    this.dialog = document.querySelector('#pack-viewversion');
     this.dialog.showModal();
   }
 
@@ -24,7 +24,7 @@ class ListVersionDialog extends React.Component {
 
   render() {
     return (
-      <dialog className="mdl-dialog">
+      <dialog className="mdl-dialog" id="pack-viewversion">
         <h4 className="mdl-dialog__title">
           觀看版本
         </h4>

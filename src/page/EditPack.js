@@ -5,7 +5,6 @@ import React from 'react';
 import './NewPack.css';
 import { newVersion } from '../actions';
 // import Editor from './components/Editor';
-import mdlUpgrade from '../utils/mdlUpgrade.js';
 
 
 class NewPack extends React.Component {
@@ -21,6 +20,7 @@ class NewPack extends React.Component {
   componentDidMount() {
     // eslint-disable-next-line
     new MediumEditor('#editable');
+    componentHandler.upgradeElements(document.getElementById('finish-btn'));
   }
 
   onFinish() {
@@ -48,7 +48,7 @@ class NewPack extends React.Component {
                 dangerouslySetInnerHTML={{ __html: this.props.content }}
               />
             </div>
-            <div className="mdl-cell--12-col">
+            <div className="mdl-cell--12-col" id="finish-btn">
               <button
                 className="mdl-button mdl-js-button
                 mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
@@ -76,4 +76,4 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(
   mapStateToProps
-)(mdlUpgrade(NewPack));
+)(NewPack);
