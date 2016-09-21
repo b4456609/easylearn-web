@@ -9,27 +9,32 @@ class PackCard extends React.Component {
   constructor(props) {
     super(props);
     this.goto = this.goto.bind(this);
-    this.handleChangeSingle = this.handleChangeSingle.bind(this);
   }
 
   goto() {
     this.context.router.push(`/pack/${this.props.id}`);
   }
 
-  handleChangeSingle(event, value) {
-    if (value === '1') {
-      this.props.dispatch(showDialog('MOVE_PACK', { id: this.props.id }));
-    } else if (value === '2') {
-      this.props.dispatch(showDialog('REMOVE_PACK_DIALOG', { id: this.props.id, name: this.props.name }));
-    } else if (value === '3') {
-      this.props.dispatch(movePackOut(this.props.id, this.props.folderId));
-    }
-  }
-
   render() {
-    // let menu = (<MenuItem value="3" primaryText="移出資料夾" />);
-    // if (this.props.folderId === 'all')
-    //   menu = (<MenuItem value="1" primaryText="放到資料夾" />);
+    let menu = (
+      <li
+        className="mdl-menu__item"
+        onClick={() => {
+          this.props.dispatch(showDialog('MOVE_PACK', { id: this.props.id }));
+        }}
+      >
+        放到資料夾
+      </li>);
+    if (this.props.folderId !== 'all')
+      menu = (
+        <li
+          className="mdl-menu__item"
+          onClick={() => {
+            this.props.dispatch(movePackOut(this.props.id, this.props.folderId));
+          }}
+        >
+          移出資料夾
+        </li>);
     return (
       <div className="mdl-cell mdl-cell--4-col">
         <div className="demo-card-wide mdl-card mdl-shadow--2dp">
@@ -57,7 +62,8 @@ class PackCard extends React.Component {
           <div className="mdl-card__menu">
             <button
               id={`pack-menu-${this.props.id}`}
-              className="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+              className="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"
+            >
               <i className="material-icons">more_vert</i>
             </button>
             <ul
@@ -72,14 +78,7 @@ class PackCard extends React.Component {
               >
                 刪除
               </li>
-              <li
-                className="mdl-menu__item"
-                onClick={() => {
-                  this.props.dispatch(showDialog('MOVE_PACK', { id: this.props.id }));
-                }}
-              >
-                移到...
-              </li>
+              {menu}
             </ul>
           </div>
         </div>
