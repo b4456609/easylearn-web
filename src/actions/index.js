@@ -1,5 +1,5 @@
-import { fbCheckLogin, fbLogin } from '../api/fb';
 import { browserHistory } from 'react-router';
+import { fbCheckLogin, fbLogin } from '../api/fb';
 
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
 export function loginSuccess(name, id) {
@@ -11,6 +11,13 @@ export function loginSuccess(name, id) {
   };
 }
 
+export const USER_NOT_LOGIN = 'USER_NOT_LOGIN';
+export function notLogin() {
+  return {
+    type: USER_NOT_LOGIN,
+  };
+}
+
 export function fbLoaded() {
   return (dispatch) => {
     fbCheckLogin((name, id) => {
@@ -18,13 +25,6 @@ export function fbLoaded() {
     }, () => {
       dispatch(notLogin());
     });
-  };
-}
-
-export const USER_NOT_LOGIN = 'USER_NOT_LOGIN';
-export function notLogin() {
-  return {
-    type: USER_NOT_LOGIN,
   };
 }
 
@@ -46,6 +46,7 @@ export function login() {
       fbLogin((response) => {
         if (response.authResponse) {
           console.log('Welcome!  Fetching your information.... ');
+          // eslint-disable-next-line
           FB.api('/me', (response) => {
             dispatch(loginSuccess(response.name, response.id));
           });

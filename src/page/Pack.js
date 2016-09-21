@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import './Pack.css';
-import { browserHistory } from 'react-router';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
 import { newNote } from '../actions/';
 
@@ -15,8 +14,8 @@ function getWindowSize() {
   };
 }
 
-function getSelectionCoords(win) {
-  win = win || window;
+function getSelectionCoords() {
+  const win = window;
   const doc = win.document;
   let sel = doc.selection;
   let range;
@@ -65,11 +64,17 @@ function getSelectionCoords(win) {
   };
 }
 
-function paintNote(range, noteId, classColor) {
-  let span = document.createElement("span");
-  span.className = "note " + classColor;
+function paintNote(range, noteId, classColor, content) {
+  const span = document.createElement('span');
+  span.className = 'note ' + classColor;
   span.setAttribute('id', noteId);
   range.surroundContents(span);
+  const div = document.createElement('div');
+  div.className = 'mdl-tooltip mdl-tooltip--large';
+  div.setAttribute('for', noteId);
+  div.innerHTML = content;
+  range.insertNode(div);
+  window.componentHandler.upgradeElement(div);
 }
 
 class Pack extends React.Component {
@@ -82,7 +87,7 @@ class Pack extends React.Component {
       x: cord.x,
       y: cord.y,
       range: null,
-      selectionText: null
+      selectionText: null,
     };
     this.buttonStyle = this.buttonStyle.bind(this);
     this.onFloatBtnClick = this.onFloatBtnClick.bind(this);
@@ -93,12 +98,49 @@ class Pack extends React.Component {
   componentDidMount() {
     document.onmouseup = () => {
       const coords = getSelectionCoords();
-      console.log('document.onmouseup', coords.x, coords.y);
       this.setState({
         x: coords.x,
         y: coords.y,
       });
     };
+  }
+
+  componentWillUnmount() {
+    document.onmouseup = null;
+  }
+
+  onFloatBtnClick() {
+    const selection = window.getSelection();
+    const textNode = selection.focusNode;
+    const content = document.getElementById('content');
+    const text = selection.toString();
+
+    // select words and is in version content
+    if (text !== '' && content.contains(textNode)) {
+      this.setState({
+        range: selection.getRangeAt(0).cloneRange(),
+        selectionText: selection.toString().trim(),
+      });
+      this.dialog = document.querySelector('dialog');
+      this.dialog.showModal();
+    } else {
+      const snackbarContainer = document.querySelector('#demo-toast-example');
+      snackbarContainer.MaterialSnackbar.showSnackbar({ message: '請選擇文章的文字' });
+    }
+  }
+
+  onCloseClick() {
+    this.dialog.close();
+  }
+
+  onSubmitClick() {
+    const { pack, version, userId, userName, dispatch } = this.props;
+    const noteId = `note${new Date().getTime()}`;
+    const content = document.getElementById('note-content').value;
+    const newContent = document.getElementById('content').innerHTML;
+    paintNote(this.state.range, noteId, 'mdl-color--indigo-100', content);
+    dispatch(newNote(pack.id, version.id, noteId, userId, userName, content, newContent));
+    this.dialog.close();
   }
 
   buttonStyle() {
@@ -107,41 +149,6 @@ class Pack extends React.Component {
       left: this.state.x + 20,
       top: this.state.y + 20,
     };
-  }
-
-  onFloatBtnClick() {
-    let selection = window.getSelection();
-    let textNode = selection.focusNode;
-    let content = document.getElementById('content');
-    let text = selection.toString();
-
-    // select words and is in version content
-    if (text !== '' && content.contains(textNode)) {
-      this.setState({
-        range: selection.getRangeAt(0).cloneRange(),
-        selectionText: selection.toString().trim(),
-      })
-      this.dialog = document.querySelector('dialog');
-      this.dialog.showModal();
-    } else {
-      const snackbarContainer = document.querySelector('#demo-toast-example');
-      snackbarContainer.MaterialSnackbar.showSnackbar({message:'請選擇文章的文字'});
-    }
-  }
-
-  onCloseClick() {
-    this.dialog.close();
-    this.props.dispatch(hideDialog());
-  }
-
-  onSubmitClick() {
-    const { pack, version, userId, userName, dispatch } = this.props;
-    const noteId = `note${new Date().getTime()}`;
-    const content = document.getElementById('note-content').value;
-    const newContent = document.getElementById('content').innerHTML;
-    paintNote(this.state.range, noteId, 'mdl-color--indigo-100');
-    dispatch(newNote(pack.id, version.id, noteId, userId, userName, content, newContent));
-    this.dialog.close();
   }
 
   render() {
@@ -165,7 +172,10 @@ class Pack extends React.Component {
           </div>
         </div>
         <div className="floatbtn" style={this.buttonStyle()}>
-          <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" onClick={this.onFloatBtnClick}>
+          <button
+            className="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
+            onClick={this.onFloatBtnClick}
+          >
             <i className="material-icons">add</i>
           </button>
         </div>
@@ -200,8 +210,8 @@ class Pack extends React.Component {
           </div>
         </dialog>
         <div id="demo-toast-example" className="mdl-js-snackbar mdl-snackbar">
-          <div className="mdl-snackbar__text"></div>
-          <button className="mdl-snackbar__action" type="button"></button>
+          <div className="mdl-snackbar__text" />
+          <button className="mdl-snackbar__action" type="button" />
         </div>
       </div>
     );
@@ -215,6 +225,9 @@ Pack.propTypes = {
   version: React.PropTypes.shape({
     content: React.PropTypes.string,
   }),
+  userId: React.PropTypes.string,
+  userName: React.PropTypes.string,
+  dispatch: React.PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -228,7 +241,6 @@ const mapStateToProps = (state, ownProps) => {
   } else {
     version = pack.version.find(i => i.id === ownProps.params.versionId);
   }
-  console.log(version);
   return {
     pack,
     version,

@@ -19,6 +19,7 @@ class NewPack extends React.Component {
   }
 
   componentDidMount() {
+    // eslint-disable-next-line
     new MediumEditor('#editable');
   }
 
