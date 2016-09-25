@@ -6,11 +6,16 @@ import { USER_NOT_LOGIN, checkLogin, fbLoaded } from './actions';
 import { init } from './api/fb.js';
 import { connect } from 'react-redux';
 import GetStart from './page/GetStart';
+import mdlUpgrade from './utils/mdlUpgrade';
 
 class App extends Component {
   constructor(props) {
     super(props);
     init(() => { this.props.dispatch(fbLoaded()); });
+  }
+
+  componentDidUpdate(){
+    window.componentHandler.upgradeDom();
   }
 
   render() {
@@ -20,8 +25,7 @@ class App extends Component {
           <div className="mdl-spinner mdl-js-spinner is-active" />
         </div>
       );
-    }
-     else if (this.props.initState === 'USER_NOT_LOGIN') {
+    } else if (this.props.initState === 'USER_NOT_LOGIN') {
       return (<GetStart />);
     }
 
@@ -58,4 +62,4 @@ export default connect(
   state => ({
     initState: state.app.initState,
   })
-)(App);
+)(mdlUpgrade(App));
