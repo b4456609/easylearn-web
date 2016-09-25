@@ -23,10 +23,9 @@ const logger = createLogger();
 const debugMidware = [];
 if (process.env.NODE_ENV !== 'production') {
   debugMidware.push(window.devToolsExtension && window.devToolsExtension());
-  debugMidware.push(applyMiddleware(thunk, logger));
-} else {
-  debugMidware.push(applyMiddleware(logger));
 }
+
+debugMidware.push(applyMiddleware(thunk, logger));
 
 const store = createStore(reducer, ...debugMidware);
 

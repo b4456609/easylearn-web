@@ -1,14 +1,29 @@
 import { browserHistory } from 'react-router';
 import { fbCheckLogin, fbLogin } from '../api/fb';
+import { auth } from '../api/easylearn';
 
-export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
-export function loginSuccess(name, id, accessToken) {
+
+export const USER_FB_LOGIN_SUCCESS = 'USER_FB_LOGIN_SUCCESS';
+function fbLoginSuccess(name, id, fbAccessToken) {
   browserHistory.push('/folder/all');
   return {
-    type: USER_LOGIN_SUCCESS,
+    type: USER_FB_LOGIN_SUCCESS,
     name,
     id,
-    accessToken,
+    fbAccessToken,
+  };
+}
+
+export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
+function appAuth(id, token) {
+  return (dispatch) => {
+    auth(id, token)
+    .then((data) => {
+      dispatch({
+        type: APP_LOGIN_SUCCESS,
+        token: data.token,
+      });
+    });
   };
 }
 
@@ -22,7 +37,8 @@ export function notLogin() {
 export function fbLoaded() {
   return (dispatch) => {
     fbCheckLogin((name, id, accessToken) => {
-      dispatch(loginSuccess(name, id, accessToken));
+      dispatch(fbLoginSuccess(name, id, accessToken));
+      dispatch(appAuth(id, accessToken));
     }, () => {
       dispatch(notLogin());
     });
@@ -32,17 +48,20 @@ export function fbLoaded() {
 export function login() {
   return (dispatch) => {
     fbCheckLogin((name, id, accessToken) => {
-      dispatch(loginSuccess(name, id, accessToken));
+      dispatch(fbLoginSuccess(name, id, accessToken));
+      dispatch(appAuth(id, accessToken));
     }, () => {
       fbLogin((r) => {
         if (r.status === 'connected') {
           FB.api('/me', (res) => {
-            dispatch(loginSuccess(res.name, res.id, r.authResponse.accessToken));
+            dispatch(fbLoginSuccess(res.name, res.id, r.authResponse.accessToken));
+            dispatch(appAuth(res.id, r.authResponse.accessToken));
           });
         } else {
           fbCheckLogin(
             (name, id, accessToken) => {
-              dispatch(loginSuccess(name, id, accessToken));
+              dispatch(fbLoginSuccess(name, id, accessToken));
+              dispatch(appAuth(id, accessToken));
             },
             () => { dispatch(notLogin()); }
           );

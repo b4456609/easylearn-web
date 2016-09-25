@@ -19,7 +19,7 @@ class App extends Component {
   }
 
   render() {
-    if (this.props.initState === 'init') {
+    if (this.props.initState === 'init' || this.props.initState === 'USER_FB_LOGIN_SUCCESS' ) {
       return (
         <div style={{ textAlign: 'center', margin: '50px' }}>
           <div className="mdl-spinner mdl-js-spinner is-active" />
