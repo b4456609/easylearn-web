@@ -22,7 +22,7 @@ export function fbCheckLogin(successCallback, failCallback) {
     FB.getLoginStatus((r) => {
       if (r.status === 'connected') {
         FB.api('/me', (res) => {
-          successCallback(res.name, res.id);
+          successCallback(res.name, res.id, r.authResponse.accessToken);
         });
       }
       else {

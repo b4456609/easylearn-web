@@ -2,12 +2,13 @@ import { browserHistory } from 'react-router';
 import { fbCheckLogin, fbLogin } from '../api/fb';
 
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
-export function loginSuccess(name, id) {
+export function loginSuccess(name, id, accessToken) {
   browserHistory.push('/folder/all');
   return {
     type: USER_LOGIN_SUCCESS,
     name,
     id,
+    accessToken,
   };
 }
 
@@ -20,18 +21,8 @@ export function notLogin() {
 
 export function fbLoaded() {
   return (dispatch) => {
-    fbCheckLogin((name, id) => {
-      dispatch(loginSuccess(name, id));
-    }, () => {
-      dispatch(notLogin());
-    });
-  };
-}
-
-export function checkLogin() {
-  return (dispatch) => {
-    fbCheckLogin((name, id) => {
-      dispatch(loginSuccess(name, id));
+    fbCheckLogin((name, id, accessToken) => {
+      dispatch(loginSuccess(name, id, accessToken));
     }, () => {
       dispatch(notLogin());
     });
@@ -40,18 +31,22 @@ export function checkLogin() {
 
 export function login() {
   return (dispatch) => {
-    fbCheckLogin((name, id) => {
-      dispatch(loginSuccess(name, id));
+    fbCheckLogin((name, id, accessToken) => {
+      dispatch(loginSuccess(name, id, accessToken));
     }, () => {
-      fbLogin((response) => {
-        if (response.authResponse) {
-          console.log('Welcome!  Fetching your information.... ');
-          // eslint-disable-next-line
-          FB.api('/me', (response) => {
-            dispatch(loginSuccess(response.name, response.id));
+      fbLogin((r) => {
+        if (r.status === 'connected') {
+          FB.api('/me', (res) => {
+            dispatch(loginSuccess(res.name, res.id, r.authResponse.accessToken));
           });
         } else {
-          dispatch(notLogin());
+          fbCheckLogin(
+            (name, id, accessToken) => {
+              dispatch(loginSuccess(name, id, accessToken));
+            },
+            () => { dispatch(notLogin()); }
+          );
+
           console.log('User cancelled login or did not fully authorize.');
         }
       });
