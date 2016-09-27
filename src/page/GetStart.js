@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import './GetStart.css';
-import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
+import './GetStart.css';
 import { login } from '../actions';
 
 class GetStart extends Component {

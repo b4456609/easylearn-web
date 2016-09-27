@@ -1,25 +1,27 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import DrawerContainer from './page/containers/DrawerContainer';
 import ModalRoot from './page/containers/ModalRoot';
 import HeaderContainer from './page/containers/HeaderContainer';
-import { USER_NOT_LOGIN, checkLogin, fbLoaded } from './actions';
+import { fbLoaded } from './actions';
 import { init } from './api/fb.js';
-import { connect } from 'react-redux';
 import GetStart from './page/GetStart';
 import mdlUpgrade from './utils/mdlUpgrade';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    init(() => { this.props.dispatch(fbLoaded()); });
+    if (process.env.NODE_ENV === 'production') {
+      init(() => { this.props.dispatch(fbLoaded()); });
+    }
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     window.componentHandler.upgradeDom();
   }
 
   render() {
-    if (this.props.initState === 'init' || this.props.initState === 'USER_FB_LOGIN_SUCCESS' ) {
+    if (this.props.initState === 'init' || this.props.initState === 'USER_FB_LOGIN_SUCCESS') {
       return (
         <div style={{ textAlign: 'center', margin: '50px' }}>
           <div className="mdl-spinner mdl-js-spinner is-active" />

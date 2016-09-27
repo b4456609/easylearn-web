@@ -1,8 +1,8 @@
 import fetch from 'isomorphic-fetch';
 
-let EASYLEARN_API_ROOT = 'https://microservices.ntou.edu.tw/';
+let EASYLEARN_API_ROOT = 'https://microservices.ntou.edu.tw/api/';
 if (process.env.NODE_ENV !== 'production') {
-  EASYLEARN_API_ROOT = 'http://localhost:8080/';
+  EASYLEARN_API_ROOT = 'http://localhost:8080/api/';
 }
 
 function checkStatus(response) {
@@ -20,7 +20,7 @@ function parseJSON(response) {
 }
 
 export function auth(id, token) {
-  return fetch(EASYLEARN_API_ROOT + 'api/auth', {
+  return fetch(`${EASYLEARN_API_ROOT}auth`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -33,4 +33,37 @@ export function auth(id, token) {
   })
   .then(checkStatus)
   .then(parseJSON);
+}
+
+export function appLogin(id, name) {
+  return fetch(`${EASYLEARN_API_ROOT}user/login`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Auth-Token': sessionStorage.getItem('token'),
+    },
+    body: JSON.stringify({
+      id,
+      name,
+    }),
+  })
+  .then(checkStatus);
+}
+
+export function addFolder(id, name, pack) {
+  return fetch(`${EASYLEARN_API_ROOT}user/folder`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Auth-Token': sessionStorage.getItem('token'),
+    },
+    body: JSON.stringify({
+      id,
+      name,
+      pack,
+    }),
+  })
+  .then(checkStatus);
 }
