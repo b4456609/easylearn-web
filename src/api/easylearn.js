@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 
-let EASYLEARN_API_ROOT = 'http://140.121.102.163:8080/';
+let EASYLEARN_API_ROOT = 'https://microservices.ntou.edu.tw/';
 if (process.env.NODE_ENV !== 'production') {
   EASYLEARN_API_ROOT = 'http://localhost:8080/';
 }
