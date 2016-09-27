@@ -25,8 +25,7 @@ export function appAuth(name, id, token) {
         type: APP_LOGIN_SUCCESS,
         token: data.token,
       });
-    })
-    .then(appLogin);
+    });
   };
 }
 
