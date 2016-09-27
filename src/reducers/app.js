@@ -5,7 +5,7 @@ import {
 } from '../actions';
 
 const initState = {
-  initState: 'APP_LOGIN_SUCCESS',
+  initState: 'init',
 };
 
 const app = (state = initState, action) => {
