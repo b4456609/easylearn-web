@@ -9,12 +9,8 @@ const config = {
   baseURL: EASYLEARN_API_ROOT,
   responseType: 'json',
   validateStatus: status => (status >= 200 && status < 300),
-  headers: { 'X-Requested-With': localStorage.getItem('token') },
+  headers: { 'X-Auth-Token': localStorage.getItem('token') },
 };
-
-function parseJSON(response) {
-  return response.json();
-}
 
 export function auth(id, token) {
   return axios.post('auth', {
