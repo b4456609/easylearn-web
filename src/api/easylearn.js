@@ -19,7 +19,7 @@ export function auth(id, token) {
   }, {
     baseURL: EASYLEARN_API_ROOT,
     validateStatus: status => (status >= 200 && status < 300),
-  });
+  }).then(r => (r.data));
 }
 
 export function appLogin(id, name) {
