@@ -51,7 +51,7 @@ export function appLogin(id, name) {
   .then(checkStatus);
 }
 
-export function addFolder(id, name, pack) {
+export function addFolderApi(id, name, pack) {
   return fetch(`${EASYLEARN_API_ROOT}user/folder`, {
     method: 'POST',
     headers: {

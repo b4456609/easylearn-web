@@ -4,9 +4,15 @@ import {
     APP_LOGIN_SUCCESS,
 } from '../actions';
 
-const initState = {
-  initState: 'init',
+let initState = {
+  initState: 'APP_LOGIN_SUCCESS',
 };
+
+if (process.env.NODE_ENV === 'production') {
+  initState = {
+    initState: 'init',
+  };
+}
 
 const app = (state = initState, action) => {
   switch (action.type) {

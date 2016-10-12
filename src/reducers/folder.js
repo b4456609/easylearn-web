@@ -27,7 +27,7 @@ const folder = (state = initState, action) => {
     case ADD_FOLDER:
       return [...state, {
         name: action.name,
-        id: `${new Date().getTime()}`,
+        id: action.id,
         pack: [],
       }];
     case NEW_PACK:

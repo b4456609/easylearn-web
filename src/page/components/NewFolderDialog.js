@@ -24,7 +24,7 @@ class NewFolderDialog extends React.Component {
   }
 
   onSubmitClick() {
-    this.props.dispatch(addFolder(document.getElementById('new-dir-name').value));
+    this.props.dispatch(addFolder(`folder${new Date().getTime()}`, document.getElementById('new-dir-name').value));
     this.onCloseClick();
     this.props.dispatch(hideDialog());
   }

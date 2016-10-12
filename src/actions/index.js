@@ -1,6 +1,6 @@
 import { browserHistory } from 'react-router';
 import { fbCheckLogin, fbLogin } from '../api/fb';
-import { auth, appLogin } from '../api/easylearn';
+import { auth, appLogin, addFolderApi } from '../api/easylearn';
 
 
 export const USER_FB_LOGIN_SUCCESS = 'USER_FB_LOGIN_SUCCESS';
@@ -76,10 +76,14 @@ export function login() {
 }
 
 export const ADD_FOLDER = 'ADD_FOLDER';
-export function addFolder(name) {
-  return {
-    type: ADD_FOLDER,
-    name,
+export function addFolder(id, name) {
+  return (dispatch) => {
+    dispatch({
+      type: ADD_FOLDER,
+      id,
+      name,
+    });
+    addFolderApi(id, name, []);
   };
 }
 
