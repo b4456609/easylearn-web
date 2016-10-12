@@ -18,14 +18,12 @@ function parseJSON(response) {
 
 export function auth(id, token) {
   return axios.post('auth', {
+    id,
+    token,
+  }, {
     baseURL: EASYLEARN_API_ROOT,
-    responseType: 'json',
-    data: {
-      id,
-      token,
-    },
-  })
-  .then(parseJSON);
+    validateStatus: status => (status >= 200 && status < 300),
+  });
 }
 
 export function appLogin(id, name) {
