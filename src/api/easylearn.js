@@ -1,69 +1,51 @@
-import fetch from 'isomorphic-fetch';
+import axios from 'axios';
 
 let EASYLEARN_API_ROOT = 'https://microservices.ntou.edu.tw/api/';
 if (process.env.NODE_ENV !== 'production') {
   EASYLEARN_API_ROOT = 'http://localhost:8080/api/';
 }
 
-function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  } else {
-    const error = new Error(response.statusText);
-    error.response = response;
-    throw error;
-  }
-}
+const config = {
+  baseURL: EASYLEARN_API_ROOT,
+  responseType: 'json',
+  validateStatus: status => (status >= 200 && status < 300),
+  headers: { 'X-Requested-With': localStorage.getItem('token') },
+};
 
 function parseJSON(response) {
   return response.json();
 }
 
 export function auth(id, token) {
-  return fetch(`${EASYLEARN_API_ROOT}auth`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  return axios.post('auth', {
+    baseURL: EASYLEARN_API_ROOT,
+    responseType: 'json',
+    data: {
       id,
       token,
-    }),
+    },
   })
-  .then(checkStatus)
   .then(parseJSON);
 }
 
 export function appLogin(id, name) {
-  return fetch(`${EASYLEARN_API_ROOT}user/login`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-Auth-Token': sessionStorage.getItem('token'),
-    },
-    body: JSON.stringify({
-      id,
-      name,
-    }),
-  })
-  .then(checkStatus);
+  return axios.post('user/login', {
+    id,
+    name,
+  }, config
+  ).then((r) => {
+    console.log(r);
+  });
 }
 
 export function addFolderApi(id, name, pack) {
-  return fetch(`${EASYLEARN_API_ROOT}user/folder`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-Auth-Token': sessionStorage.getItem('token'),
-    },
-    body: JSON.stringify({
-      id,
-      name,
-      pack,
-    }),
-  })
-  .then(checkStatus);
+  return axios.post('user/folder', {
+    id,
+    name,
+    pack,
+  }, config);
+}
+
+export function delteFolderApi(id) {
+  return axios.delete(`user/folder/${id}`, config);
 }

@@ -1,31 +1,33 @@
 import { browserHistory } from 'react-router';
 import { fbCheckLogin, fbLogin } from '../api/fb';
-import { auth, appLogin, addFolderApi } from '../api/easylearn';
-
-
-export const USER_FB_LOGIN_SUCCESS = 'USER_FB_LOGIN_SUCCESS';
-function fbLoginSuccess(name, id, fbAccessToken) {
-  browserHistory.push('/folder/all');
-  return {
-    type: USER_FB_LOGIN_SUCCESS,
-    name,
-    id,
-    fbAccessToken,
-  };
-}
+import { auth, appLogin, addFolderApi, delteFolderApi } from '../api/easylearn';
 
 export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
 export function appAuth(name, id, token) {
   return (dispatch) => {
     auth(id, token)
     .then((data) => {
-      sessionStorage.setItem('token', data.token);
+      localStorage.setItem('token', data.token);
       appLogin(id, name);
       dispatch({
         type: APP_LOGIN_SUCCESS,
         token: data.token,
       });
     });
+  };
+}
+
+export const USER_FB_LOGIN_SUCCESS = 'USER_FB_LOGIN_SUCCESS';
+function fbLoginSuccess(name, id, fbAccessToken) {
+  browserHistory.push('/folder/all');
+  return (dispatch) => {
+    dispatch({
+      type: USER_FB_LOGIN_SUCCESS,
+      name,
+      id,
+      fbAccessToken,
+    });
+    dispatch(appAuth(name, id, fbAccessToken));
   };
 }
 
@@ -40,7 +42,6 @@ export function fbLoaded() {
   return (dispatch) => {
     fbCheckLogin((name, id, accessToken) => {
       dispatch(fbLoginSuccess(name, id, accessToken));
-      dispatch(appAuth(name, id, accessToken));
     }, () => {
       dispatch(notLogin());
     });
@@ -51,23 +52,19 @@ export function login() {
   return (dispatch) => {
     fbCheckLogin((name, id, accessToken) => {
       dispatch(fbLoginSuccess(name, id, accessToken));
-      dispatch(appAuth(name, id, accessToken));
     }, () => {
       fbLogin((r) => {
         if (r.status === 'connected') {
           FB.api('/me', (res) => {
             dispatch(fbLoginSuccess(res.name, res.id, r.authResponse.accessToken));
-            dispatch(appAuth(res.name, res.id, r.authResponse.accessToken));
           });
         } else {
           fbCheckLogin(
             (name, id, accessToken) => {
               dispatch(fbLoginSuccess(name, id, accessToken));
-              dispatch(appAuth(name, id, accessToken));
             },
             () => { dispatch(notLogin()); }
           );
-
           console.log('User cancelled login or did not fully authorize.');
         }
       });
@@ -145,10 +142,13 @@ export function movePackOut(packId, folderId) {
 
 export const REMOVE_FOLDER = 'REMOVE_FOLDER';
 export function removeFolder(folderId) {
-  return {
-    type: REMOVE_FOLDER,
-    folderId,
-  };
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_FOLDER,
+      folderId,
+    });
+    delteFolderApi(folderId);
+  }
 }
 
 export const NEW_VERSION = 'NEW_VERSION';

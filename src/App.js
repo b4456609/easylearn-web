@@ -7,12 +7,16 @@ import { fbLoaded } from './actions';
 import { init } from './api/fb.js';
 import GetStart from './page/GetStart';
 import mdlUpgrade from './utils/mdlUpgrade';
+import { appLogin } from './api/easylearn';
 
 class App extends Component {
   constructor(props) {
     super(props);
     if (process.env.NODE_ENV === 'production') {
       init(() => { this.props.dispatch(fbLoaded()); });
+    }
+    else {
+      appLogin('id', 'name');
     }
   }
 
