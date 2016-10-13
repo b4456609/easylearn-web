@@ -1,4 +1,4 @@
-import { NEW_NOTE } from '../actions';
+import { NEW_NOTE, NEW_COMMENT } from '../actions';
 
 const pack = (state = {}, action) => {
   switch (action.type) {
@@ -12,6 +12,15 @@ const pack = (state = {}, action) => {
           userId: action.userId,
           userName: action.userName,
         },
+      });
+    case NEW_COMMENT:
+      const { id, createTime, userId, userName, content } = action;
+      return Object.assign({}, state, {
+        [action.noteId]: Object.assign({},
+          state[action.noteId],
+          { comment: [...state[action.noteId].comment, {
+            id, createTime, userId, userName, content,
+          }] }),
       });
     default:
       return state;

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import './Pack.css';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
-import { newNote } from '../actions/';
+import { newNote, showDialog } from '../actions/';
 import { findDOMNode } from 'react-dom';
 
 function getWindowSize() {
@@ -94,6 +94,8 @@ class Pack extends React.Component {
     this.onFloatBtnClick = this.onFloatBtnClick.bind(this);
     this.onCloseClick = this.onCloseClick.bind(this);
     this.onSubmitClick = this.onSubmitClick.bind(this);
+    this.onNoteClick = this.onNoteClick.bind(this);
+    this.noteRegister = this.noteRegister.bind(this);
   }
 
   componentDidMount() {
@@ -104,14 +106,24 @@ class Pack extends React.Component {
         y: coords.y,
       });
     };
+    this.noteRegister();
+  }
+
+  componentDidUpdate() {
+    window.componentHandler.upgradeElements(findDOMNode(this));
+    this.noteRegister();
   }
 
   componentWillUnmount() {
     document.onmouseup = null;
   }
 
-  componentDidUpdate() {
-    window.componentHandler.upgradeElements(findDOMNode(this));
+  noteRegister(){
+    const notes = document.getElementsByClassName('note');
+    for (let i = 0; i < notes.length; i++) {
+      const note = notes[i];
+      note.onclick = this.onNoteClick;
+    }
   }
 
   onFloatBtnClick() {
@@ -146,6 +158,10 @@ class Pack extends React.Component {
     const newContent = document.getElementById('content').innerHTML;
     dispatch(newNote(pack.id, version.id, noteId, userId, userName, content, newContent));
     this.dialog.close();
+  }
+
+  onNoteClick(event) {
+    this.props.dispatch(showDialog('NOTE_DIALOG', { name: event.target.innerHTML, noteId: event.target.id }));
   }
 
   buttonStyle() {

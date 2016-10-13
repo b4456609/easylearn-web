@@ -148,7 +148,7 @@ export function removeFolder(folderId) {
       folderId,
     });
     delteFolderApi(folderId);
-  }
+  };
 }
 
 export const NEW_VERSION = 'NEW_VERSION';
@@ -174,5 +174,16 @@ export function newNote(packId, versionId, noteId, userId, userName, content, ne
     noteId,
     content,
     newContent,
+  };
+}
+
+export const NEW_COMMENT = 'NEW_COMMENT';
+export function newComment(userId, userName, content, noteId) {
+  const time = new Date().getTime();
+  return {
+    type: NEW_COMMENT,
+    id: `comment${time}`,
+    createTime: time,
+    userId, userName, content, noteId,
   };
 }

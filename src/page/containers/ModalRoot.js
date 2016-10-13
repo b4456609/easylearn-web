@@ -5,12 +5,14 @@ import NewFolderDialog from '../components/NewFolderDialog';
 import MovePackDialog from '../components/MovePackDialog';
 import RemovePackDialog from '../components/RemovePackDialog';
 import ListVersionDialog from '../components/ListVersionDialog';
+import NoteDialog from '../components/NoteDialog';
 
 const MODAL_COMPONENTS = {
   NEW_FOLDER_DIALOG: NewFolderDialog,
   MOVE_PACK: MovePackDialog,
   REMOVE_PACK_DIALOG: RemovePackDialog,
   LIST_VERSION_DIALOG: ListVersionDialog,
+  NOTE_DIALOG: NoteDialog,
   /* other modals */
 };
 
