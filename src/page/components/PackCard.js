@@ -56,7 +56,7 @@ class PackCard extends React.Component {
               className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
               onClick={this.goto}
             >
-              Read
+              閱讀
             </a>
           </div>
           <div className="mdl-card__menu">

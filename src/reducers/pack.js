@@ -30,29 +30,29 @@ function newPack(id, name, description, isPublic, content, creatorUserId, creato
 }
 
 const fake = {
-      "id": "pack1474100598141",
-      "createTime": 1474100598144,
-      "name": "a",
-      "description": "a",
-      "isPublic": true,
-      "coverFilename": "",
-      "creatorUserId": null,
-      "creatorUserName": "遊客",
-      "viewCount": 0,
-      "version": [
-        {
-          "id": "version1474100598144",
-          "content": "<p>Hello, World!</p>",
-          "createTime": 1474100598144,
-          "isPublic": true,
-          "creatorUserId": null,
-          "creatorUserName": "遊客",
-          "note": [],
-          "view_count": 0,
-          "user_view_count": 0
-        }
-      ]
-    };
+  'id': 'pack1474100598141',
+  'createTime': 1474100598144,
+  'name': 'a',
+  'description': 'a',
+  'isPublic': true,
+  'coverFilename': '',
+  'creatorUserId': null,
+  'creatorUserName': '遊客',
+  'viewCount': 0,
+  'version': [
+    {
+      'id': 'version1474100598144',
+      'content': '<p>Hello, World!</p>',
+      'createTime': 1474100598144,
+      'isPublic': true,
+      'creatorUserId': null,
+      'creatorUserName': '遊客',
+      'note': [],
+      'view_count': 0,
+      'user_view_count': 0,
+    },
+  ],
+};
 
 const pack = (state = [fake], action) => {
   switch (action.type) {
@@ -69,35 +69,35 @@ const pack = (state = [fake], action) => {
         ...state.slice(index + 1),
       ];
     case NEW_VERSION:
-      return state.map((i)=>{
-        if(i.id === action.packId){
-          return {...i, version:[...i.version, {
-            "id": action.versionId,
-            "content": action.content,
-            "createTime": new Date().getTime(),
-            "isPublic": true,
-            "creatorUserId": action.userId,
-            "creatorUserName": action.userName,
-            "note": [],
-            "view_count": 0,
-            "user_view_count": 0
-          }]}
+      return state.map((i) => {
+        if (i.id === action.packId) {
+          return Object.assign({}, i, { version: [...i.version, {
+            'id': action.versionId,
+            'content': action.content,
+            'createTime': new Date().getTime(),
+            'isPublic': true,
+            'creatorUserId': action.userId,
+            'creatorUserName': action.userName,
+            'note': [],
+            'view_count': 0,
+            'user_view_count': 0,
+          }] });
         }
         return i;
       });
     case NEW_NOTE:
-      return state.map((pack)=>{
-        if(pack.id === action.packId){
+      return state.map((pack) => {
+        if (pack.id === action.packId) {
           return Object.assign({}, pack, {
-            version:pack.version.map((version)=>{
-              if(version.id === action.versionId){
+            version: pack.version.map((version) => {
+              if (version.id === action.versionId) {
                 return Object.assign({}, version, {
                   content: action.newContent,
-                  note:[...version.note, action.noteId]
+                  note: [...version.note, action.noteId],
                 });
               }
               return version;
-            })
+            }),
           });
         }
         return pack;
