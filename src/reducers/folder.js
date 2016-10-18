@@ -4,7 +4,7 @@ import {
   MOVE_PACK_TO_FOLDER,
   REMOVE_PACK,
   MOVE_PACK_OUT,
-  REMOVE_FOLDER,
+  REMOVE_FOLDER
 } from '../actions';
 
 const ALL_FOLDER = 'all';
@@ -13,20 +13,22 @@ let initState = [
   {
     name: '全部懶人包',
     id: ALL_FOLDER,
-    pack: ['pack1474100598141']
+    pack: ['pack1474100598141'],
   }, {
     name: 'a',
     id: 'folder1476756912004',
-    pack: [],
+    pack: []
   },
 ];
 
 if (process.env.NODE_ENV === 'production') {
-  initState = {
-    name: '全部懶人包',
-    id: ALL_FOLDER,
-    pack: [],
-  };
+  initState = [
+    {
+      name: '全部懶人包',
+      id: ALL_FOLDER,
+      pack: [],
+    }
+  ];
 }
 
 const folder = (state = initState, action) => {
@@ -36,7 +38,7 @@ const folder = (state = initState, action) => {
         ...state, {
           name: action.name,
           id: action.id,
-          pack: [],
+          pack: []
         },
       ];
     case NEW_PACK:
