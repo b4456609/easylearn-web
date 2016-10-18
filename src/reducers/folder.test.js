@@ -1,10 +1,8 @@
-import expect from 'expect';
-import reducers from '../../reducers';
+import reducers from '.';
 
-describe('reducers', () => {
+describe('my beverage', () => {
   it('should handle actions', () => {
-    let state;
-    state = reducers({
+    const state = reducers({
       user: {
         id: null,
         name: '遊客',
@@ -23,8 +21,8 @@ describe('reducers', () => {
       dialog: {
         modalType: 'MOVE_PACK',
         modalProps: {
-          id: 'pack1474100598141',
-        },
+          id: 'pack1474100598141'
+        }
       },
       pack: [
         {
@@ -49,9 +47,9 @@ describe('reducers', () => {
               version: 0,
               view_count: 0,
               user_view_count: 0,
-            },
+            }
           ],
-        },
+        }
       ],
     }, {
       type: 'MOVE_PACK_TO_FOLDER',
