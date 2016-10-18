@@ -17,7 +17,7 @@ class RemovePackDialog extends React.Component {
     return (
       <dialog className="mdl-dialog">
         <h4 className="mdl-dialog__title">
-          Add a Folder
+          刪除懶人包
         </h4>
         <div className="mdl-dialog__content">
           {'確定要刪除 "'}{this.props.modalProps.name}{'"？'}
