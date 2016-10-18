@@ -1,6 +1,6 @@
 import { browserHistory } from 'react-router';
 import { fbCheckLogin, fbLogin } from '../api/fb';
-import { auth, appLogin, addFolderApi, delteFolderApi } from '../api/easylearn';
+import { auth, appLogin, addFolderApi, delteFolderApi, getFolderApi } from '../api/easylearn';
 
 export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
 export function appAuth(name, id, token) {
@@ -9,6 +9,7 @@ export function appAuth(name, id, token) {
     .then((data) => {
       localStorage.setItem('token', data.token);
       appLogin(id, name);
+      getFolderApi(id, name);
       dispatch({
         type: APP_LOGIN_SUCCESS,
         token: data.token,
