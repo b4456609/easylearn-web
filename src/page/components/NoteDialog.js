@@ -23,17 +23,27 @@ class NoteDialog extends React.Component {
   componentDidMount() {
     this.dialog = document.querySelector('#note-comment-dialog');
     this.dialog.showModal();
+    const scroll = document.querySelector('.note-comment');
+    scroll.scrollTop = scroll.scrollHeight;
+  }
+
+  componentDidUpdate() {
+    this.dialog.close();
+    this.dialog.showModal();
+    const scroll = document.querySelector('.note-comment');
+    scroll.scrollTop = scroll.scrollHeight;
   }
 
   onCloseClick() {
     this.dialog.close();
-    this.props.dispatch(hideDialog);
+    this.props.dispatch(hideDialog());
   }
 
   onSubmitClick() {
     let { userName, userId, noteId } = this.props;
     const content = document.getElementById('comment-content').value.trim();
     this.props.dispatch(newComment(userId, userName, content, noteId));
+    document.getElementById('comment-content').value = '';
   }
 
   render() {
@@ -43,21 +53,24 @@ class NoteDialog extends React.Component {
           {this.props.name}
         </h4>
         <div className="mdl-dialog__content">
+          <p>
+            {this.props.note.content}
+          </p>
           <ul className="mdl-list note-comment">
-          {this.props.note.comment.map(comment =>
+            {this.props.note.comment.map(comment =>
               (<li key={comment.id} className="mdl-list__item mdl-list__item--three-line">
-                  <span className="mdl-list__item-primary-content">
-                    <i className="material-icons  mdl-list__item-avatar">person</i>
-                    <span>{comment.userName}</span>
-                    <span className="mdl-list__item-text-body">
-                      {comment.content}
-                    </span>
+                <span className="mdl-list__item-primary-content">
+                  <i className="material-icons  mdl-list__item-avatar">person</i>
+                  <span>{comment.userName}</span>
+                  <span className="mdl-list__item-text-body">
+                    {comment.content}
                   </span>
-                </li>
+                </span>
+              </li>
               )
-          )}
+            )}
           </ul>
-          <div className="mdl-textfield mdl-js-textfield">
+          <div className="mdl-textfield mdl-js-textfield" style={{ width: '100%' }}>
             <input
               className="mdl-textfield__input"
               type="text"
