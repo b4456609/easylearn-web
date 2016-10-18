@@ -1,6 +1,6 @@
 import { NEW_NOTE, NEW_COMMENT } from '../actions';
 
-const pack = (state = {}, action) => {
+const note = (state = {}, action) => {
   switch (action.type) {
     case NEW_NOTE:
       return Object.assign({}, state, {
@@ -27,4 +27,4 @@ const pack = (state = {}, action) => {
   }
 };
 
-export default pack;
+export default note;

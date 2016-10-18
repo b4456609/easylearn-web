@@ -8,23 +8,26 @@ import {
 } from '../actions';
 
 const ALL_FOLDER = 'all';
-// const initState = {
-//   name: '全部懶人包',
-//   id: ALL_FOLDER,
-//   pack: [],
-// };
 
-const initState = [
+let initState = [
   {
     name: '全部懶人包',
-    id: 'all',
-    pack: ['pack1474100598141',]
+    id: ALL_FOLDER,
+    pack: ['pack1474100598141']
   }, {
-    'name': 'a',
-    'id': 'folder1476756912004',
-    'pack': [],
+    name: 'a',
+    id: 'folder1476756912004',
+    pack: [],
   },
 ];
+
+if (process.env.NODE_ENV === 'production') {
+  initState = {
+    name: '全部懶人包',
+    id: ALL_FOLDER,
+    pack: [],
+  };
+}
 
 const folder = (state = initState, action) => {
   switch (action.type) {

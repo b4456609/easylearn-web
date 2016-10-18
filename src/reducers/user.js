@@ -3,12 +3,23 @@ import {
     APP_LOGIN_SUCCESS,
 } from '../actions';
 
-const user = (state = {
-  id: '',
-  name: '遊客',
+let initState = {
+  id: '1009840175700426',
+  name: 'Bernie',
   fbAccessToken: '',
   token: '',
-}, action) => {
+};
+
+if (process.env.NODE_ENV === 'production') {
+  initState = {
+    id: '',
+    name: '遊客',
+    fbAccessToken: '',
+    token: '',
+  };
+}
+
+const user = (state = initState, action) => {
   switch (action.type) {
     case USER_FB_LOGIN_SUCCESS:
       return Object.assign({}, state, {
