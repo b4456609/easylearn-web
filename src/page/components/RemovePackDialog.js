@@ -30,14 +30,14 @@ class RemovePackDialog extends React.Component {
               this.props.dispatch(removePack(this.props.modalProps.id));
               this.props.dispatch(hideDialog());
             }}
-          >Submit</button>
+          >送出</button>
           <button
             type="button"
             className="mdl-button"
             onClick={() => {
               this.props.dispatch(hideDialog());
             }}
-          >Cancel</button>
+          >取消</button>
         </div>
       </dialog>
     );

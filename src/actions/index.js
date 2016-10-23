@@ -29,17 +29,17 @@ export const SUCCESS_LOAD_PACK = 'SUCCESS_LOAD_PACK';
 export const SUCCESS_LOAD_FOLDER = 'SUCCESS_LOAD_FOLDER';
 export function loadData() {
   return (dispatch) => {
+    getPackApi()
+    .then((data) => {
+      dispatch({
+        type: SUCCESS_LOAD_PACK,
+        data,
+      });
+    });
     getFolderApi()
       .then((data) => {
         dispatch({
           type: SUCCESS_LOAD_FOLDER,
-          data,
-        });
-      });
-    getPackApi()
-      .then((data) => {
-        dispatch({
-          type: SUCCESS_LOAD_PACK,
           data,
         });
       });

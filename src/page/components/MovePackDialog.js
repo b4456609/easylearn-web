@@ -8,6 +8,8 @@ class MovePackDialog extends React.Component {
     super(props);
     this.onCloseClick = this.onCloseClick.bind(this);
     this.onSubmitClick = this.onSubmitClick.bind(this);
+    this.content = this.content.bind(this);
+    this.actionList = this.actionList.bind(this);
   }
 
   componentDidMount() {
@@ -27,38 +29,54 @@ class MovePackDialog extends React.Component {
     this.props.dispatch(hideDialog());
   }
 
+  content() {
+    if (this.props.folder.length === 0) {
+      return (<p>沒有資料夾可以放入</p>);
+    }
+    return (
+      <ul className="demo-list-control mdl-list">
+        {this.props.folder.map(i => (
+          <li key={i.id} className="mdl-list__item">
+            <span className="mdl-list__item-primary-content">
+              {i.name}
+            </span>
+            <span className="mdl-list__item-secondary-action">
+              <label className="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor={`folderlist-${i.id}`}>
+                <input type="radio" id={`folderlist-${i.id}`} className="mdl-radio__button" name="folderlist" value={i.id} />
+              </label>
+            </span>
+          </li>))}
+      </ul>
+    );
+  }
+
+  actionList(){
+    if (this.props.folder.length === 0) {
+      return (
+        <div className="mdl-dialog__actions">
+          <button type="button" className="mdl-button close" onClick={this.onCloseClick}>取消</button>
+        </div>
+      );
+    }
+    return (
+      <div className="mdl-dialog__actions">
+        <button type="button" className="mdl-button" onClick={this.onSubmitClick}>移動</button>
+        <button type="button" className="mdl-button close" onClick={this.onCloseClick}>取消</button>
+      </div>
+    );
+  }
+
   render() {
     return (
       <dialog className="mdl-dialog">
         <h4 className="mdl-dialog__title">
-          移動懶人包到...
+          放入...
         </h4>
         <div className="mdl-dialog__content">
-          <ul className="demo-list-control mdl-list">
-            {this.props.folder.map(i => (
-              <li key={i.id} className="mdl-list__item">
-                <span className="mdl-list__item-primary-content">
-                  {i.name}
-                </span>
-                <span className="mdl-list__item-secondary-action">
-                  <label className="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor={`folderlist-${i.id}`}>
-                    <input type="radio" id={`folderlist-${i.id}`} className="mdl-radio__button" name="folderlist" value={i.id} />
-                  </label>
-                </span>
-              </li>))}
-          </ul>
+          {this.content()}
         </div>
         <div className="mdl-dialog__actions">
-          <button
-            type="button"
-            className="mdl-button"
-            onClick={this.onSubmitClick}
-          >移動</button>
-          <button
-            type="button"
-            className="mdl-button close"
-            onClick={this.onCloseClick}
-          >取消</button>
+          {this.actionList()}
         </div>
       </dialog>
     );
@@ -79,6 +97,6 @@ MovePackDialog.propTypes = {
 export default connect(
   state => ({
     modalProps: state.dialog.modalProps,
-    folder: state.folder,
+    folder: state.folder.filter(i => i.id !== 'all'),
   })
 )(mdlUpgrade(MovePackDialog));
