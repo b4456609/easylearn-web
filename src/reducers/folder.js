@@ -4,7 +4,8 @@ import {
   MOVE_PACK_TO_FOLDER,
   REMOVE_PACK,
   MOVE_PACK_OUT,
-  REMOVE_FOLDER
+  REMOVE_FOLDER,
+  SUCCESS_LOAD_FOLDER
 } from '../actions';
 
 const ALL_FOLDER = 'all';
@@ -33,6 +34,8 @@ if (process.env.NODE_ENV === 'production') {
 
 const folder = (state = initState, action) => {
   switch (action.type) {
+    case SUCCESS_LOAD_FOLDER:
+      return action.data;
     case ADD_FOLDER:
       return [
         ...state, {
@@ -48,7 +51,7 @@ const folder = (state = initState, action) => {
         return Object.assign({}, i, {
           pack: [
             ...i.pack,
-            action.id,
+            action.pack.id,
           ]
         });
       });

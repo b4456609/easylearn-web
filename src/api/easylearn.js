@@ -31,12 +31,30 @@ export function appLogin(id, name) {
   }, config);
 }
 
+export function getPackApi() {
+  return axios.get('pack', config)
+  .then(r => r.data)
+  .then((data) => {
+    console.log(data);
+    return data;
+  });
+}
+
+export function addPackApi(pack) {
+  return axios.post('pack', pack, config);
+}
+
 export function getFolderApi() {
   return axios.get('user/folder', config)
   .then(r => r.data)
   .then((data) => {
     console.log(data);
+    return data;
   });
+}
+
+export function updateFolderApi(folder) {
+  return axios.put('user/folder', folder, config);
 }
 
 export function addFolderApi(id, name, pack) {

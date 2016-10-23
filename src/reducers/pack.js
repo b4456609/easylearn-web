@@ -1,33 +1,10 @@
-import {NEW_PACK, REMOVE_PACK, NEW_VERSION, NEW_NOTE,} from '../actions';
-
-function newPack(id, name, description, isPublic, content, creatorUserId, creatorUserName) {
-  const time = new Date().getTime();
-  return {
-    id,
-    createTime: time,
-    name,
-    description,
-    isPublic,
-    coverFilename: '',
-    creatorUserId,
-    creatorUserName,
-    viewCount: 0,
-    version: [
-      {
-        id: `version${time}`,
-        content,
-        createTime: time,
-        isPublic,
-        creatorUserId,
-        creatorUserName,
-        note: [],
-        version: 0,
-        view_count: 0,
-        user_view_count: 0,
-      },
-    ],
-  };
-}
+import {
+  NEW_PACK,
+  REMOVE_PACK,
+  NEW_VERSION,
+  NEW_NOTE,
+  SUCCESS_LOAD_PACK,
+} from '../actions';
 
 let initState = [
   {
@@ -50,9 +27,9 @@ let initState = [
         'creatorUserName': '遊客',
         'note': [],
         'view_count': 0,
-        'user_view_count': 0,
+        'user_view_count': 0
       },
-    ],
+    ]
   }
 ];
 
@@ -62,10 +39,12 @@ if (process.env.NODE_ENV === 'production') {
 
 const pack = (state = initState, action) => {
   switch (action.type) {
+    case SUCCESS_LOAD_PACK:
+      return action.data;
     case NEW_PACK:
       return [
         ...state,
-        newPack(action.id, action.title, action.description, action.isPublic, action.content, action.userId, action.userName),
+        action.pack,
       ];
     case REMOVE_PACK:
       const index = state.findIndex(ele => ele.id === action.packId);
@@ -87,7 +66,7 @@ const pack = (state = initState, action) => {
                 'creatorUserName': action.userName,
                 'note': [],
                 'view_count': 0,
-                'user_view_count': 0,
+                'user_view_count': 0
               },
             ]
           });
@@ -105,7 +84,7 @@ const pack = (state = initState, action) => {
                   note: [
                     ...version.note,
                     action.noteId,
-                  ],
+                  ]
                 });
               }
               return version;

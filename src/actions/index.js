@@ -1,6 +1,14 @@
 import { browserHistory } from 'react-router';
 import { fbCheckLogin, fbLogin } from '../api/fb';
-import { auth, appLogin, addFolderApi, delteFolderApi, getFolderApi } from '../api/easylearn';
+import { getPackApi,
+  auth,
+  appLogin,
+  addFolderApi,
+  delteFolderApi,
+  getFolderApi,
+  addPackApi,
+  updateFolderApi,
+} from '../api/easylearn';
 
 export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
 export function appAuth(name, id, token) {
@@ -9,12 +17,32 @@ export function appAuth(name, id, token) {
     .then((data) => {
       localStorage.setItem('token', data.token);
       appLogin(id, name);
-      getFolderApi(id, name);
       dispatch({
         type: APP_LOGIN_SUCCESS,
         token: data.token,
       });
     });
+  };
+}
+
+export const SUCCESS_LOAD_PACK = 'SUCCESS_LOAD_PACK';
+export const SUCCESS_LOAD_FOLDER = 'SUCCESS_LOAD_FOLDER';
+export function loadData() {
+  return (dispatch) => {
+    getFolderApi()
+      .then((data) => {
+        dispatch({
+          type: SUCCESS_LOAD_FOLDER,
+          data,
+        });
+      });
+    getPackApi()
+      .then((data) => {
+        dispatch({
+          type: SUCCESS_LOAD_PACK,
+          data,
+        });
+      });
   };
 }
 
@@ -101,26 +129,58 @@ export function hideDialog() {
   };
 }
 
-export const NEW_PACK = 'NEW_PACK';
-export function newPack(id, title, description, isPublic, content, userId, userName) {
+
+function newPackFactory(id, name, description, isPublic, content, creatorUserId, creatorUserName) {
+  const time = new Date().getTime();
   return {
-    type: NEW_PACK,
     id,
-    title,
+    createTime: time,
+    name,
     description,
     isPublic,
-    content,
-    userId,
-    userName,
+    coverFilename: '',
+    creatorUserId,
+    creatorUserName,
+    viewCount: 0,
+    version: [
+      {
+        id: `version${time}`,
+        content,
+        createTime: time,
+        isPublic,
+        creatorUserId,
+        creatorUserName,
+        note: [],
+        version: 0,
+        view_count: 0,
+        user_view_count: 0
+      },
+    ]
+  };
+}
+
+export const NEW_PACK = 'NEW_PACK';
+export function newPack(id, title, description, isPublic, content, userId, userName) {
+  const pack = newPackFactory(id, title, description, isPublic, content, userId, userName);
+  return (dispatch, getState) => {
+    dispatch({
+      type: NEW_PACK,
+      pack
+    });
+    addPackApi(pack);
+    updateFolderApi(getState().folder.find(i => i.id === 'all'));
   };
 }
 
 export const MOVE_PACK_TO_FOLDER = 'MOVE_PACK_TO_FOLDER';
 export function movePackToFolder(packId, folderId) {
-  return {
-    type: MOVE_PACK_TO_FOLDER,
-    packId,
-    folderId,
+  return (dispatch, getState) => {
+    dispatch({
+      type: MOVE_PACK_TO_FOLDER,
+      packId,
+      folderId,
+    });
+    updateFolderApi(getState().folder.find(i => i.id === folderId));
   };
 }
 
@@ -134,10 +194,13 @@ export function removePack(packId) {
 
 export const MOVE_PACK_OUT = 'MOVE_PACK_OUT';
 export function movePackOut(packId, folderId) {
-  return {
-    type: MOVE_PACK_OUT,
-    packId,
-    folderId,
+  return (dispatch, getState) => {
+    dispatch({
+      type: MOVE_PACK_OUT,
+      packId,
+      folderId,
+    });
+    updateFolderApi(getState().folder.find(i => i.id === folderId));
   };
 }
 

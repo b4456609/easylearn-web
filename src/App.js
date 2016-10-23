@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import DrawerContainer from './page/containers/DrawerContainer';
 import ModalRoot from './page/containers/ModalRoot';
 import HeaderContainer from './page/containers/HeaderContainer';
-import { fbLoaded } from './actions';
+import { fbLoaded, loadData } from './actions';
 import { init } from './api/fb.js';
 import GetStart from './page/GetStart';
 import mdlUpgrade from './utils/mdlUpgrade';
@@ -17,6 +17,7 @@ class App extends Component {
     }
     else {
       appLogin('id', 'name');
+      this.props.dispatch(loadData());
     }
   }
 

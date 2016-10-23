@@ -4,7 +4,7 @@ import {
 } from '../actions';
 
 let initState = {
-  id: '1009840175700426',
+  id: 'id',
   name: 'Bernie',
   fbAccessToken: '',
   token: '',
