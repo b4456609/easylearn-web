@@ -57,6 +57,7 @@ function fbLoginSuccess(name, id, fbAccessToken) {
       fbAccessToken,
     });
     dispatch(appAuth(name, id, fbAccessToken));
+    dispatch(loadData());
   };
 }
 
