@@ -68,3 +68,7 @@ export function addFolderApi(id, name, pack) {
 export function delteFolderApi(id) {
   return axios.delete(`user/folder/${id}`, config);
 }
+
+export function deltePackInFolderApi(id) {
+  return axios.delete(`user/folder/pack/${id}`, config);
+}

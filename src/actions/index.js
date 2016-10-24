@@ -8,6 +8,7 @@ import { getPackApi,
   getFolderApi,
   addPackApi,
   updateFolderApi,
+  deltePackInFolderApi,
 } from '../api/easylearn';
 
 export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
@@ -187,9 +188,12 @@ export function movePackToFolder(packId, folderId) {
 
 export const REMOVE_PACK = 'REMOVE_PACK';
 export function removePack(packId) {
-  return {
-    type: REMOVE_PACK,
-    packId,
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_PACK,
+      packId,
+    });
+    deltePackInFolderApi(packId);
   };
 }
 
