@@ -57,17 +57,7 @@ const pack = (state = initState, action) => {
         if (i.id === action.packId) {
           return Object.assign({}, i, {
             version: [
-              ...i.version, {
-                'id': action.versionId,
-                'content': action.content,
-                'createTime': new Date().getTime(),
-                'isPublic': true,
-                'creatorUserId': action.userId,
-                'creatorUserName': action.userName,
-                'note': [],
-                'view_count': 0,
-                'user_view_count': 0
-              },
+              ...i.version, action.version
             ]
           });
         }
