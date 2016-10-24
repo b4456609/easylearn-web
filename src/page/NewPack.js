@@ -4,9 +4,9 @@ import { browserHistory } from 'react-router';
 import React from 'react';
 import './NewPack.css';
 import { newPack } from '../actions';
-// import Editor from './components/Editor';
+import img from '../img/305.png';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
-
+import { uploadImg } from '../api/imgur';
 
 class NewPack extends React.Component {
 
@@ -21,6 +21,16 @@ class NewPack extends React.Component {
   componentDidMount() {
     // eslint-disable-next-line
     new MediumEditor('#editable');
+    document.getElementById('file').onchange = (event) => {
+      const input = event.target;
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById('cover-img').src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    };
   }
 
   onFinish() {
@@ -31,7 +41,6 @@ class NewPack extends React.Component {
     const { userId, userName } = this.props;
     const id = 'pack' + new Date().getTime();
     this.props.dispatch(newPack(id, title, description, isPublic, content, userId, userName));
-    // Go to /some/path.
     browserHistory.push('/');
   }
 
@@ -48,14 +57,20 @@ class NewPack extends React.Component {
             <div className="mdl-cell--4-col mdl-cell--6-col-desktop text-field">
               <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <input className="mdl-textfield__input" type="text" id="title" />
-                <label className="mdl-textfield__label" htmlFor="title">Title</label>
+                <label className="mdl-textfield__label" htmlFor="title">名稱</label>
               </div>
             </div>
             <div className="mdl-cell--4-col mdl-cell--6-col-desktop text-field">
               <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <input className="mdl-textfield__input" type="text" id="description" />
-                <label className="mdl-textfield__label" htmlFor="description">Description</label>
+                <label className="mdl-textfield__label" htmlFor="description">描述</label>
               </div>
+            </div>
+            <div className="mdl-cell--4-col mdl-cell--6-col-desktop">
+              <input type="file" id="file" />
+              <label htmlFor="file" className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                選擇封面照片
+              </label>
             </div>
             <div className="mdl-cell--4-col mdl-cell--6-col-desktop">
               <label
@@ -68,13 +83,11 @@ class NewPack extends React.Component {
                   className="mdl-checkbox__input"
                   defaultChecked
                 />
-                <span className="mdl-checkbox__label">Public</span>
+                <span className="mdl-checkbox__label">公開</span>
               </label>
             </div>
-            <div className="mdl-cell--4-col mdl-cell--6-col-desktop">
-              <button className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                Choose Cover Image
-              </button>
+            <div className="mdl-cell--12-col">
+              <img id="cover-img" alt="pack's cover img" src={img} />
             </div>
             <div className="mdl-cell--12-col">
               <div id="editable" className="pack-content" />
@@ -85,7 +98,7 @@ class NewPack extends React.Component {
                 mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
                 onClick={this.onFinish}
               >
-                Finish
+                完成
               </button>
             </div>
           </div>
