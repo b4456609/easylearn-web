@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { fbCheckLogin, fbLogin } from '../api/fb';
+import { fbCheckLogin, fbLogin, fbLogout } from '../api/fb';
 import { getPackApi,
   auth,
   appLogin,
@@ -65,6 +65,14 @@ function fbLoginSuccess(name, id, fbAccessToken) {
 
 export const USER_NOT_LOGIN = 'USER_NOT_LOGIN';
 export function notLogin() {
+  return {
+    type: USER_NOT_LOGIN,
+  };
+}
+
+export function logOut() {
+  fbLogout();
+  localStorage.removeItem('token');
   return {
     type: USER_NOT_LOGIN,
   };
