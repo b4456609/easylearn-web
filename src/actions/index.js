@@ -9,6 +9,7 @@ import { getPackApi,
   addPackApi,
   updateFolderApi,
   deltePackInFolderApi,
+  addVersionApi
 } from '../api/easylearn';
 
 export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
@@ -152,7 +153,6 @@ function newPackFactory(id, name, description, isPublic, content, creatorUserId,
         isPublic,
         creatorUserId,
         creatorUserName,
-        note: [],
         version: 0,
         view_count: 0,
         user_view_count: 0
@@ -220,15 +220,27 @@ export function removeFolder(folderId) {
   };
 }
 
+function newVersionTemplate(id, content, creatorUserId, creatorUserName) {
+  return {
+    id,
+    content,
+    createTime: new Date().getTime(),
+    isPublic: true,
+    creatorUserId,
+    creatorUserName,
+    view_count: 0,
+    user_view_count: 0
+  };
+}
+
 export const NEW_VERSION = 'NEW_VERSION';
 export function newVersion(packId, versionId, content, userId, userName) {
+  const version = newVersionTemplate(versionId, content, userId, userName);
+  addVersionApi(packId, version);
   return {
     type: NEW_VERSION,
     packId,
-    versionId,
-    content,
-    userId,
-    userName,
+    version,
   };
 }
 

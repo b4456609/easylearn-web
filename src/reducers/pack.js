@@ -73,26 +73,6 @@ const pack = (state = initState, action) => {
         }
         return i;
       });
-    case NEW_NOTE:
-      return state.map((pack) => {
-        if (pack.id === action.packId) {
-          return Object.assign({}, pack, {
-            version: pack.version.map((version) => {
-              if (version.id === action.versionId) {
-                return Object.assign({}, version, {
-                  content: action.newContent,
-                  note: [
-                    ...version.note,
-                    action.noteId,
-                  ]
-                });
-              }
-              return version;
-            })
-          });
-        }
-        return pack;
-      });
     default:
       return state;
   }

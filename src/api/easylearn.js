@@ -44,6 +44,10 @@ export function addPackApi(pack) {
   return axios.post('pack', pack, config);
 }
 
+export function addVersionApi(packId, version) {
+  return axios.post(`pack/${packId}/version`, version, config);
+}
+
 export function getFolderApi() {
   return axios.get('user/folder', config)
   .then(r => r.data)
