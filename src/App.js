@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import DrawerContainer from './page/containers/DrawerContainer';
 import ModalRoot from './page/containers/ModalRoot';
 import HeaderContainer from './page/containers/HeaderContainer';
-import { fbLoaded, logOut } from './actions';
+import { fbLoaded, appAuth } from './actions';
 import { init } from './api/fb.js';
 import GetStart from './page/GetStart';
 import mdlUpgrade from './utils/mdlUpgrade';
-import { appLogin } from './api/easylearn';
 
 class App extends Component {
   constructor(props) {
@@ -16,13 +15,9 @@ class App extends Component {
       init(() => { this.props.dispatch(fbLoaded()); });
     }
     else {
-      appLogin('id', 'name');
-      this.props.dispatch(logOut());
+      // appLogin('id', 'name');
+      this.props.dispatch(appAuth());
     }
-  }
-
-  componentDidUpdate() {
-    window.componentHandler.upgradeDom();
   }
 
   render() {
