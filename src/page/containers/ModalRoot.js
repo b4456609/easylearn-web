@@ -6,6 +6,7 @@ import MovePackDialog from '../components/MovePackDialog';
 import RemovePackDialog from '../components/RemovePackDialog';
 import ListVersionDialog from '../components/ListVersionDialog';
 import NoteDialog from '../components/NoteDialog';
+import LoadingDialog from '../components/LoadingDialog';
 
 const MODAL_COMPONENTS = {
   NEW_FOLDER_DIALOG: NewFolderDialog,
@@ -13,6 +14,7 @@ const MODAL_COMPONENTS = {
   REMOVE_PACK_DIALOG: RemovePackDialog,
   LIST_VERSION_DIALOG: ListVersionDialog,
   NOTE_DIALOG: NoteDialog,
+  LOADING_DIALOG: LoadingDialog,
   /* other modals */
 };
 
@@ -27,7 +29,7 @@ const ModalRoot = ({ modalType, ownProps }) => {
 
 export default connect(
   (state, ownProps) => ({
-    ownProps: ownProps,
+    ownProps,
     modalType: state.dialog.modalType,
   })
 )(ModalRoot);

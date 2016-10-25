@@ -17,7 +17,17 @@ export function uploadImg(file) {
   data.append('image', file);
   data.append('album', 'dvtm9wHkgA5cbZa');
 
+  let uploadConfig = Object.assign({}, config,
+  {
+    onUploadProgress: function(progressEvent) {
+      var percentCompleted = progressEvent.loaded / progressEvent.total;
+      console.log(percentCompleted);
+    }
+  });
+
+  console.log(uploadConfig);
+
   return axios
-    .post('image', data, config)
+    .post('image', data, uploadConfig)
     .then(r=>{return r.data});
 }

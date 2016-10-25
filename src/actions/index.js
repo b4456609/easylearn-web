@@ -126,7 +126,7 @@ export function addFolder(id, name) {
 }
 
 export const SHOW_DIALOG = 'SHOW_DIALOG';
-export function showDialog(modalType, modalProps) {
+export function showDialog(modalType, modalProps = {}) {
   return {
     type: SHOW_DIALOG,
     modalType,
@@ -174,6 +174,7 @@ export const NEW_PACK = 'NEW_PACK';
 export function newPack(id, title, description, isPublic, content, userId, userName, file) {
   if (file != null) {
     return (dispatch, getState) => {
+      dispatch(showDialog('LOADING_DIALOG'))
       uploadImg(file).then((response) => {
         const filename = response.data.link.substr(response.data.link.lastIndexOf('/') + 1);
         const pack = newPackFactory(id, title, description, isPublic,
@@ -182,7 +183,10 @@ export function newPack(id, title, description, isPublic, content, userId, userN
         addPackApi(pack);
         updateFolderApi(getState().folder.find(i => i.id === 'all'));
       }).then(() => {
+        dispatch(hideDialog());
         browserHistory.push('/');
+      }).catch(() => {
+        dispatch(hideDialog());
       });
     };
   }
