@@ -9,10 +9,19 @@ class PackCard extends React.Component {
   constructor(props) {
     super(props);
     this.goto = this.goto.bind(this);
+    this.getImg = this.getImg.bind(this);
   }
 
   goto() {
     this.context.router.push(`/pack/${this.props.id}`);
+  }
+
+  getImg(){
+    if(this.props.imgUrl === '')
+      return img;
+    else {
+      return `http://i.imgur.com/${this.props.imgUrl}`
+    }
   }
 
   render() {
@@ -44,8 +53,8 @@ class PackCard extends React.Component {
           <div className="mdl-card__media">
             <img
               className="card-img"
-              src={img}
-              alt="{this.props.name}"
+              src={this.getImg()}
+              alt={this.props.name}
             />
           </div>
           <div className="mdl-card__supporting-text">
@@ -95,6 +104,7 @@ PackCard.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  imgUrl: PropTypes.string.isRequired,
   folderId: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
 };

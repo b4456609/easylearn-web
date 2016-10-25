@@ -11,6 +11,7 @@ import { getPackApi,
   deltePackInFolderApi,
   addVersionApi
 } from '../api/easylearn';
+import { uploadImg } from '../api/imgur.js';
 
 export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
 export function appAuth(name, id, token) {
@@ -141,7 +142,7 @@ export function hideDialog() {
 }
 
 
-function newPackFactory(id, name, description, isPublic, content, creatorUserId, creatorUserName) {
+function newPackFactory(id, name, description, isPublic, content, creatorUserId, creatorUserName, coverFilename = '') {
   const time = new Date().getTime();
   return {
     id,
@@ -149,7 +150,7 @@ function newPackFactory(id, name, description, isPublic, content, creatorUserId,
     name,
     description,
     isPublic,
-    coverFilename: '',
+    coverFilename,
     creatorUserId,
     creatorUserName,
     viewCount: 0,
@@ -170,15 +171,27 @@ function newPackFactory(id, name, description, isPublic, content, creatorUserId,
 }
 
 export const NEW_PACK = 'NEW_PACK';
-export function newPack(id, title, description, isPublic, content, userId, userName) {
-  const pack = newPackFactory(id, title, description, isPublic, content, userId, userName);
+export function newPack(id, title, description, isPublic, content, userId, userName, file) {
+  if (file != null) {
+    return (dispatch, getState) => {
+      uploadImg(file).then((response) => {
+        const filename = response.data.link.substr(response.data.link.lastIndexOf('/') + 1);
+        const pack = newPackFactory(id, title, description, isPublic,
+           content, userId, userName, filename);
+        dispatch({ type: NEW_PACK, pack });
+        addPackApi(pack);
+        updateFolderApi(getState().folder.find(i => i.id === 'all'));
+      }).then(() => {
+        browserHistory.push('/');
+      });
+    };
+  }
   return (dispatch, getState) => {
-    dispatch({
-      type: NEW_PACK,
-      pack
-    });
+    const pack = newPackFactory(id, title, description, isPublic, content, userId, userName);
+    dispatch({ type: NEW_PACK, pack });
     addPackApi(pack);
     updateFolderApi(getState().folder.find(i => i.id === 'all'));
+    browserHistory.push('/');
   };
 }
 

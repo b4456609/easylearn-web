@@ -1,12 +1,10 @@
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 // import TinyMCE from 'react-tinymce';
 import React from 'react';
 import './NewPack.css';
 import { newPack } from '../actions';
 import img from '../img/305.png';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
-import { uploadImg } from '../api/imgur';
 
 class NewPack extends React.Component {
 
@@ -14,6 +12,7 @@ class NewPack extends React.Component {
     super(props, context);
     this.state = {
       isPublic: true,
+      file: null,
     };
     this.onFinish = this.onFinish.bind(this);
   }
@@ -29,6 +28,7 @@ class NewPack extends React.Component {
           document.getElementById('cover-img').src = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
+        this.state.file = input.files[0];
       }
     };
   }
@@ -37,11 +37,10 @@ class NewPack extends React.Component {
     const content = document.getElementById('editable').innerHTML;
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
-    const { isPublic } = this.state;
+    const { isPublic, file } = this.state;
     const { userId, userName } = this.props;
     const id = 'pack' + new Date().getTime();
-    this.props.dispatch(newPack(id, title, description, isPublic, content, userId, userName));
-    browserHistory.push('/');
+    this.props.dispatch(newPack(id, title, description, isPublic, content, userId, userName, file));
   }
 
   render() {

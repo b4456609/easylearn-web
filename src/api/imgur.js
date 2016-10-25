@@ -17,5 +17,7 @@ export function uploadImg(file) {
   data.append('image', file);
   data.append('album', 'dvtm9wHkgA5cbZa');
 
-  return axios.post('image', data, config).then(r => (r.data));
+  return axios
+    .post('image', data, config)
+    .then(r=>{return r.data});
 }

@@ -13,8 +13,7 @@ class App extends Component {
     super(props);
     if (process.env.NODE_ENV === 'production') {
       init(() => { this.props.dispatch(fbLoaded()); });
-    }
-    else {
+    } else {
       // appLogin('id', 'name');
       this.props.dispatch(appAuth());
     }

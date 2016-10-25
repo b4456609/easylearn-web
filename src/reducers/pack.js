@@ -2,7 +2,6 @@ import {
   NEW_PACK,
   REMOVE_PACK,
   NEW_VERSION,
-  NEW_NOTE,
   SUCCESS_LOAD_PACK,
 } from '../actions';
 
