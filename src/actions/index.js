@@ -96,7 +96,7 @@ export function login() {
     }, () => {
       fbLogin((r) => {
         if (r.status === 'connected') {
-          FB.api('/me', (res) => {
+          window.FB.api('/me', (res) => {
             dispatch(fbLoginSuccess(res.name, res.id, r.authResponse.accessToken));
           });
         } else {
@@ -174,7 +174,7 @@ export const NEW_PACK = 'NEW_PACK';
 export function newPack(id, title, description, isPublic, content, userId, userName, file) {
   if (file != null) {
     return (dispatch, getState) => {
-      dispatch(showDialog('LOADING_DIALOG'))
+      dispatch(showDialog('LOADING_DIALOG'));
       uploadImg(file).then((response) => {
         const filename = response.data.link.substr(response.data.link.lastIndexOf('/') + 1);
         const pack = newPackFactory(id, title, description, isPublic,
@@ -290,6 +290,9 @@ export function newComment(userId, userName, content, noteId) {
     type: NEW_COMMENT,
     id: `comment${time}`,
     createTime: time,
-    userId, userName, content, noteId,
+    userId,
+    userName,
+    content,
+    noteId,
   };
 }
