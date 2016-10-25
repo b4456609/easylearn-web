@@ -20,6 +20,10 @@ class App extends Component {
     }
   }
 
+  componentDidUpdate() {
+    window.componentHandler.upgradeDom();
+  }
+
   render() {
     if (this.props.initState === 'init' || this.props.initState === 'USER_FB_LOGIN_SUCCESS') {
       return (
