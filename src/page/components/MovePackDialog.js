@@ -50,7 +50,7 @@ class MovePackDialog extends React.Component {
     );
   }
 
-  actionList(){
+  actionList() {
     if (this.props.folder.length === 0) {
       return (
         <div className="mdl-dialog__actions">

@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { hideDialog, removePack } from '../../actions';
 import mdlUpgrade from '../../utils/mdlUpgrade';
 
 class LoadingDialog extends React.Component {
