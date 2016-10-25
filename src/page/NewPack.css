@@ -11,3 +11,12 @@
 .pack-content p{
   font-size: 1.5em !important;
 }
+
+#cover-img{
+  max-width: 500px;
+  margin: 16px 0px;
+}
+
+#file{
+  display: none;
+}

@@ -13,12 +13,13 @@ const FolderView = ({ pack, folderId }) => {
           description={i.description}
           id={i.id}
           folderId={folderId}
+          imgUrl={i.coverFilename}
         />
       )
     ));
   } else {
     content = (
-      <div style={{width:'100%',margin:'36px', textAlign: 'center', color:'grey'}}>
+      <div style={{ width: '100%', margin: '36px', textAlign: 'center', color: 'grey' }}>
         <i
           className="material-icons"
           style={{
