@@ -1,5 +1,9 @@
-body, span {
+body {
   margin: 0;
   padding: 0;
+  font-family: "Roboto","Helvetica","Arial",sans-serif, "Microsoft JhengHei", "Microsoft YaHei" !important;
+}
+
+span {
   font-family: "Roboto","Helvetica","Arial",sans-serif, "Microsoft JhengHei", "Microsoft YaHei" !important;
 }
