@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-// import TinyMCE from 'react-tinymce';
+import TinyMCE from 'react-tinymce';
 import React from 'react';
 import './NewPack.css';
 import { newPack } from '../actions';
@@ -17,9 +17,17 @@ class NewPack extends React.Component {
     this.onFinish = this.onFinish.bind(this);
   }
 
+  componentWillMount() {
+    document.addEventListener('mdl-componentupgraded', function(e) {
+      tinymce.init({
+        selector: "#editable",
+      });
+    });
+  }
+
   componentDidMount() {
     // eslint-disable-next-line
-    new MediumEditor('#editable');
+    // new MediumEditor('#editable');
     document.getElementById('file').onchange = (event) => {
       const input = event.target;
       if (input.files && input.files[0]) {
@@ -31,6 +39,10 @@ class NewPack extends React.Component {
         this.state.file = input.files[0];
       }
     };
+  }
+
+  componentWillUnmount() {
+    tinymce.remove();
   }
 
   onFinish() {
