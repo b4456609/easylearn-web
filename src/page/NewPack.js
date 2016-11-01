@@ -53,6 +53,25 @@ class NewPack extends React.Component {
     this.props.dispatch(newPack(id, title, description, isPublic, content, userId, userName, file));
   }
 
+  getYoutubeDialog() {
+    return (
+      <dialog className="mdl-dialog">
+        <h4 className="mdl-dialog__title">
+          插入Youtube
+        </h4>
+        <div className="mdl-dialog__content">
+          <div className="mdl-textfield mdl-js-textfield">
+            <input className="mdl-textfield__input" type="text" id="sample1" />
+              <label className="mdl-textfield__label" htmlFor="sample1">Text...</label>
+            </div>
+        </div>
+        <div className="mdl-dialog__actions">
+          {this.actionList()}
+        </div>
+      </dialog>
+    );
+  }
+
   render() {
     const top = (
       <div className="mdl-grid">
