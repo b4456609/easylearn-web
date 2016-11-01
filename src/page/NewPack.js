@@ -5,6 +5,7 @@ import './NewPack.css';
 import { newPack } from '../actions';
 import img from '../img/305.png';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
+import Editor from '../api/editor.js';
 
 class NewPack extends React.Component {
 
@@ -19,15 +20,12 @@ class NewPack extends React.Component {
 
   componentWillMount() {
     document.addEventListener('mdl-componentupgraded', function(e) {
-      tinymce.init({
-        selector: "#editable",
-      });
+      Editor.init();
     });
   }
 
   componentDidMount() {
     // eslint-disable-next-line
-    // new MediumEditor('#editable');
     document.getElementById('file').onchange = (event) => {
       const input = event.target;
       if (input.files && input.files[0]) {
@@ -46,7 +44,7 @@ class NewPack extends React.Component {
   }
 
   onFinish() {
-    const content = document.getElementById('editable').innerHTML;
+    const content = Editor.getContent();
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
     const { isPublic, file } = this.state;
@@ -56,62 +54,76 @@ class NewPack extends React.Component {
   }
 
   render() {
+    const top = (
+      <div className="mdl-grid">
+        <div className="mdl-cell mdl-cell--4-col mdl-cell--6-col-desktop">
+          <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label text-field">
+            <input className="mdl-textfield__input" type="text" id="title" />
+            <label className="mdl-textfield__label" htmlFor="title">名稱</label>
+          </div>
+        </div>
+        <div className="mdl-cell mdl-cell--4-col mdl-cell--6-col-desktop">
+          <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label text-field">
+            <input className="mdl-textfield__input" type="text" id="description" />
+            <label className="mdl-textfield__label" htmlFor="description">描述</label>
+          </div>
+        </div>
+        <div className="mdl-cell mdl-cell--4-col mdl-cell--6-col-desktop">
+          <input type="file" id="file" />
+          <label htmlFor="file" className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+            選擇封面照片
+          </label>
+        </div>
+        <div className="mdl-cell mdl-cell--4-col mdl-cell--6-col-desktop">
+          <label
+            className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+            htmlFor="public-checkbox"
+          >
+            <input
+              type="checkbox"
+              id="public-checkbox"
+              className="mdl-checkbox__input"
+              defaultChecked
+            />
+            <span className="mdl-checkbox__label">公開此懶人包</span>
+          </label>
+        </div>
+        <div className="mdl-cell mdl-cell--12-col">
+          <img id="cover-img" alt="pack's cover img" src={img} />
+        </div>
+      </div>
+    );
+
+    const middle = (
+        <div className="mdl-grid mdl-grid--no-spacing">
+          <div className="mdl-cell mdl-cell--12-col mdl-cell--10-col-desktop mdl-cell--1-offset-desktop">
+            <div id="editor" className="pack-content" />
+          </div>
+        </div>
+    );
+
+    const bottom = (
+      <div className="mdl-grid">
+        <div className="mdl-cell mdl-cell--4-col">
+          <button className="mdl-button mdl-js-button
+            mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick={this.onFinish}>
+            完成
+          </button>
+        </div>
+      </div>
+    );
+
     return (
-      <div className="demo-container mdl-grid">
-        <div className="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone" />
-        <div
-          className="demo-content
-          mdl-color--white mdl-shadow--4dp content
-          mdl-color-text--grey-800 mdl-cell mdl-cell--10-col"
-        >
-          <div className="mdl-grid">
-            <div className="mdl-cell--4-col mdl-cell--6-col-desktop text-field">
-              <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input className="mdl-textfield__input" type="text" id="title" />
-                <label className="mdl-textfield__label" htmlFor="title">名稱</label>
-              </div>
-            </div>
-            <div className="mdl-cell--4-col mdl-cell--6-col-desktop text-field">
-              <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input className="mdl-textfield__input" type="text" id="description" />
-                <label className="mdl-textfield__label" htmlFor="description">描述</label>
-              </div>
-            </div>
-            <div className="mdl-cell--4-col mdl-cell--6-col-desktop">
-              <input type="file" id="file" />
-              <label htmlFor="file" className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                選擇封面照片
-              </label>
-            </div>
-            <div className="mdl-cell--4-col mdl-cell--6-col-desktop">
-              <label
-                className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
-                htmlFor="public-checkbox"
-              >
-                <input
-                  type="checkbox"
-                  id="public-checkbox"
-                  className="mdl-checkbox__input"
-                  defaultChecked
-                />
-                <span className="mdl-checkbox__label">公開</span>
-              </label>
-            </div>
-            <div className="mdl-cell--12-col">
-              <img id="cover-img" alt="pack's cover img" src={img} />
-            </div>
-            <div className="mdl-cell--12-col">
-              <div id="editable" className="pack-content" />
-            </div>
-            <div className="mdl-cell--12-col">
-              <button
-                className="mdl-button mdl-js-button
-                mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                onClick={this.onFinish}
-              >
-                完成
-              </button>
-            </div>
+      <div>
+        <div className="mdl-grid mdl-grid--no-spacing">
+          <div className="mdl-cell mdl-cell--12-col mdl-cell--10-col-desktop mdl-cell--1-offset-desktop">
+            {top}
+          </div>
+        </div>
+        {middle}
+        <div className="mdl-grid mdl-grid--no-spacing">
+          <div className="mdl-cell mdl-cell--12-col mdl-cell--10-col-desktop mdl-cell--1-offset-desktop">
+            {bottom}
           </div>
         </div>
       </div>
