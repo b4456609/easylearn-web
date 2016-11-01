@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
-import TinyMCE from 'react-tinymce';
 import React from 'react';
 import './NewPack.css';
 import { newPack } from '../actions';
 import img from '../img/305.png';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
-import Editor from '../api/editor.js';
+import Editor from './components/components/Editor.js';
+import EditorApi from '../api/editor.js';
 
 class NewPack extends React.Component {
 
@@ -16,12 +16,6 @@ class NewPack extends React.Component {
       file: null,
     };
     this.onFinish = this.onFinish.bind(this);
-  }
-
-  componentWillMount() {
-    document.addEventListener('mdl-componentupgraded', function(e) {
-      Editor.init();
-    });
   }
 
   componentDidMount() {
@@ -39,37 +33,14 @@ class NewPack extends React.Component {
     };
   }
 
-  componentWillUnmount() {
-    tinymce.remove();
-  }
-
   onFinish() {
-    const content = Editor.getContent();
+    const content = EditorApi.getContent();
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
     const { isPublic, file } = this.state;
     const { userId, userName } = this.props;
     const id = 'pack' + new Date().getTime();
     this.props.dispatch(newPack(id, title, description, isPublic, content, userId, userName, file));
-  }
-
-  getYoutubeDialog() {
-    return (
-      <dialog className="mdl-dialog">
-        <h4 className="mdl-dialog__title">
-          插入Youtube
-        </h4>
-        <div className="mdl-dialog__content">
-          <div className="mdl-textfield mdl-js-textfield">
-            <input className="mdl-textfield__input" type="text" id="sample1" />
-              <label className="mdl-textfield__label" htmlFor="sample1">Text...</label>
-            </div>
-        </div>
-        <div className="mdl-dialog__actions">
-          {this.actionList()}
-        </div>
-      </dialog>
-    );
   }
 
   render() {
@@ -116,7 +87,7 @@ class NewPack extends React.Component {
     const middle = (
         <div className="mdl-grid mdl-grid--no-spacing">
           <div className="mdl-cell mdl-cell--12-col mdl-cell--10-col-desktop mdl-cell--1-offset-desktop">
-            <div id="editor" className="pack-content" />
+            <Editor />
           </div>
         </div>
     );
@@ -125,7 +96,8 @@ class NewPack extends React.Component {
       <div className="mdl-grid">
         <div className="mdl-cell mdl-cell--4-col">
           <button className="mdl-button mdl-js-button
-            mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick={this.onFinish}>
+            mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick={this.onFinish}
+          >
             完成
           </button>
         </div>
