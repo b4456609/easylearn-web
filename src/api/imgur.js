@@ -31,3 +31,11 @@ export function uploadImg(file) {
     .post('image', data, uploadConfig)
     .then(r=>{return r.data});
 }
+
+export function uploadMultipleImg(imgurlArray) {
+  console.log(imgurlArray);
+  const array = imgurlArray.map(i => {
+    return uploadImg(i)
+  });
+  return Promise.all(array);
+}

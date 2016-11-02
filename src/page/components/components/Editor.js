@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import EditorApi from '../../../api/editor.js';
 import YoutubeApi from '../../../api/youtube.js';
-import { uploadImg } from '../../../api/imgur.js';
+import SlideshareApi from '../../../api/slideshare.js';
+import { uploadImg, uploadMultipleImg } from '../../../api/imgur.js';
 import { showDialog, hideDialog } from '../../../actions';
 
 class Editor extends React.Component {
@@ -12,6 +13,10 @@ class Editor extends React.Component {
     this.state = {
       img: null,
     };
+    this.onSlideshareClose = this.onSlideshareClose.bind(this);
+    this.onSlideshareSubmit = this.onSlideshareSubmit.bind(this);
+    this.onSlideshareButton = this.onSlideshareButton.bind(this);
+    this.getSlideshareDialog = this.getSlideshareDialog.bind(this);
     this.onClickImgButton = this.onClickImgButton.bind(this);
     this.onImageSubmit = this.onImageSubmit.bind(this);
     this.onImageClose = this.onImageClose.bind(this);
@@ -29,6 +34,85 @@ class Editor extends React.Component {
   componentWillUnmount() {
     document.removeEventListener('mdl-componentupgraded', this.editorInit);
     EditorApi.remove();
+  }
+
+  onSlideshareButton() {
+    const dialog = document.getElementById('slideshare-dialog');
+    dialog.showModal();
+  }
+
+  onSlideshareClose() {
+    const dialog = document.getElementById('slideshare-dialog');
+    dialog.close();
+  }
+
+  onSlideshareSubmit() {
+    const slideshareUrl = document.getElementById('slideshare-url').value.trim();
+    const start = parseInt(document.getElementById('slideshare-start').value.trim());
+    const end = parseInt(document.getElementById('slideshare-end').value.trim());
+
+    if (slideshareUrl === '') {
+      const snackbarContainer = document.querySelector('#easylearn-toast');
+      snackbarContainer.MaterialSnackbar.showSnackbar({ message: '網址不能空白' });
+    } else {
+      this.onSlideshareClose();
+      this.props.dispatch(showDialog('LOADING_DIALOG'));
+
+      SlideshareApi
+        .getSlideshareImg(slideshareUrl, start, end)
+        .then((data) => {
+          uploadMultipleImg(data.img)
+            .then((response) => {
+              console.log(response);
+              for (let data of response){
+                const link = data.data.link;
+                const img = `<img src="${link}" style='max-width:100% !important; height:auto;' >`;
+                EditorApi.insertContent(img);
+              }
+            })
+            .then(() => {
+              this.props.dispatch(hideDialog());
+            })
+            .catch(() => {
+              this.props.dispatch(hideDialog());
+            });
+        })
+        .catch(() => {
+          this.props.dispatch(hideDialog());
+        });;
+    }
+  }
+
+  getSlideshareDialog() {
+    return (
+      <dialog className="mdl-dialog" id="slideshare-dialog">
+        <h4 className="mdl-dialog__title">
+          插入Slideshare
+        </h4>
+        <div className="mdl-dialog__content">
+          <div className="mdl-textfield mdl-js-textfield">
+            <input className="mdl-textfield__input" type="text" id="slideshare-url" />
+            <label className="mdl-textfield__label" htmlFor="slideshare-url">slideshare網址</label>
+          </div>
+          <div className="mdl-textfield mdl-js-textfield">
+            <input className="mdl-textfield__input" type="text" id="slideshare-start" />
+            <label className="mdl-textfield__label" htmlFor="slideshare-start">開始頁數</label>
+          </div>
+          <div className="mdl-textfield mdl-js-textfield">
+            <input className="mdl-textfield__input" type="text" id="slideshare-end" />
+            <label className="mdl-textfield__label" htmlFor="slideshare-end">結束頁數</label>
+          </div>
+        </div>
+        <div className="mdl-dialog__actions">
+          <button type="button" className="mdl-button" onClick={this.onSlideshareSubmit}>完成</button>
+          <button
+            type="button"
+            className="mdl-button close"
+            onClick={this.onSlideshareClose}
+          >取消</button>
+        </div>
+      </dialog>
+    );
   }
 
   onClickImgButton() {
@@ -152,7 +236,7 @@ class Editor extends React.Component {
   }
 
   editorInit() {
-    EditorApi.init(this.onClickImgButton, null, this.onClickYoutubeButton, null);
+    EditorApi.init(this.onClickImgButton, this.onSlideshareButton, this.onClickYoutubeButton, null);
   }
 
   render() {
@@ -161,6 +245,7 @@ class Editor extends React.Component {
         <div id="editor" className="pack-content" />
         {this.getYoutubeDialog()}
         {this.getImageDialog()}
+        {this.getSlideshareDialog()}
       </div>
     );
   }
