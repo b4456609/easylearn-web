@@ -67,7 +67,7 @@ function getSelectionCoords() {
 
 function paintNote(range, noteId, classColor, content) {
   const span = document.createElement('span');
-  span.className = 'note ' + classColor;
+  span.className = `note ${classColor}`;
   span.setAttribute('id', noteId);
   range.surroundContents(span);
   const div = document.createElement('span');
@@ -118,7 +118,7 @@ class Pack extends React.Component {
     document.onmouseup = null;
   }
 
-  noteRegister(){
+  noteRegister() {
     const notes = document.getElementsByClassName('note');
     for (let i = 0; i < notes.length; i++) {
       const note = notes[i];
@@ -175,12 +175,10 @@ class Pack extends React.Component {
   render() {
     return (
       <div>
-        <div className="demo-container mdl-grid">
+        <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone" />
           <div
-            className="demo-content
-            mdl-color--white mdl-shadow--4dp content
-            mdl-color-text--grey-800 mdl-cell mdl-cell--8-col"
+            className="mdl-cell mdl-cell--8-col"
           >
             <h3>
               {this.props.pack.name}
