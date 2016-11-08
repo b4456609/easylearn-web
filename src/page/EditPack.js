@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-// import TinyMCE from 'react-tinymce';
 import React from 'react';
 import './NewPack.css';
 import { newVersion } from '../actions';
-// import Editor from './components/Editor';
+import Editor from './components/components/Editor.js';
+import EditorApi from '../api/editor.js';
+import mdlUpgrade from '../utils/mdlUpgrade.js';
 
 
 class NewPack extends React.Component {
@@ -18,13 +19,11 @@ class NewPack extends React.Component {
   }
 
   componentDidMount() {
-    // eslint-disable-next-line
-    new MediumEditor('#editable');
-    componentHandler.upgradeElements(document.getElementById('finish-btn'));
+
   }
 
   onFinish() {
-    const content = document.getElementById('editable').innerHTML;
+    const content = EditorApi.getContent();
     const { userId, userName, packId } = this.props;
     const versionId = `version${new Date().getTime()}`;
     this.props.dispatch(newVersion(packId, versionId, content, userId, userName));
@@ -33,30 +32,35 @@ class NewPack extends React.Component {
 
   render() {
     return (
-      <div className="demo-container mdl-grid">
-        <div className="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone" />
-        <div
-          className="demo-content
-          mdl-color--white mdl-shadow--4dp content
-          mdl-color-text--grey-800 mdl-cell mdl-cell--10-col"
-        >
-          <div className="mdl-grid">
-            <div className="mdl-cell--12-col">
-              <div
-                id="editable"
-                className="pack-content"
-                dangerouslySetInnerHTML={{ __html: this.props.content }}
-              />
-            </div>
-            <div className="mdl-cell--12-col" id="finish-btn">
-              <button
-                className="mdl-button mdl-js-button
-                mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                onClick={this.onFinish}
-              >
-                Finish
-              </button>
-            </div>
+      <div>
+        <div className="mdl-grid">
+          <div
+            className="mdl-cell--12-col
+            mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
+            id="finish-btn"
+          />
+        </div>
+        <div className="mdl-grid mdl-grid--no-spacing">
+          <div
+            className="mdl-cell mdl-cell--12-col
+            mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
+          >
+            <Editor />
+          </div>
+        </div>
+        <div className="mdl-grid">
+          <div
+            className="mdl-cell--12-col
+            mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
+            id="finish-btn"
+          >
+            <button
+              className="mdl-button mdl-js-button
+              mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+              onClick={this.onFinish}
+            >
+              完成
+            </button>
           </div>
         </div>
       </div>
@@ -76,4 +80,4 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(
   mapStateToProps
-)(NewPack);
+)(mdlUpgrade(NewPack));
