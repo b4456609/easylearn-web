@@ -31,17 +31,19 @@ class ListVersionDialog extends React.Component {
         <div className="mdl-dialog__content">
           <ul className="demo-list-control mdl-list">
             {this.props.version.map((i) => {
-              let check = (<input
-                type="radio"
-                id={`list-option-${i.createTime}`}
-                className="mdl-radio__button"
-                name="options"
-                value="1"
-                onClick={() => {
-                  browserHistory.push(`/pack/${this.props.packId}/${i.id}`);
-                  this.onCloseClick();
-                }}
-              />);
+              console.log(i, this.props);
+              let check = (
+                <input
+                  type="radio"
+                  id={`list-option-${i.createTime}`}
+                  className="mdl-radio__button"
+                  name="options"
+                  onClick={() => {
+                    browserHistory.push(`/pack/${this.props.packId}/${i.id}`);
+                    this.onCloseClick();
+                  }}
+                />
+              );
 
               if (i.id === this.props.versionId) {
                 check = (<input
@@ -49,7 +51,6 @@ class ListVersionDialog extends React.Component {
                   id={`list-option-${i.createTime}`}
                   className="mdl-radio__button"
                   name="options"
-                  value="1"
                   onClick={() => {
                     browserHistory.push(`/pack/${this.props.packId}/${i.id}`);
                     this.onCloseClick();
@@ -86,7 +87,7 @@ class ListVersionDialog extends React.Component {
 
 ListVersionDialog.propTypes = {
   version: React.PropTypes.arrayOf(React.PropTypes.shape({
-    createTime: React.PropTypes.string.isRequired,
+    createTime: React.PropTypes.number.isRequired,
     id: React.PropTypes.string.isRequired,
   })).isRequired,
   versionId: React.PropTypes.string.isRequired,
@@ -96,8 +97,8 @@ ListVersionDialog.propTypes = {
 
 export default connect(
   (state, ownProps) => ({
+    versionId: state.dialog.modalProps.versionId,
     packId: ownProps.params.id,
-    versionId: ownProps.params.versionId,
     version: state.pack
       .find(i => i.id === ownProps.params.id)
       .version

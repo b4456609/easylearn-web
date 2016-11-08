@@ -16,7 +16,7 @@ function mapStateToProps(state, ownProps) {
   } else if (ownProps.location.pathname.indexOf('/pack') !== -1) {
     title = ownProps.params.id && state.pack.find(i => i.id === ownProps.params.id).name;
     packId = ownProps.params.id;
-    let pack = state.pack.find(i => i.id === ownProps.params.id);
+    const pack = state.pack.find(i => i.id === packId);
     pack.version.sort((a, b) => b.createTime - a.createTime);
     versionId = ownProps.params.versionId || pack.version[0].id;
   } else if (ownProps.location.pathname.indexOf('/folder') !== -1) {
@@ -39,8 +39,8 @@ function mapDispatchToProps(dispatch) {
     removeFolder: (folderId) => {
       dispatch(removeFolder(folderId));
     },
-    showListVersionDialog: () => {
-      dispatch(showDialog('LIST_VERSION_DIALOG'));
+    showListVersionDialog: (versionId) => {
+      dispatch(showDialog('LIST_VERSION_DIALOG', { versionId }));
     },
   };
 }

@@ -3,11 +3,11 @@ import FolderAction from './components/FolderAction';
 import PackAction from './components/PackAction';
 
 const Header = ({ title, removeFolder, folderId, packId, versionId, showListVersionDialog }) => {
-  let action = undefined;
+  let action;
   if (folderId !== null && folderId !== 'all') {
     action = <FolderAction removeFolder={removeFolder} folderId={folderId} />;
   } else if (packId != null) {
-    action = <PackAction packId={packId} versionId={versionId} showListVersionDialog={showListVersionDialog}/>
+    action = <PackAction packId={packId} versionId={versionId} showListVersionDialog={showListVersionDialog} />;
   }
   return (
     <header className="mdl-layout__header">

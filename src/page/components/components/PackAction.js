@@ -2,14 +2,14 @@ import { browserHistory } from 'react-router';
 import React from 'react';
 import mdlUpgrade from '../../../utils/mdlUpgrade.js';
 
-class PackAction extends React.Component{
+class PackAction extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  render(){
+  render() {
     return (
-      <div id="test">
+      <div>
         <button
           id="appbar-menu-lower-right"
           className="mdl-button mdl-js-button mdl-button--icon"
@@ -30,7 +30,7 @@ class PackAction extends React.Component{
           </li>
           <li
             className="mdl-menu__item"
-            onClick={this.props.showListVersionDialog}
+            onClick={() => { this.props.showListVersionDialog(this.props.versionId); }}
           >
             查看其他版本
           </li>
