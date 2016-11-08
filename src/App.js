@@ -47,6 +47,10 @@ class App extends Component {
           </div>
         </main>
         <ModalRoot {...this.props} />
+        <div id="easylearn-toast" className="mdl-js-snackbar mdl-snackbar">
+          <div className="mdl-snackbar__text" />
+          <button className="mdl-snackbar__action" type="button" />
+        </div>
       </div>
       );
   }

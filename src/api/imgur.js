@@ -17,17 +17,23 @@ export function uploadImg(file) {
   data.append('image', file);
   data.append('album', 'dvtm9wHkgA5cbZa');
 
-  let uploadConfig = Object.assign({}, config,
-  {
-    onUploadProgress: function(progressEvent) {
-      var percentCompleted = progressEvent.loaded / progressEvent.total;
-      console.log(percentCompleted);
-    }
-  });
+  const uploadConfig = Object.assign({}, config,
+    {
+      onUploadProgress(progressEvent) {
+        const percentCompleted = progressEvent.loaded / progressEvent.total;
+        console.log(percentCompleted);
+      }
+    });
 
   console.log(uploadConfig);
 
   return axios
     .post('image', data, uploadConfig)
-    .then(r=>{return r.data});
+    .then(r => (r.data));
+}
+
+export function uploadMultipleImg(imgurlArray) {
+  console.log(imgurlArray);
+  const array = imgurlArray.map(i => (uploadImg(i)));
+  return Promise.all(array);
 }

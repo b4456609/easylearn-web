@@ -1,5 +1,5 @@
-.text-field{
-  padding: 0px 5px 15px 5px;
+.text-field {
+  width: 100%;
 }
 
 .pack-content {
@@ -7,16 +7,16 @@
   margin: 16px 0;
 }
 
-
-.pack-content p{
+.pack-content p {
   font-size: 1.5em !important;
 }
 
-#cover-img{
+#cover-img {
+  width: 100%;
   max-width: 500px;
   margin: 16px 0px;
 }
 
-#file{
+#file {
   display: none;
 }
