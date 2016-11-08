@@ -195,7 +195,7 @@ class Pack extends React.Component {
             className="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
             onClick={this.onFloatBtnClick}
           >
-            <i className="material-icons">add</i>
+            <i className="material-icons">note_add</i>
           </button>
         </div>
         <dialog className="mdl-dialog" id="note-dialog">

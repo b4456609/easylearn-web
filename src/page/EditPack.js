@@ -18,10 +18,6 @@ class NewPack extends React.Component {
     this.onFinish = this.onFinish.bind(this);
   }
 
-  componentDidMount() {
-
-  }
-
   onFinish() {
     const content = EditorApi.getContent();
     const { userId, userName, packId } = this.props;
@@ -45,7 +41,7 @@ class NewPack extends React.Component {
             className="mdl-cell mdl-cell--12-col
             mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
           >
-            <Editor />
+            <Editor content={this.props.content} />
           </div>
         </div>
         <div className="mdl-grid">

@@ -238,7 +238,7 @@ class Editor extends React.Component {
   }
 
   editorInit() {
-    EditorApi.init(this.onClickImgButton, this.onSlideshareButton, this.onClickYoutubeButton, null);
+    EditorApi.init(this.onClickImgButton, this.onSlideshareButton, this.onClickYoutubeButton, this.props.content);
   }
 
   render() {
@@ -255,6 +255,7 @@ class Editor extends React.Component {
 
 Editor.propTypes = {
   dispatch: React.PropTypes.func.isRequired,
+  content: React.PropTypes.string,
 };
 
 export default connect()(Editor);
