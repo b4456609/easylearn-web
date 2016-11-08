@@ -5,7 +5,7 @@ import mdlUpgrade from '../../utils/mdlUpgrade';
 
 class RemovePackDialog extends React.Component {
   componentDidMount() {
-    this.dialog = document.querySelector('dialog');
+    this.dialog = document.querySelector('#remove-pack-dialog');
     this.dialog.showModal();
   }
 
@@ -15,7 +15,7 @@ class RemovePackDialog extends React.Component {
 
   render() {
     return (
-      <dialog className="mdl-dialog">
+      <dialog className="mdl-dialog" id="remove-pack-dialog">
         <h4 className="mdl-dialog__title">
           刪除懶人包
         </h4>

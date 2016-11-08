@@ -14,7 +14,7 @@ class NewFolderDialog extends React.Component {
   }
 
   componentDidMount() {
-    this.dialog = document.querySelector('dialog');
+    this.dialog = document.querySelector('#new-folder-dialog');
     this.dialog.showModal();
   }
 
@@ -31,7 +31,7 @@ class NewFolderDialog extends React.Component {
 
   render() {
     return (
-      <dialog className="mdl-dialog">
+      <dialog className="mdl-dialog" id="new-folder-dialog">
         <h4 className="mdl-dialog__title">
           新增資料夾
         </h4>

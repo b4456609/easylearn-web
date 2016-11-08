@@ -13,7 +13,7 @@ class MovePackDialog extends React.Component {
   }
 
   componentDidMount() {
-    this.dialog = document.querySelector('dialog');
+    this.dialog = document.querySelector('#moving-dialog');
     this.dialog.showModal();
   }
 
@@ -68,7 +68,7 @@ class MovePackDialog extends React.Component {
 
   render() {
     return (
-      <dialog className="mdl-dialog">
+      <dialog className="mdl-dialog" id="moving-dialog">
         <h4 className="mdl-dialog__title">
           放入...
         </h4>
