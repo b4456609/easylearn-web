@@ -10,18 +10,30 @@ class PackCard extends React.Component {
     super(props);
     this.goto = this.goto.bind(this);
     this.getImg = this.getImg.bind(this);
+    this.getToolTip = this.getToolTip.bind(this);
   }
 
   goto() {
     this.context.router.push(`/pack/${this.props.id}`);
   }
 
-  getImg(){
-    if(this.props.imgUrl === '')
+  getImg() {
+    if (this.props.imgUrl === '') {
       return img;
-    else {
-      return `http://i.imgur.com/${this.props.imgUrl}`
     }
+    else {
+      return `http://i.imgur.com/${this.props.imgUrl}`;
+    }
+  }
+
+  getToolTip() {
+    console.log(this.props.isPublic);
+    if (!this.props.isPublic) {
+      return (
+        <i id={`pack-tooltip-${this.props.id}`} className="material-icons mdl-color-text--grey-600">person</i>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -34,7 +46,7 @@ class PackCard extends React.Component {
       >
         放到資料夾
       </li>);
-    if (this.props.folderId !== 'all')
+    if (this.props.folderId !== 'all') {
       menu = (
         <li
           className="mdl-menu__item"
@@ -43,7 +55,9 @@ class PackCard extends React.Component {
           }}
         >
           移出資料夾
-        </li>);
+        </li>
+      );
+    }
     return (
       <div className="mdl-cell mdl-cell--4-col">
         <div className="demo-card-wide mdl-card mdl-shadow--2dp">
@@ -67,13 +81,15 @@ class PackCard extends React.Component {
             >
               閱讀
             </a>
+            <div className="mdl-layout-spacer" />
+            {this.getToolTip()}
           </div>
           <div className="mdl-card__menu">
             <button
               id={`pack-menu-${this.props.id}`}
               className="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"
             >
-              <i className="material-icons">more_vert</i>
+              <i className="material-icons mdl-color-text--grey-700">more_vert</i>
             </button>
             <ul
               className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
@@ -91,6 +107,9 @@ class PackCard extends React.Component {
             </ul>
           </div>
         </div>
+        <span className="mdl-tooltip" data-mdl-for={`pack-tooltip-${this.props.id}`}>
+          私有的懶人包
+        </span>
       </div>
     );
   }
@@ -107,6 +126,7 @@ PackCard.propTypes = {
   imgUrl: PropTypes.string.isRequired,
   folderId: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
+  isPublic: PropTypes.bool,
 };
 
 export default connect(

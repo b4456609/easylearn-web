@@ -12,7 +12,6 @@ class NewPack extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      isPublic: true,
       file: null,
     };
     this.onFinish = this.onFinish.bind(this);
@@ -37,9 +36,10 @@ class NewPack extends React.Component {
     const content = EditorApi.getContent();
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
-    const { isPublic, file } = this.state;
+    const isPublic = document.querySelector('#public-checkbox').checked;
+    const { file } = this.state;
     const { userId, userName } = this.props;
-    const id = 'pack' + new Date().getTime();
+    const id = `pack${new Date().getTime()}`;
     this.props.dispatch(newPack(id, title, description, isPublic, content, userId, userName, file));
   }
 
@@ -58,13 +58,7 @@ class NewPack extends React.Component {
             <label className="mdl-textfield__label" htmlFor="description">描述</label>
           </div>
         </div>
-        <div className="mdl-cell mdl-cell--4-col mdl-cell--6-col-desktop">
-          <input type="file" id="file" />
-          <label htmlFor="file" className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-            選擇封面照片
-          </label>
-        </div>
-        <div className="mdl-cell mdl-cell--4-col mdl-cell--6-col-desktop">
+        <div className="mdl-cell mdl-cell--4-col mdl-cell--6-col-desktop public-div">
           <label
             className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
             htmlFor="public-checkbox"
@@ -73,29 +67,40 @@ class NewPack extends React.Component {
               type="checkbox"
               id="public-checkbox"
               className="mdl-checkbox__input"
-              defaultChecked
             />
             <span className="mdl-checkbox__label">公開此懶人包</span>
           </label>
         </div>
-        <div className="mdl-cell mdl-cell--12-col">
+        <div className="mdl-cell mdl-cell--4-col mdl-cell--6-col-desktop">
+          <input type="file" id="file" />
+          <label
+            htmlFor="file"
+            className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+          >
+            更換封面照片
+          </label>
+        </div>
+        <div className="mdl-cell mdl-cell--12-col mdl-typography--text-center">
           <img id="cover-img" alt="pack's cover img" src={img} />
         </div>
       </div>
     );
 
     const middle = (
-        <div className="mdl-grid mdl-grid--no-spacing">
-          <div className="mdl-cell mdl-cell--12-col mdl-cell--10-col-desktop mdl-cell--1-offset-desktop">
-            <Editor />
-          </div>
+      <div className="mdl-grid mdl-grid--no-spacing">
+        <div
+          className="mdl-cell mdl-cell--12-col mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
+        >
+          <Editor />
         </div>
+      </div>
     );
 
     const bottom = (
       <div className="mdl-grid">
         <div className="mdl-cell mdl-cell--4-col">
-          <button className="mdl-button mdl-js-button
+          <button
+            className="mdl-button mdl-js-button
             mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick={this.onFinish}
           >
             完成
@@ -107,13 +112,19 @@ class NewPack extends React.Component {
     return (
       <div>
         <div className="mdl-grid mdl-grid--no-spacing">
-          <div className="mdl-cell mdl-cell--12-col mdl-cell--10-col-desktop mdl-cell--1-offset-desktop">
+          <div
+            className="mdl-cell mdl-cell--12-col
+            mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
+          >
             {top}
           </div>
         </div>
         {middle}
         <div className="mdl-grid mdl-grid--no-spacing">
-          <div className="mdl-cell mdl-cell--12-col mdl-cell--10-col-desktop mdl-cell--1-offset-desktop">
+          <div
+            className="mdl-cell mdl-cell--12-col
+            mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
+          >
             {bottom}
           </div>
         </div>

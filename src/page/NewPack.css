@@ -11,6 +11,11 @@
   font-size: 1.5em !important;
 }
 
+.public-div{
+  display: flex;
+  align-items: center;
+}
+
 #cover-img {
   width: 100%;
   max-width: 500px;

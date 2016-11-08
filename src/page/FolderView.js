@@ -5,6 +5,7 @@ import PackCard from './components/PackCard';
 const FolderView = ({ pack, folderId }) => {
   let content;
   if (pack.length !== 0) {
+    console.log(pack);
     content = (pack.map(
       i => (
         <PackCard
@@ -14,6 +15,7 @@ const FolderView = ({ pack, folderId }) => {
           id={i.id}
           folderId={folderId}
           imgUrl={i.coverFilename}
+          isPublic={i.isPublic}
         />
       )
     ));
