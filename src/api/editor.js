@@ -2,7 +2,7 @@ function addImgButton(editor, callback) {
   editor.addButton('img', {
     text: 'Img',
     icon: false,
-    onclick: function() {
+    onclick() {
       callback();
     }
   });
@@ -12,7 +12,7 @@ function addSlideshareButton(editor, callback) {
   editor.addButton('slideshare', {
     text: 'Slideshare',
     icon: false,
-    onclick: function() {
+    onclick() {
       callback();
     }
   });
@@ -22,27 +22,28 @@ function addYoutubeButton(editor, callback) {
   editor.addButton('youtube', {
     text: 'Youtube',
     icon: false,
-    onclick: function() {
+    onclick() {
       callback();
     }
   });
 }
 
-let Editor = {
-  init: function(imgcallback, slideshareCallback, youtubeCallback, content) {
+const Editor = {
+  init(imgcallback, slideshareCallback, youtubeCallback, content) {
     console.log('[Editor]init');
     tinymce.init({
-      selector: "#editor",
+      selector: '#editor',
       resize: true,
       min_height: 400,
       // language: 'zh_TW',
-      plugins: "advlist autolink lists link charmap preview hr anchor searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking table contextmenu directionality emoticons paste textcolor colorpicker textpattern imagetools",
-      toolbar1: "insertfile undo redo | styleselect | bold italic strikethrough | bullist numlist | link table",
-      toolbar2: "fullscreen | forecolor backcolor emoticons charmap | youtube slideshare img",
-      setup: function(editor) {
-        editor.on('init', function() {
-          if(typeof content === 'string')
+      plugins: 'advlist autolink lists link charmap preview hr anchor searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking table contextmenu directionality emoticons paste textcolor colorpicker textpattern imagetools',
+      toolbar1: 'insertfile undo redo | styleselect | bold italic strikethrough | bullist numlist | link table',
+      toolbar2: 'fullscreen | forecolor backcolor emoticons charmap | youtube slideshare img',
+      setup(editor) {
+        editor.on('init', () => {
+          if (typeof content === 'string') {
             tinymce.activeEditor.setContent(content);
+          }
         });
         addYoutubeButton(editor, youtubeCallback);
         addSlideshareButton(editor, slideshareCallback);
@@ -51,36 +52,36 @@ let Editor = {
     });
   },
 
-  setContent: function(content) {
+  setContent(content) {
     tinymce.activeEditor.setContent(content);
   },
 
-  getContent: function() {
-    let content = tinymce.activeEditor.getContent();
+  getContent() {
+    const content = tinymce.activeEditor.getContent();
     console.log('[Editor]getContent', content);
     return content;
   },
 
-  onContentChange: function(callback) {
-    tinymce.activeEditor.on('change', function(e) {
+  onContentChange(callback) {
+    tinymce.activeEditor.on('change', (e) => {
       console.log('[Editor]change event');
       callback();
     });
   },
 
-  remove: function() {
+  remove() {
     tinymce.remove('#editor');
   },
 
-  initAndSetContent: function(content) {
+  initAndSetContent(content) {
     console.log('[Editor]initAndSetContent', content);
 
-    this.init(function() {
+    this.init(() => {
       tinymce.activeEditor.setContent(content);
-    })
+    });
   },
 
-  insertContent: function(content) {
+  insertContent(content) {
     console.log('[Editor]insertContet', content);
     tinymce.activeEditor.insertContent(content);
   }

@@ -1,18 +1,21 @@
 {
-    "extends": "eslint-config-airbnb",
-    "rules": {
-        "react/jsx-filename-extension": [1, {
-            "extensions": [".js", ".jsx"]
-        }],
-        "comma-dangle": ["error", "only-multiline"],
-        "no-case-declarations": 0,
-        "quote-props": 0,
-        "class-methods-use-this": 0,
-        "object-property-newline": 1,
-    },
-    "env": {
-      "browser": true,
-      "node": true,
-      "jasmine": true,
-    },
+  "extends": "eslint-config-airbnb",
+  "rules": {
+    "react/jsx-filename-extension": [1, {
+      "extensions": [".js", ".jsx"]
+    }],
+    "comma-dangle": ["error", "only-multiline"],
+    "no-case-declarations": 0,
+    "quote-props": 0,
+    "class-methods-use-this": 0,
+    "object-property-newline": 1,
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jasmine": true,
+  },
+  "globals": {
+    "tinymce": true,
+  }
 }

@@ -1,27 +1,25 @@
 import axios from 'axios';
 import fetchJsonp from 'fetch-jsonp';
 
-let SlideShareApi = {
-  getSlideshareImg: function (user_url, start, end) {
+const SlideShareApi = {
+  getSlideshareImg(userUrl, start, end) {
     // set slideshare url
-    var url = "http://www.slideshare.net/api/oembed/2?url=" + user_url + "&format=json";
+    const url = `http://www.slideshare.net/api/oembed/2?url=${userUrl}&format=json`;
 
-    //set slide share path variable
-    var indexOfSlash = user_url.lastIndexOf('/');
-    indexOfSlash = user_url.lastIndexOf('/', indexOfSlash - 1);
-    var slidesharePath = user_url.substr(indexOfSlash + 1).replace('/', '_');
+    // set slide share path variable
+    let indexOfSlash = userUrl.lastIndexOf('/');
+    indexOfSlash = userUrl.lastIndexOf('/', indexOfSlash - 1);
+    const slidesharePath = userUrl.substr(indexOfSlash + 1).replace('/', '_');
 
     return fetchJsonp(url)
-      .then(function(response) {
-        return response.json()
-      })
+      .then(response => (response.json()))
       .then((data) => {
         console.log('[Slideshare]success', data);
 
-        let result = {
+        const result = {
           path: slidesharePath,
           img: []
-        }
+        };
 
         if (start <= 0 || start === null || start > data.total_slides) {
           start = 1;
@@ -33,13 +31,12 @@ let SlideShareApi = {
         }
         console.log(start, end);
         for (; start <= end; start++) {
-          var imgUrl = 'http:' + data.slide_image_baseurl + start + data.slide_image_baseurl_suffix;
+          const imgUrl = `http:${data.slide_image_baseurl}${start}${data.slide_image_baseurl_suffix}`;
           result.img.push(imgUrl);
         }
-
-        return result
+        return result;
       });
   }
-}
+};
 
 module.exports = SlideShareApi;

@@ -48,8 +48,8 @@ class Editor extends React.Component {
 
   onSlideshareSubmit() {
     const slideshareUrl = document.getElementById('slideshare-url').value.trim();
-    const start = parseInt(document.getElementById('slideshare-start').value.trim());
-    const end = parseInt(document.getElementById('slideshare-end').value.trim());
+    const start = parseInt(document.getElementById('slideshare-start').value.trim(), 10);
+    const end = parseInt(document.getElementById('slideshare-end').value.trim(), 10);
 
     if (slideshareUrl === '') {
       const snackbarContainer = document.querySelector('#easylearn-toast');
@@ -63,9 +63,8 @@ class Editor extends React.Component {
         .then((data) => {
           uploadMultipleImg(data.img)
             .then((response) => {
-              console.log(response);
-              for (let data of response){
-                const link = data.data.link;
+              for (const d of response) {
+                const link = d.data.link;
                 const img = `<img src="${link}" style='max-width:100% !important; height:auto;' >`;
                 EditorApi.insertContent(img);
               }
@@ -79,7 +78,7 @@ class Editor extends React.Component {
         })
         .catch(() => {
           this.props.dispatch(hideDialog());
-        });;
+        });
     }
   }
 
@@ -219,14 +218,17 @@ class Editor extends React.Component {
 
   onYoutubeSubmit() {
     const youtubeUrl = document.getElementById('youtube-url').value.trim();
+    const snackbarContainer = document.querySelector('#easylearn-toast');
     if (youtubeUrl === '') {
-      const snackbarContainer = document.querySelector('#easylearn-toast');
       snackbarContainer.MaterialSnackbar.showSnackbar({ message: '網址不能空白' });
     } else {
       const dialog = document.getElementById('youtube-dialog');
-      dialog.close();
       const code = YoutubeApi.generateYoutubeEmbedCode(youtubeUrl, 0, 0);
+      if (code === null) {
+        snackbarContainer.MaterialSnackbar.showSnackbar({ message: '輸入的Youtube網址不正確' });
+      }
       EditorApi.insertContent(code);
+      dialog.close();
     }
   }
 
@@ -250,5 +252,9 @@ class Editor extends React.Component {
     );
   }
 }
+
+Editor.propTypes = {
+  dispatch: React.PropTypes.func.isRequired,
+};
 
 export default connect()(Editor);
