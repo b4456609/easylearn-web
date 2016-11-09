@@ -8,25 +8,34 @@ function mapStateToProps(state, ownProps) {
   let folderId = null;
   let packId = null;
   let versionId = null;
-  if (!ownProps.location.pathname === '/') {
+  let isEdit = false;
+  const currentPath = ownProps.location.pathname;
+  const currentId = ownProps.params.id;
+  if (!currentPath === '/') {
     title = 'All';
     folderId = 'all';
-  } else if (ownProps.location.pathname === '/new-pack') {
+  } else if (currentPath === '/new-pack') {
     title = '新增懶人包';
-  } else if (ownProps.location.pathname.indexOf('/pack') !== -1) {
-    title = ownProps.params.id && state.pack.find(i => i.id === ownProps.params.id).name;
-    packId = ownProps.params.id;
+  } else if (currentPath.indexOf('/pack') !== -1) {
+    title = currentId && state.pack.find(i => i.id === currentId).name;
+    packId = currentId;
     const pack = state.pack.find(i => i.id === packId);
     pack.version.sort((a, b) => b.createTime - a.createTime);
     versionId = ownProps.params.versionId || pack.version[0].id;
-  } else if (ownProps.location.pathname.indexOf('/folder') !== -1) {
-    title = ownProps.params.id && state.folder.find(i => i.id === ownProps.params.id).name;
-    folderId = ownProps.params.id;
+  } else if (currentPath.indexOf('/folder') !== -1) {
+    title = currentId && state.folder.find(i => i.id === currentId).name;
+    folderId = currentId;
   } else {
     title = 'Easylearn';
   }
+
+  if (ownProps.location.pathname.indexOf('/edit') !== -1) {
+    isEdit = true;
+  }
+
   return {
     initState: state.app.initState,
+    isEdit,
     title,
     folderId,
     packId,
