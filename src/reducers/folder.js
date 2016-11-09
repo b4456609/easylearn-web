@@ -14,11 +14,11 @@ let initState = [
   {
     name: '全部懶人包',
     id: ALL_FOLDER,
-    pack: ['pack1474100598141'],
+    pack: ['pack1474100598141', 'pack1478670701680'],
   }, {
     name: 'a',
     id: 'folder1476756912004',
-    pack: []
+    pack: ['pack1478670701680']
   },
 ];
 
@@ -47,7 +47,7 @@ const folder = (state = initState, action) => {
     case NEW_PACK:
       return state.map((i) => {
         if (i.id !== ALL_FOLDER)
-          return i;
+          { return i; }
         return Object.assign({}, i, {
           pack: [
             ...i.pack,
