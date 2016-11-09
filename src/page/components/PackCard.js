@@ -22,7 +22,7 @@ class PackCard extends React.Component {
       return img;
     }
     else {
-      return `http://i.imgur.com/${this.props.imgUrl}`;
+      return `//i.imgur.com/${this.props.imgUrl}`;
     }
   }
 
