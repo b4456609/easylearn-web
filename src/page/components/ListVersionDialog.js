@@ -31,7 +31,6 @@ class ListVersionDialog extends React.Component {
         <div className="mdl-dialog__content">
           <ul className="demo-list-control mdl-list">
             {this.props.version.map((i) => {
-              console.log(i, this.props);
               let check = (
                 <input
                   type="radio"
@@ -102,11 +101,6 @@ export default connect(
     version: state.pack
       .find(i => i.id === ownProps.params.id)
       .version
-      .map(i => (
-        {
-          createTime: i.createTime,
-          id: i.id,
-        }))
       .sort((a, b) => b.createTime - a.createTime),
   })
 )(mdlUpgrade(ListVersionDialog));
