@@ -11,6 +11,7 @@ class ListVersionDialog extends React.Component {
   constructor(props) {
     super(props);
     this.onCloseClick = this.onCloseClick.bind(this);
+    this.getPrivate = this.getPrivate.bind(this);
   }
 
   componentDidMount() {
@@ -25,6 +26,17 @@ class ListVersionDialog extends React.Component {
   onCloseClick() {
     this.dialog.close();
     this.props.dispatch(hideDialog());
+  }
+
+  getPrivate(isPublic) {
+    if (!isPublic) {
+      return (
+        <span className="mdl-list__item-text-body">
+          私有的版本
+        </span>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -63,10 +75,13 @@ class ListVersionDialog extends React.Component {
                 />);
               }
               return (
-                <li key={i.createTime} className="mdl-list__item">
+                <li key={i.createTime} className="mdl-list__item mdl-list__item--three-line">
                   <span className="mdl-list__item-primary-content">
                     <img className="mdl-list__item-avatar" src={`//graph.facebook.com/${i.creatorUserId}/picture`} alt={name} />
-                    {moment(i.createTime).fromNow()}
+                    <span>
+                      {moment(i.createTime).fromNow()}
+                    </span>
+                    {this.getPrivate(i.isPublic)}
                   </span>
                   <span className="mdl-list__item-secondary-action">
                     <label className="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor={`list-option-${i.createTime}`}>
