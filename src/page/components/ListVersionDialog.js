@@ -61,7 +61,7 @@ class ListVersionDialog extends React.Component {
               return (
                 <li key={i.createTime} className="mdl-list__item">
                   <span className="mdl-list__item-primary-content">
-                    <i className="material-icons  mdl-list__item-avatar">person</i>
+                    <img className="mdl-list__item-avatar" src={`//graph.facebook.com/${i.creatorUserId}/picture`} alt={name} />
                     {moment(i.createTime).fromNow()}
                   </span>
                   <span className="mdl-list__item-secondary-action">
