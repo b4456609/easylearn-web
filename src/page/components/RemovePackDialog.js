@@ -1,10 +1,15 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { hideDialog, removePack } from '../../actions';
 import mdlUpgrade from '../../utils/mdlUpgrade';
 
 class RemovePackDialog extends React.Component {
   componentDidMount() {
+    const dialog = findDOMNode(this);
+    if (!dialog.showModal) {   // avoid chrome warnings and update only on unsupported browsers
+      window.dialogPolyfill.registerDialog(dialog);
+    }
     this.dialog = document.querySelector('#remove-pack-dialog');
     this.dialog.showModal();
   }

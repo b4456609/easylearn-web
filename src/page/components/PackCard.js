@@ -28,7 +28,6 @@ class PackCard extends React.Component {
   }
 
   getToolTip() {
-    console.log(this.props.isPublic);
     if (!this.props.isPublic) {
       return (
         <i id={`pack-tooltip-${this.props.id}`} className="material-icons mdl-color-text--grey-600">person</i>

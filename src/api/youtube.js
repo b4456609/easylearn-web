@@ -1,6 +1,7 @@
 
 // parse youtube url to id
 function youtubeParser(url) {
+  // eslint-disable-next-line
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
   const match = url.match(regExp);
   if (match && match[2].length === 11) {

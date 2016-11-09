@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { fbLogout } from '../../../api/fb';
 
 
 const UserDrawer = ({ name, id, userLogout }) => (
@@ -9,12 +8,13 @@ const UserDrawer = ({ name, id, userLogout }) => (
         <img className="mdl-list__item-avatar" src={`//graph.facebook.com/${id}/picture`} alt={name} />
         <span>{name}</span>
       </span>
-        <a
-          className="mdl-list__item-action"
-          href="#"
-        >
-          <i className="material-icons">directions_run</i>
-        </a>
+      <a
+        className="mdl-list__item-action"
+        href="#"
+        // onClick={userLogout}
+      >
+        <i className="material-icons">directions_run</i>
+      </a>
     </div>
   </div>
 );

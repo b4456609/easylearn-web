@@ -27,7 +27,7 @@ class NewPack extends React.Component {
           document.getElementById('cover-img').src = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
-        this.state.file = input.files[0];
+        this.setState({ file: input.files[0] });
       }
     };
   }
@@ -132,6 +132,12 @@ class NewPack extends React.Component {
     );
   }
 }
+
+NewPack.propTypes = {
+  userId: React.PropTypes.string.isRequired,
+  userName: React.PropTypes.string.isRequired,
+  dispatch: React.PropTypes.func.isRequired,
+};
 
 const mapStateToProps = state => (
   {

@@ -1,4 +1,4 @@
-import axios from 'axios';
+/* eslint-disable */
 import fetchJsonp from 'fetch-jsonp';
 
 const SlideShareApi = {

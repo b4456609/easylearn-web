@@ -1,9 +1,14 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import mdlUpgrade from '../../utils/mdlUpgrade';
 
 class LoadingDialog extends React.Component {
   componentDidMount() {
+    const dialog = findDOMNode(this);
+    if (!dialog.showModal) {   // avoid chrome warnings and update only on unsupported browsers
+      window.dialogPolyfill.registerDialog(dialog);
+    }
     this.dialog = document.querySelector('#loading-dialog');
     this.dialog.showModal();
   }

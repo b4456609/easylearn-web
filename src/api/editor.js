@@ -1,3 +1,4 @@
+/* eslint-disable */
 function addImgButton(editor, callback) {
   editor.addButton('img', {
     text: 'Img',

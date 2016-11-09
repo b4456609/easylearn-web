@@ -1,11 +1,9 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { hideDialog, addFolder } from '../../actions';
 import mdlUpgrade from '../../utils/mdlUpgrade';
 
-const mapStateToProps = (state) => {
-  return { modalProps: state.dialog.modalProps };
-};
 class NewFolderDialog extends React.Component {
   constructor(props) {
     super(props);
@@ -14,6 +12,10 @@ class NewFolderDialog extends React.Component {
   }
 
   componentDidMount() {
+    const dialog = findDOMNode(this);
+    if (!dialog.showModal) {   // avoid chrome warnings and update only on unsupported browsers
+      window.dialogPolyfill.registerDialog(dialog);
+    }
     this.dialog = document.querySelector('#new-folder-dialog');
     this.dialog.showModal();
   }
@@ -64,6 +66,12 @@ class NewFolderDialog extends React.Component {
     );
   }
 }
+
+NewFolderDialog.propTypes = {
+  dispatch: React.PropTypes.func,
+};
+
+const mapStateToProps = state => ({ modalProps: state.dialog.modalProps });
 
 export default connect(
   mapStateToProps

@@ -1,4 +1,5 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import moment from 'moment';
@@ -13,6 +14,10 @@ class ListVersionDialog extends React.Component {
   }
 
   componentDidMount() {
+    const dialog = findDOMNode(this);
+    if (!dialog.showModal) {   // avoid chrome warnings and update only on unsupported browsers
+      window.dialogPolyfill.registerDialog(dialog);
+    }
     this.dialog = document.querySelector('#pack-viewversion');
     this.dialog.showModal();
   }

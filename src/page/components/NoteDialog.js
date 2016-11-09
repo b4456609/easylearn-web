@@ -1,4 +1,5 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { hideDialog, newComment } from '../../actions';
 import mdlUpgrade from '../../utils/mdlUpgrade';
@@ -21,6 +22,10 @@ class NoteDialog extends React.Component {
   }
 
   componentDidMount() {
+    const dialog = findDOMNode(this);
+    if (!dialog.showModal) {   // avoid chrome warnings and update only on unsupported browsers
+      window.dialogPolyfill.registerDialog(dialog);
+    }
     this.dialog = document.querySelector('#note-comment-dialog');
     this.dialog.showModal();
     const scroll = document.querySelector('.note-comment');

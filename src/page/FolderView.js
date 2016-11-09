@@ -5,7 +5,6 @@ import PackCard from './components/PackCard';
 const FolderView = ({ pack, folderId }) => {
   let content;
   if (pack.length !== 0) {
-    console.log(pack);
     content = (pack.map(
       i => (
         <PackCard

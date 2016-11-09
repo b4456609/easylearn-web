@@ -5,6 +5,7 @@ import YoutubeApi from '../../../api/youtube.js';
 import SlideshareApi from '../../../api/slideshare.js';
 import { uploadImg, uploadMultipleImg } from '../../../api/imgur.js';
 import { showDialog, hideDialog } from '../../../actions';
+import mdlUpgrade from '../../../utils/mdlUpgrade';
 
 class Editor extends React.Component {
 
@@ -29,6 +30,11 @@ class Editor extends React.Component {
 
   componentWillMount() {
     document.addEventListener('mdl-componentupgraded', this.editorInit);
+  }
+
+  componentDidMount() {
+    const dialogs = document.querySelectorAll('dialog');
+    [].slice.call(dialogs).forEach(dialog => window.dialogPolyfill.registerDialog(dialog));
   }
 
   componentWillUnmount() {
@@ -126,7 +132,7 @@ class Editor extends React.Component {
           document.getElementById('preview-img').src = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
-        this.state.img = input.files[0];
+        this.setState({ img: input.files[0] });
       }
     };
   }
@@ -258,4 +264,4 @@ Editor.propTypes = {
   content: React.PropTypes.string,
 };
 
-export default connect()(Editor);
+export default connect()(mdlUpgrade(Editor));

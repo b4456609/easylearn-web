@@ -9,6 +9,7 @@
     "quote-props": 0,
     "class-methods-use-this": 0,
     "object-property-newline": 1,
+    "sort-comp": 0,
   },
   "env": {
     "browser": true,
