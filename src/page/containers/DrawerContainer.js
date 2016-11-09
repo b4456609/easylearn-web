@@ -14,9 +14,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     showDialog: () => {
-      dispatch(showDialog('NEW_FOLDER_DIALOG', 'adf'));
+      dispatch(showDialog('NEW_FOLDER_DIALOG'));
     },
     userLogout: () => {
+      localStorage.clear();
       dispatch(notLogin());
     },
   };

@@ -11,7 +11,7 @@ const UserDrawer = ({ name, id, userLogout }) => (
       <a
         className="mdl-list__item-action"
         href="#"
-        // onClick={userLogout}
+        onClick={userLogout}
       >
         <i className="material-icons">directions_run</i>
       </a>
