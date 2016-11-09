@@ -245,12 +245,12 @@ export function removeFolder(folderId) {
   };
 }
 
-function newVersionTemplate(id, content, creatorUserId, creatorUserName) {
+function newVersionTemplate(id, content, creatorUserId, creatorUserName, isPublic) {
   return {
     id,
     content,
     createTime: new Date().getTime(),
-    isPublic: true,
+    isPublic,
     creatorUserId,
     creatorUserName,
     view_count: 0,
@@ -259,8 +259,8 @@ function newVersionTemplate(id, content, creatorUserId, creatorUserName) {
 }
 
 export const NEW_VERSION = 'NEW_VERSION';
-export function newVersion(packId, versionId, content, userId, userName) {
-  const version = newVersionTemplate(versionId, content, userId, userName);
+export function newVersion(packId, versionId, content, userId, userName, isPublic) {
+  const version = newVersionTemplate(versionId, content, userId, userName, isPublic);
   addVersionApi(packId, version);
   return {
     type: NEW_VERSION,

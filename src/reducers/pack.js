@@ -25,8 +25,8 @@ let initState = [
         'creatorUserId': null,
         'creatorUserName': '遊客',
         'note': [],
-        'view_count': 0,
-        'user_view_count': 0
+        'viewCount': 0,
+        'userViewCount': 0
       },
     ]
   }

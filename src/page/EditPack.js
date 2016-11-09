@@ -20,7 +20,7 @@ class NewPack extends React.Component {
     const isPublic = document.querySelector('#public-checkbox').checked;
     const { userId, userName, packId } = this.props;
     const versionId = `version${new Date().getTime()}`;
-    this.props.dispatch(newVersion(packId, versionId, content, userId, userName));
+    this.props.dispatch(newVersion(packId, versionId, content, userId, userName, isPublic));
     browserHistory.push(`/pack/${packId}/${versionId}`);
   }
 
@@ -28,11 +28,14 @@ class NewPack extends React.Component {
     return (
       <div>
         <div className="mdl-grid">
-          <div className="mdl-cell--12-col
+          <div
+            className="mdl-cell--12-col
             mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
           />
         </div>
-        <div className="mdl-grid mdl-grid--no-spacing">
+        <div
+          className="mdl-grid mdl-grid--no-spacing"
+        >
           <div
             className="mdl-cell mdl-cell--12-col
             mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
