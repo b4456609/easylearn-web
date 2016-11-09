@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import moment from 'moment';
 import './index.css';
 
 import reducer from './reducers';
@@ -17,6 +18,8 @@ import Pack from './page/Pack';
 import EditPack from './page/EditPack';
 
 injectTapEventPlugin();
+
+moment.locale('zh-tw');
 
 const logger = createLogger();
 
