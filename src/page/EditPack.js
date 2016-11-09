@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import React from 'react';
-import './NewPack.css';
+import './EditPack.css';
 import { newVersion } from '../actions';
 import Editor from './components/components/Editor.js';
 import EditorApi from '../api/editor.js';
@@ -12,14 +12,12 @@ class NewPack extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      isPublic: true,
-    };
     this.onFinish = this.onFinish.bind(this);
   }
 
   onFinish() {
     const content = EditorApi.getContent();
+    const isPublic = document.querySelector('#public-checkbox').checked;
     const { userId, userName, packId } = this.props;
     const versionId = `version${new Date().getTime()}`;
     this.props.dispatch(newVersion(packId, versionId, content, userId, userName));
@@ -30,10 +28,8 @@ class NewPack extends React.Component {
     return (
       <div>
         <div className="mdl-grid">
-          <div
-            className="mdl-cell--12-col
+          <div className="mdl-cell--12-col
             mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
-            id="finish-btn"
           />
         </div>
         <div className="mdl-grid mdl-grid--no-spacing">
@@ -47,7 +43,23 @@ class NewPack extends React.Component {
         <div className="mdl-grid">
           <div
             className="mdl-cell--12-col
-            mdl-cell--10-col-desktop mdl-cell--1-offset-desktop"
+            mdl-cell--5-col-desktop mdl-cell--1-offset-desktop verticle-center"
+          >
+            <label
+              className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+              htmlFor="public-checkbox"
+            >
+              <input
+                type="checkbox"
+                id="public-checkbox"
+                className="mdl-checkbox__input"
+              />
+              <span className="mdl-checkbox__label">公開此懶人包</span>
+            </label>
+          </div>
+          <div
+            className="mdl-cell--12-col
+            mdl-cell--5-col-desktop mdl-typography--text-right"
             id="finish-btn"
           >
             <button
@@ -73,6 +85,14 @@ function mapStateToProps(state, ownProps) {
     packId: pack.id,
   };
 }
+
+NewPack.propTypes = {
+  dispatch: React.PropTypes.func.isRequired,
+  content: React.PropTypes.string.isRequired,
+  userId: React.PropTypes.string.isRequired,
+  userName: React.PropTypes.string.isRequired,
+  packId: React.PropTypes.string.isRequired,
+};
 
 export default connect(
   mapStateToProps
