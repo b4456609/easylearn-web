@@ -11,6 +11,7 @@ class PackCard extends React.Component {
     this.goto = this.goto.bind(this);
     this.getImg = this.getImg.bind(this);
     this.getToolTip = this.getToolTip.bind(this);
+    this.getDescription = this.getDescription.bind(this);
   }
 
   goto() {
@@ -34,6 +35,17 @@ class PackCard extends React.Component {
       );
     }
     return null;
+  }
+
+  getDescription() {
+    if (this.props.description === '') {
+      return null;
+    }
+    return (
+      <div className="mdl-card__supporting-text">
+        {this.props.description}
+      </div>
+    );
   }
 
   render() {
@@ -71,16 +83,14 @@ class PackCard extends React.Component {
               alt={this.props.name}
             />
           </div>
-          <div className="mdl-card__supporting-text">
-            {this.props.description}
-          </div>
+          {this.getDescription()}
           <div className="mdl-card__actions mdl-card--border">
-            <a
+            <button
               className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
               onClick={this.goto}
             >
               閱讀
-            </a>
+            </button>
             <div className="mdl-layout-spacer" />
             {this.getToolTip()}
           </div>
