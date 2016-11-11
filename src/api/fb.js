@@ -4,7 +4,7 @@ export function init(callback) {
     FB.init({
       appId      : '937637919620079',
       xfbml      : true,
-      version    : 'v2.7'
+      version    : 'v2.8'
     });
     callback();
   };
