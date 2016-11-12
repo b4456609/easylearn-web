@@ -3,6 +3,7 @@ import {
   REMOVE_PACK,
   NEW_VERSION,
   SUCCESS_LOAD_PACK,
+  NEW_NOTE,
 } from '../actions';
 
 let initState = [
@@ -100,6 +101,23 @@ const pack = (state = initState, action) => {
             version: [
               ...i.version, action.version
             ]
+          });
+        }
+        return i;
+      });
+    case NEW_NOTE:
+      return state.map((i) => {
+        if (i.id === action.packId) {
+          const newVersion = i.version.map((version) => {
+            if (version.id === action.versionId) {
+              return Object.assign({}, version, {
+                content: action.newContent
+              });
+            }
+            return version;
+          });
+          return Object.assign({}, i, {
+            version: newVersion
           });
         }
         return i;
