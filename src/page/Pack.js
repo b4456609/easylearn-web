@@ -107,9 +107,9 @@ class Pack extends React.Component {
   }
 
   componentDidUpdate() {
-    window.componentHandler.upgradeElements(findDOMNode(this));
     this.noteRegister();
     this.addNotes();
+    window.componentHandler.upgradeElements(findDOMNode(this));
   }
 
   componentWillUnmount() {
