@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import './Pack.css';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
 import { newNote, showDialog } from '../actions/';
-import { findDOMNode } from 'react-dom';
+import { contentFilter } from '../utils/content';
 
 function getWindowSize() {
   const w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -65,17 +66,11 @@ function getSelectionCoords() {
   };
 }
 
-function paintNote(range, noteId, classColor, content) {
+function paintNote(range, noteId, classColor) {
   const span = document.createElement('span');
   span.className = `note ${classColor}`;
   span.setAttribute('id', noteId);
   range.surroundContents(span);
-  const div = document.createElement('span');
-  div.className = 'mdl-tooltip mdl-tooltip--large';
-  div.setAttribute('for', noteId);
-  div.innerHTML = content;
-  range.insertNode(div);
-  // window.componentHandler.upgradeElement(div);
 }
 
 class Pack extends React.Component {
@@ -96,6 +91,8 @@ class Pack extends React.Component {
     this.onSubmitClick = this.onSubmitClick.bind(this);
     this.onNoteClick = this.onNoteClick.bind(this);
     this.noteRegister = this.noteRegister.bind(this);
+    this.addNotes = this.addNotes.bind(this);
+    this.getContent = this.getContent.bind(this);
   }
 
   componentDidMount() {
@@ -107,11 +104,13 @@ class Pack extends React.Component {
       });
     };
     this.noteRegister();
+    this.addNotes();
   }
 
   componentDidUpdate() {
     window.componentHandler.upgradeElements(findDOMNode(this));
     this.noteRegister();
+    this.addNotes();
   }
 
   componentWillUnmount() {
@@ -155,7 +154,7 @@ class Pack extends React.Component {
     const noteId = `note${new Date().getTime()}`;
     const content = document.getElementById('note-content').value;
     paintNote(this.state.range, noteId, 'mdl-color--indigo-100', content);
-    const newContent = document.getElementById('content').innerHTML;
+    const newContent = contentFilter(document.getElementById('content').innerHTML);
     dispatch(newNote(pack.id, version.id, noteId, userId, userName, content, newContent));
     this.dialog.close();
   }
@@ -170,6 +169,22 @@ class Pack extends React.Component {
       left: this.state.x + 20,
       top: this.state.y + 20,
     };
+  }
+
+  addNotes() {
+    const noteArea = document.querySelector('#note-area');
+    noteArea.innerHTML = '';
+    const notes = Array.from(document.querySelectorAll('.note'));
+    const notesId = notes.map(note => note.id);
+
+    for (const noteId of notesId) {
+      const target = this.props.note[noteId];
+      const span = document.createElement('span');
+      span.className = 'mdl-tooltip mdl-tooltip--large';
+      span.setAttribute('for', target.id);
+      span.innerHTML = target.content;
+      noteArea.insertAdjacentElement('afterbegin', span);
+    }
   }
 
   render() {
@@ -232,6 +247,7 @@ class Pack extends React.Component {
           <div className="mdl-snackbar__text" />
           <button className="mdl-snackbar__action" type="button" />
         </div>
+        <div id="note-area" />
       </div>
     );
   }
@@ -247,9 +263,11 @@ Pack.propTypes = {
   userId: React.PropTypes.string,
   userName: React.PropTypes.string,
   dispatch: React.PropTypes.func,
+  note: React.PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const note = state.note;
   const packId = ownProps.params.id;
   const pack = state.pack.find(item => item.id === packId);
   let version = null;
@@ -262,6 +280,7 @@ const mapStateToProps = (state, ownProps) => {
   }
   return {
     pack,
+    note,
     version,
     userId: state.user.id,
     userName: state.user.name,
