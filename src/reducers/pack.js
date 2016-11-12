@@ -85,6 +85,16 @@ const pack = (state = initState, action) => {
       ];
     case NEW_VERSION:
       return state.map((i) => {
+        if (i.id === action.packId
+          && i.isPublic === false
+          && action.version.isPublic === true) {
+          return Object.assign({}, i, {
+            isPublic: true,
+            version: [
+              ...i.version, action.version
+            ]
+          });
+        }
         if (i.id === action.packId) {
           return Object.assign({}, i, {
             version: [
