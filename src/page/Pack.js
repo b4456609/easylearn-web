@@ -92,7 +92,6 @@ class Pack extends React.Component {
     this.onNoteClick = this.onNoteClick.bind(this);
     this.noteRegister = this.noteRegister.bind(this);
     this.addNotes = this.addNotes.bind(this);
-    this.getContent = this.getContent.bind(this);
   }
 
   componentDidMount() {

@@ -1,3 +1,5 @@
+import { contentFilter } from '../utils/content.js';
+
 /* eslint-disable */
 function addImgButton(editor, callback) {
   editor.addButton('img', {
@@ -61,7 +63,7 @@ const Editor = {
   getContent() {
     const content = tinymce.activeEditor.getContent();
     console.log('[Editor]getContent', content);
-    return content;
+    return contentFilter(content);
   },
 
   onContentChange(callback) {
