@@ -35,6 +35,7 @@ const Editor = {
     tinymce.init({
       selector: '#editor',
       resize: true,
+      content_style: "p {font-size: 1.5em;}",
       min_height: 400,
       // language: 'zh_TW',
       plugins: 'advlist autolink lists link charmap preview hr anchor searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking table contextmenu directionality emoticons paste textcolor colorpicker textpattern imagetools',
