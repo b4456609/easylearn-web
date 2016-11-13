@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { hideDialog, addFolder } from '../../actions';
 import mdlUpgrade from '../../utils/mdlUpgrade';
+import { simpleNotify } from '../../utils/toast.js';
 
 class NewFolderDialog extends React.Component {
   constructor(props) {
@@ -26,7 +27,12 @@ class NewFolderDialog extends React.Component {
   }
 
   onSubmitClick() {
-    this.props.dispatch(addFolder(`folder${new Date().getTime()}`, document.getElementById('new-dir-name').value));
+    const name = document.getElementById('new-dir-name').value.trim();
+    if (name === '') {
+      simpleNotify('資料夾名稱不能空白');
+      return;
+    }
+    this.props.dispatch(addFolder(`folder${new Date().getTime()}`, name));
     this.onCloseClick();
     this.props.dispatch(hideDialog());
   }

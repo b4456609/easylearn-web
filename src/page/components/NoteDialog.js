@@ -6,15 +6,14 @@ import mdlUpgrade from '../../utils/mdlUpgrade';
 import './NoteDialog.css';
 import { simpleNotify } from '../../utils/toast.js';
 
-const mapStateToProps = (state) => {
-  return {
-    name: state.dialog.modalProps.name,
-    noteId: state.dialog.modalProps.noteId,
-    note: state.note[state.dialog.modalProps.noteId],
-    userId: state.user.id,
-    userName: state.user.name,
-  };
-};
+const mapStateToProps = state => ({
+  name: state.dialog.modalProps.name,
+  noteId: state.dialog.modalProps.noteId,
+  note: state.note[state.dialog.modalProps.noteId],
+  userId: state.user.id,
+  userName: state.user.name,
+});
+
 class NoteDialog extends React.Component {
   constructor(props) {
     super(props);
