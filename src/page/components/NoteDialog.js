@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { hideDialog, newComment } from '../../actions';
 import mdlUpgrade from '../../utils/mdlUpgrade';
 import './NoteDialog.css';
+import { simpleNotify } from '../../utils/toast.js';
 
 const mapStateToProps = (state) => {
   return {
@@ -45,8 +46,12 @@ class NoteDialog extends React.Component {
   }
 
   onSubmitClick() {
-    let { userName, userId, noteId } = this.props;
+    const { userName, userId, noteId } = this.props;
     const content = document.getElementById('comment-content').value.trim();
+    if (content === '') {
+      simpleNotify('留言內容不可以空白');
+      return;
+    }
     this.props.dispatch(newComment(userId, userName, content, noteId));
     document.getElementById('comment-content').value = '';
   }
@@ -103,6 +108,15 @@ class NoteDialog extends React.Component {
     );
   }
 }
+
+NoteDialog.propTypes = {
+  dispatch: React.PropTypes.func,
+  name: React.PropTypes.string,
+  noteId: React.PropTypes.string,
+  note: React.PropTypes.object,
+  userId: React.PropTypes.string,
+  userName: React.PropTypes.string,
+};
 
 export default connect(
   mapStateToProps
