@@ -16,6 +16,7 @@ import NewPack from './page/NewPack';
 import FolderView from './page/FolderView';
 import Pack from './page/Pack';
 import EditPack from './page/EditPack';
+import NotFound from './page/NotFound';
 
 injectTapEventPlugin();
 
@@ -43,5 +44,6 @@ ReactDOM.render(
         <Route path="folder/:id" component={FolderView} />
         <Route path="new-pack" component={NewPack} />
       </Route>
+      <Route path="*" component={NotFound} />
     </Router>
   </Provider>, document.getElementById('root'));
