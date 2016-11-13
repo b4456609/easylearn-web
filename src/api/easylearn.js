@@ -76,3 +76,19 @@ export function delteFolderApi(id) {
 export function deltePackInFolderApi(id) {
   return axios.delete(`user/folder/pack/${id}`, config);
 }
+
+export function addNoteApi(note, versionId, packId, content) {
+  return axios.post('web/note', {
+    note,
+    versionId,
+    packId,
+    content,
+  }, config);
+}
+
+export function addCommentApi(comment, noteId) {
+  return axios.post('web/note', {
+    comment,
+    noteId,
+  }, config);
+}
