@@ -1,0 +1,11 @@
+
+#notfound-card > .mdl-card__title > .mdl-card__title-text{
+  line-height: 2em;
+  flex: 1 1 auto;
+}
+
+#notfound-title {
+  font-size: 100px;
+  font-weight: 300;
+  color: white
+}
