@@ -313,30 +313,43 @@ export function newVersion(packId, versionId, content, userId, userName, isPubli
   };
 }
 
-export const NEW_NOTE = 'NEW_NOTE';
-export function newNote(packId, versionId, noteId, userId, userName, content, newContent) {
+function newNoteTemplate(id, content, createTime, userId, userName) {
   return {
-    type: NEW_NOTE,
-    packId,
-    versionId,
+    id,
+    content,
+    createTime,
+    comment: [],
     userId,
     userName,
+  };
+}
+
+export const NEW_NOTE = 'NEW_NOTE';
+export function newNote(packId, versionId, noteId, userId, userName, content, newContent) {
+  const note = newNoteTemplate(noteId, content, new Date().getTime(), userId, userName);
+  return {
+    type: NEW_NOTE,
     noteId,
-    content,
+    note,
+    packId,
+    versionId,
     newContent,
+  };
+}
+
+function newCommentTemplate(id, createTime, userId, userName, content) {
+  return {
+    id, createTime, userId, userName, content,
   };
 }
 
 export const NEW_COMMENT = 'NEW_COMMENT';
 export function newComment(userId, userName, content, noteId) {
   const time = new Date().getTime();
+  const comment = newCommentTemplate(`comment${time}`, time, userId, userName, content);
   return {
     type: NEW_COMMENT,
-    id: `comment${time}`,
-    createTime: time,
-    userId,
-    userName,
-    content,
+    comment,
     noteId,
   };
 }
