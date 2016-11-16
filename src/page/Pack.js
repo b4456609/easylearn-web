@@ -187,6 +187,9 @@ class Pack extends React.Component {
   }
 
   render() {
+    if (this.props.packFetch) {
+      return <div id="p2" className="mdl-progress mdl-js-progress mdl-progress__indeterminate" />;
+    }
     return (
       <div>
         <div className="mdl-grid">
@@ -266,6 +269,11 @@ Pack.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  if (state.app.packFetch) {
+    return {
+      packFetch: true
+    };
+  }
   const note = state.note;
   const packId = ownProps.params.id;
   const pack = state.pack.find(item => item.id === packId);
@@ -283,6 +291,7 @@ const mapStateToProps = (state, ownProps) => {
     version,
     userId: state.user.id,
     userName: state.user.name,
+    packFetch: false
   };
 };
 
