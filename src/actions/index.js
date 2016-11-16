@@ -28,15 +28,36 @@ export function appAuth(name, id, token) {
   };
 }
 
+export const PACK_FETCHING = 'PACK_FETCHING';
+export const PACK_FETCHING_ERROR = 'PACK_FETCHING_ERROR';
+
+export const SERVER_ERROR = 'SERVER_ERROR';
+export const NOT_FOUND = 'NOT_FOUND';
+
 export const SUCCESS_LOAD_PACK = 'SUCCESS_LOAD_PACK';
 export const SUCCESS_LOAD_FOLDER = 'SUCCESS_LOAD_FOLDER';
 export function loadData() {
   return (dispatch) => {
+    dispatch({
+      type: PACK_FETCHING
+    });
     getPackApi()
     .then((data) => {
       dispatch({
         type: SUCCESS_LOAD_PACK,
         data,
+      });
+    })
+    .catch((error) => {
+      const status = '';
+      if (error.response.status >= 500) {
+        browserHistory.push('/error');
+      } else {
+        browserHistory.push('/404');
+      }
+      dispatch({
+        type: PACK_FETCHING_ERROR,
+        status,
       });
     });
     getFolderApi()
@@ -45,6 +66,8 @@ export function loadData() {
           type: SUCCESS_LOAD_FOLDER,
           data,
         });
+      })
+      .catch(() => {
       });
   };
 }
