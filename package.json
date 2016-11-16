@@ -9,6 +9,8 @@
     "eslint-plugin-import": "^1.15.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.2.2",
+    "pact": "^1.0.0-rc.5",
+    "@pact-foundation/pact-node": "^4.5.3",
     "react-scripts": "0.4.1"
   },
   "dependencies": {

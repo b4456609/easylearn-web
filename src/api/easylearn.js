@@ -5,6 +5,10 @@ if (process.env.NODE_ENV !== 'production') {
   EASYLEARN_API_ROOT = 'http://localhost:8080/api/';
 }
 
+export function setURL(url) {
+  EASYLEARN_API_ROOT = url;
+}
+
 const config = {
   baseURL: EASYLEARN_API_ROOT,
   responseType: 'json',
