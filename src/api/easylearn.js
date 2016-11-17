@@ -5,8 +5,14 @@ if (process.env.NODE_ENV !== 'production') {
   EASYLEARN_API_ROOT = 'http://localhost:8080/api/';
 }
 
+let appToken = '';
+
 export function setURL(url) {
   EASYLEARN_API_ROOT = url;
+}
+
+export function setToken(token) {
+  appToken = token;
 }
 
 const config = {
@@ -14,7 +20,7 @@ const config = {
   responseType: 'json',
   validateStatus: status => (status >= 200 && status < 300),
   headers: {
-    'X-Auth-Token': localStorage.getItem('token')
+    'X-Auth-Token': appToken
   }
 };
 

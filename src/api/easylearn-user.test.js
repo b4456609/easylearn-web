@@ -1,4 +1,4 @@
-import { auth, setURL } from './easylearn.js';
+import { getPackApi, setURL } from './easylearn.js';
 const path = require('path');
 const Pact = require('pact');
 const wrapper = require('@pact-foundation/pact-node');
@@ -13,11 +13,11 @@ describe("Easylearn's API", () => {
 
   const server = wrapper.createServer({
     port,
-    log: path.resolve(process.cwd(), 'logs', 'mockserver-integration.log'),
+    log: path.resolve(process.cwd(), 'logs', 'mockserver-integrationa.log'),
     dir: path.resolve(process.cwd(), 'pacts'),
     spec: 2,
     consumer: 'easylearn-web',
-    provider: 'easylearn-user'
+    provider: 'easylearn-usera'
   });
 
   const EXPECTED_BODY = [{ dog: 1 }];
@@ -32,7 +32,7 @@ describe("Easylearn's API", () => {
 
   beforeEach((done) => {
     server.start().then(() => {
-      provider = Pact({ consumer: 'easylearn-web', provider: 'easylearn-user', port });
+      provider = Pact({ consumer: 'easylearn-web', provider: 'easylearn-usera', port });
       done();
     });
   });
@@ -45,7 +45,8 @@ describe("Easylearn's API", () => {
         withRequest: {
           method: 'POST',
           path: '/auth',
-          headers: { 'Accept': 'application/json, text/plain, */*' }
+          headers: { 'Accept': 'application/json, text/plain, */*',
+        'X-Auth-Token': 'asf' }
         },
         willRespondWith: {
           status: 200,
@@ -61,7 +62,7 @@ describe("Easylearn's API", () => {
     });
 
     it('successfully verifies', (done) => {
-      return auth('id', 'name')
+      return getPackApi()
         .then(provider.verify)
         .then(done, done);
     });
