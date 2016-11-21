@@ -13,21 +13,6 @@ import { getPackApi,
 } from '../api/easylearn';
 import { uploadImg } from '../api/imgur.js';
 
-export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
-export function appAuth(name, id, token) {
-  return (dispatch) => {
-    auth(id, token)
-    .then((data) => {
-      localStorage.setItem('token', data.token);
-      appLogin(id, name);
-      dispatch({
-        type: APP_LOGIN_SUCCESS,
-        token: data.token,
-      });
-    });
-  };
-}
-
 export const SUCCESS_LOAD_PACK = 'SUCCESS_LOAD_PACK';
 export const SUCCESS_LOAD_FOLDER = 'SUCCESS_LOAD_FOLDER';
 export function loadData() {
@@ -49,6 +34,24 @@ export function loadData() {
   };
 }
 
+export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
+export function appAuth(name, id, token) {
+  return (dispatch) => {
+    auth(id, token)
+    .then((data) => {
+      localStorage.setItem('token', data.token);
+      appLogin(id, name);
+      dispatch({
+        type: APP_LOGIN_SUCCESS,
+        token: data.token,
+      });
+    })
+    .then(() => {
+      dispatch(loadData());
+    });
+  };
+}
+
 export const USER_FB_LOGIN_SUCCESS = 'USER_FB_LOGIN_SUCCESS';
 function fbLoginSuccess(name, id, fbAccessToken) {
   browserHistory.push('/folder/all');
@@ -60,7 +63,6 @@ function fbLoginSuccess(name, id, fbAccessToken) {
       fbAccessToken,
     });
     dispatch(appAuth(name, id, fbAccessToken));
-    dispatch(loadData());
   };
 }
 
