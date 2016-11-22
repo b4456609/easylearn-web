@@ -46,8 +46,9 @@ const folder = (state = initState, action) => {
       ];
     case NEW_PACK:
       return state.map((i) => {
-        if (i.id !== ALL_FOLDER)
-          { return i; }
+        if (i.id !== ALL_FOLDER) {
+          return i;
+        }
         return Object.assign({}, i, {
           pack: [
             ...i.pack,

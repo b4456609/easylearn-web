@@ -2,8 +2,9 @@ import React from 'react';
 import FolderAction from './components/FolderAction';
 import PackAction from './components/PackAction';
 
-function getAction(removeFolder, folderId, packId, versionId, showListVersionDialog, isEdit) {
-  if (isEdit) {
+function getAction(removeFolder, folderId, packId, versionId,
+   showListVersionDialog, isEdit, loading) {
+  if (isEdit || loading) {
     return null;
   }
 
@@ -29,17 +30,17 @@ function getAction(removeFolder, folderId, packId, versionId, showListVersionDia
   return null;
 }
 
-const Header = ({ title, removeFolder, folderId, packId, versionId, showListVersionDialog, isEdit }) => {
-  return (
-    <header className="mdl-layout__header">
-      <div className="mdl-layout__header-row">
-        <span className="mdl-layout-title">{title || 'Easylearn'}</span>
-        <div className="mdl-layout-spacer" />
-        {getAction(removeFolder, folderId, packId, versionId, showListVersionDialog, isEdit)}
-      </div>
-    </header>
+const Header = ({ loading, title, removeFolder, folderId, packId,
+   versionId, showListVersionDialog, isEdit }) => (
+     <header className="mdl-layout__header">
+       <div className="mdl-layout__header-row">
+         <span className="mdl-layout-title">{title || 'Easylearn'}</span>
+         <div className="mdl-layout-spacer" />
+         {getAction(removeFolder, folderId, packId, versionId,
+         showListVersionDialog, isEdit, loading)}
+       </div>
+     </header>
   );
-};
 
 Header.propTypes = {
   isEdit: React.PropTypes.bool,

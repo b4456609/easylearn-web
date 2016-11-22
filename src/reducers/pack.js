@@ -7,39 +7,41 @@ import {
 } from '../actions';
 
 let initState = [
+  // {
+  //   'id': 'pack1474100598141',
+  //   'createTime': 1474100598144,
+  //   'name': 'a',
+  //   'description': 'a',
+  //   'isPublic': true,
+  //   'coverFilename': '',
+  //   'creatorUserId': null,
+  //   'creatorUserName': '遊客',
+  //   'viewCount': 0,
+  //   'version': [
+  //     {
+  //       'id': 'version1478670050337',
+  //       'content': '<p>Hello, World!fff</p>',
+  //       'createTime': 1478670050337,
+  //       'isPublic': false,
+  //       'creatorUserId': 'id',
+  //       'creatorUserName': 'Bernie',
+  //       'view_count': 0,
+  //       'user_view_count': 0,
+  //     }, {
+  //       'id': 'version1474100598144',
+  //       'content': '<p>Hello, World!</p>',
+  //       'createTime': 1474100598144,
+  //       'isPublic': true,
+  //       'creatorUserId': null,
+  //       'creatorUserName': '遊客',
+  //       'note': [],
+  //       'viewCount': 0,
+  //       'userViewCount': 0,
+  //     },
+  //   ],
+  // }
+  // ,
   {
-    'id': 'pack1474100598141',
-    'createTime': 1474100598144,
-    'name': 'a',
-    'description': 'a',
-    'isPublic': true,
-    'coverFilename': '',
-    'creatorUserId': null,
-    'creatorUserName': '遊客',
-    'viewCount': 0,
-    'version': [
-      {
-        'id': 'version1478670050337',
-        'content': '<p>Hello, World!fff</p>',
-        'createTime': 1478670050337,
-        'isPublic': false,
-        'creatorUserId': 'id',
-        'creatorUserName': 'Bernie',
-        'view_count': 0,
-        'user_view_count': 0,
-      }, {
-        'id': 'version1474100598144',
-        'content': '<p>Hello, World!</p>',
-        'createTime': 1474100598144,
-        'isPublic': true,
-        'creatorUserId': null,
-        'creatorUserName': '遊客',
-        'note': [],
-        'viewCount': 0,
-        'userViewCount': 0,
-      },
-    ],
-  }, {
     'id': 'pack1478670701680',
     'createTime': 1478670701680,
     'name': '川普當選機率高 加拿大移民部網站被塞爆',

@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PackCard from './components/PackCard';
 
-const FolderView = ({ pack, folderId, loading }) => {
-  if (loading) {
+const FolderView = ({ pack, folderId, isFetch }) => {
+  if (isFetch) {
     return (
       <div style={{ textAlign: 'center', padding: '40px' }}>
         <div className="mdl-spinner mdl-js-spinner is-active" />
@@ -50,7 +50,7 @@ const FolderView = ({ pack, folderId, loading }) => {
 };
 
 FolderView.propTypes = {
-  loading: React.PropTypes.boolean,
+  isFetch: React.PropTypes.bool,
   pack: React.PropTypes.array,
   folderId: React.PropTypes.string,
 };
@@ -60,18 +60,20 @@ export default connect(
   (state, ownProps) => {
     if (state.app.packFetch === true || state.app.folderFetch === true || state.app.initState !== 'APP_LOGIN_SUCCESS') {
       return {
-        loading: true
+        isFetch: true
       };
     }
     const folderId = ownProps.params.id || 'all';
     const folder = state.folder.find(i => i.id === folderId);
-    const packArray = folder.pack.map(
+    let packArray = folder.pack.map(
       item => state.pack.find(
         p => p.id === item
       )
     );
+    // some pack are in state
+    packArray = packArray.filter(i => i !== undefined);
     return {
-      loading: false,
+      isFetch: false,
       pack: packArray,
       folderId,
     };
