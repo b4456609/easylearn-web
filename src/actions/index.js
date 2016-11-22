@@ -13,21 +13,6 @@ import { getPackApi,
 } from '../api/easylearn';
 import { uploadImg } from '../api/imgur.js';
 
-export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
-export function appAuth(name, id, token) {
-  return (dispatch) => {
-    auth(id, token)
-    .then((data) => {
-      localStorage.setItem('token', data.token);
-      appLogin(id, name);
-      dispatch({
-        type: APP_LOGIN_SUCCESS,
-        token: data.token,
-      });
-    });
-  };
-}
-
 export const PACK_FETCHING = 'PACK_FETCHING';
 export const PACK_FETCHING_ERROR = 'PACK_FETCHING_ERROR';
 
@@ -87,6 +72,22 @@ export function loadData() {
           status,
         });
       });
+  };
+}
+
+export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
+export function appAuth(name, id, token) {
+  return (dispatch) => {
+    auth(id, token)
+    .then((data) => {
+      localStorage.setItem('token', data.token);
+      appLogin(id, name);
+      dispatch({
+        type: APP_LOGIN_SUCCESS,
+        token: data.token,
+      });
+    })
+    .then(loadData);
   };
 }
 
