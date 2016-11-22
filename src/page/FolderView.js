@@ -71,6 +71,7 @@ export default connect(
       )
     );
     return {
+      loading: false,
       pack: packArray,
       folderId,
     };
