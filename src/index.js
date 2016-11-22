@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import moment from 'moment';
 import './index.css';
 
@@ -18,8 +17,6 @@ import Pack from './page/Pack';
 import EditPack from './page/EditPack';
 import NotFound from './page/NotFound';
 import Error from './page/Error';
-
-injectTapEventPlugin();
 
 moment.locale('zh-tw');
 
