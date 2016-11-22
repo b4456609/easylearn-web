@@ -9,7 +9,8 @@ import { getPackApi,
   addPackApi,
   updateFolderApi,
   deltePackInFolderApi,
-  addVersionApi
+  addVersionApi,
+  setAppToken
 } from '../api/easylearn';
 import { uploadImg } from '../api/imgur.js';
 
@@ -80,7 +81,7 @@ export function appAuth(name, id, token) {
   return (dispatch) => {
     auth(id, token)
     .then((data) => {
-      localStorage.setItem('token', data.token);
+      setAppToken(data.token);
       appLogin(id, name);
       dispatch({
         type: APP_LOGIN_SUCCESS,
