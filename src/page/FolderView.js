@@ -2,7 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PackCard from './components/PackCard';
 
-const FolderView = ({ pack, folderId }) => {
+const FolderView = ({ pack, folderId, loading }) => {
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', padding: '40px' }}>
+        <div className="mdl-spinner mdl-js-spinner is-active" />
+      </div>
+    );
+  }
   let content;
   if (pack.length !== 0) {
     content = (pack.map(
@@ -43,13 +50,19 @@ const FolderView = ({ pack, folderId }) => {
 };
 
 FolderView.propTypes = {
-  pack: React.PropTypes.array.isRequired,
-  folderId: React.PropTypes.string.isRequired,
+  loading: React.PropTypes.boolean,
+  pack: React.PropTypes.array,
+  folderId: React.PropTypes.string,
 };
 
 
 export default connect(
   (state, ownProps) => {
+    if (state.app.packFetch === true || state.app.folderFetch === true) {
+      return {
+        loading: true
+      };
+    }
     const folderId = ownProps.params.id || 'all';
     const folder = state.folder.find(i => i.id === folderId);
     const packArray = folder.pack.map(

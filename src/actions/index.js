@@ -13,27 +13,6 @@ import { getPackApi,
 } from '../api/easylearn';
 import { uploadImg } from '../api/imgur.js';
 
-export const SUCCESS_LOAD_PACK = 'SUCCESS_LOAD_PACK';
-export const SUCCESS_LOAD_FOLDER = 'SUCCESS_LOAD_FOLDER';
-export function loadData() {
-  return (dispatch) => {
-    getPackApi()
-    .then((data) => {
-      dispatch({
-        type: SUCCESS_LOAD_PACK,
-        data,
-      });
-    });
-    getFolderApi()
-      .then((data) => {
-        dispatch({
-          type: SUCCESS_LOAD_FOLDER,
-          data,
-        });
-      });
-  };
-}
-
 export const APP_LOGIN_SUCCESS = 'APP_LOGIN_SUCCESS';
 export function appAuth(name, id, token) {
   return (dispatch) => {
@@ -45,10 +24,69 @@ export function appAuth(name, id, token) {
         type: APP_LOGIN_SUCCESS,
         token: data.token,
       });
-    })
-    .then(() => {
-      dispatch(loadData());
     });
+  };
+}
+
+export const PACK_FETCHING = 'PACK_FETCHING';
+export const PACK_FETCHING_ERROR = 'PACK_FETCHING_ERROR';
+
+export const FOLDER_FETCHING = 'FOLDER_FETCHING';
+export const FOLDER_FETCHING_ERROR = 'FOLDER_FETCHING_ERROR';
+
+export const SERVER_ERROR = 'SERVER_ERROR';
+export const NOT_FOUND = 'NOT_FOUND';
+
+export const SUCCESS_LOAD_PACK = 'SUCCESS_LOAD_PACK';
+export const SUCCESS_LOAD_FOLDER = 'SUCCESS_LOAD_FOLDER';
+export function loadData() {
+  return (dispatch) => {
+    dispatch({
+      type: PACK_FETCHING
+    });
+    dispatch({
+      type: FOLDER_FETCHING
+    });
+    // get pack
+    getPackApi()
+    .then((data) => {
+      dispatch({
+        type: SUCCESS_LOAD_PACK,
+        data,
+      });
+    })
+    .catch((error) => {
+      const status = '';
+      if (error.response.status >= 500) {
+        browserHistory.push('/error');
+      } else {
+        browserHistory.push('/404');
+      }
+      dispatch({
+        type: PACK_FETCHING_ERROR,
+        status,
+      });
+    });
+    // get folder
+    getFolderApi()
+      .then((data) => {
+        dispatch({
+          type: SUCCESS_LOAD_FOLDER,
+          data,
+        });
+      })
+      .catch((error) => {
+        const status = '';
+        if (error.response.status >= 500) {
+          browserHistory.push('/error');
+        } else {
+          browserHistory.push('/404');
+        }
+        dispatch({
+          type: FOLDER_FETCHING_ERROR,
+          status,
+        });
+      });
   };
 }
 
