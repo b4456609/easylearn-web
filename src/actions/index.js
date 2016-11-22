@@ -88,7 +88,7 @@ export function appAuth(name, id, token) {
       });
     })
     .then(() => {
-      loadData();
+      dispatch(loadData());
     });
   };
 }
