@@ -31,6 +31,9 @@ export function appAuth(name, id, token) {
 export const PACK_FETCHING = 'PACK_FETCHING';
 export const PACK_FETCHING_ERROR = 'PACK_FETCHING_ERROR';
 
+export const FOLDER_FETCHING = 'FOLDER_FETCHING';
+export const FOLDER_FETCHING_ERROR = 'FOLDER_FETCHING_ERROR';
+
 export const SERVER_ERROR = 'SERVER_ERROR';
 export const NOT_FOUND = 'NOT_FOUND';
 
@@ -41,6 +44,10 @@ export function loadData() {
     dispatch({
       type: PACK_FETCHING
     });
+    dispatch({
+      type: FOLDER_FETCHING
+    });
+    // get pack
     getPackApi()
     .then((data) => {
       dispatch({
@@ -60,6 +67,7 @@ export function loadData() {
         status,
       });
     });
+    // get folder
     getFolderApi()
       .then((data) => {
         dispatch({
@@ -67,7 +75,17 @@ export function loadData() {
           data,
         });
       })
-      .catch(() => {
+      .catch((error) => {
+        const status = '';
+        if (error.response.status >= 500) {
+          browserHistory.push('/error');
+        } else {
+          browserHistory.push('/404');
+        }
+        dispatch({
+          type: FOLDER_FETCHING_ERROR,
+          status,
+        });
       });
   };
 }
