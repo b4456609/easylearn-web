@@ -19,7 +19,8 @@ let initState = {
 if (process.env.NODE_ENV === 'production') {
   initState = {
     initState: 'init',
-    packFetch: false
+    packFetch: false,
+    folderFetch: false,
   };
 }
 

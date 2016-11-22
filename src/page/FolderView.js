@@ -4,7 +4,11 @@ import PackCard from './components/PackCard';
 
 const FolderView = ({ pack, folderId, loading }) => {
   if (loading) {
-    return (<div className="mdl-spinner mdl-js-spinner is-active" />);
+    return (
+      <div style={{ textAlign: 'center', padding: '40px' }}>
+        <div className="mdl-spinner mdl-js-spinner is-active" />
+      </div>
+    );
   }
   let content;
   if (pack.length !== 0) {
