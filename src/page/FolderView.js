@@ -58,7 +58,7 @@ FolderView.propTypes = {
 
 export default connect(
   (state, ownProps) => {
-    if (state.app.packFetch === true || state.app.folderFetch === true) {
+    if (state.app.packFetch === true || state.app.folderFetch === true || state.app.initState !== 'APP_LOGIN_SUCCESS') {
       return {
         loading: true
       };

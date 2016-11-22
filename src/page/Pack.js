@@ -269,7 +269,7 @@ Pack.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  if (state.app.packFetch) {
+  if (state.app.packFetch || state.app.initState !== 'APP_LOGIN_SUCCESS') {
     return {
       packFetch: true
     };
