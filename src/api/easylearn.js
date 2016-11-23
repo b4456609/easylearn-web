@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let EASYLEARN_API_ROOT = 'https://microservices.ntou.edu.tw/api/';
+let EASYLEARN_API_ROOT = '/api/';
 if (process.env.NODE_ENV !== 'production') {
   EASYLEARN_API_ROOT = 'http://localhost:8080/api/';
 }
