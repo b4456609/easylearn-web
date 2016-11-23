@@ -52,7 +52,7 @@ class App extends Component {
           <button className="mdl-snackbar__action" type="button" />
         </div>
       </div>
-      );
+    );
   }
 }
 
