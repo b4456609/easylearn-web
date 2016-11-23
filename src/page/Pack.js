@@ -172,7 +172,7 @@ class Pack extends React.Component {
   }
 
   onNoteClick(event) {
-    this.props.dispatch(showDialog('NOTE_DIALOG', { name: event.target.innerHTML, noteId: event.target.id }));
+    this.props.dispatch(showDialog('NOTE_DIALOG', { name: event.target.innerText, noteId: event.target.id }));
   }
 
   buttonStyle() {
