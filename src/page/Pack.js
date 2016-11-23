@@ -5,6 +5,7 @@ import './Pack.css';
 import mdlUpgrade from '../utils/mdlUpgrade.js';
 import { newNote, showDialog } from '../actions/';
 import { contentFilter } from '../utils/content';
+import { simpleNotify } from '../utils/toast.js';
 
 function getWindowSize() {
   const w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -70,7 +71,8 @@ function paintNote(range, noteId, classColor) {
   const span = document.createElement('span');
   span.className = `note ${classColor}`;
   span.setAttribute('id', noteId);
-  range.surroundContents(span);
+  span.appendChild(range.extractContents());
+  range.insertNode(span);
 }
 
 class Pack extends React.Component {
@@ -130,6 +132,18 @@ class Pack extends React.Component {
     const content = document.getElementById('content');
     const text = selection.toString();
 
+    // check if the selection has other note
+    if (selection.rangeCount) {
+      const container = document.createElement('div');
+      for (let i = 0, len = selection.rangeCount; i < len; ++i) {
+        container.appendChild(selection.getRangeAt(i).cloneContents());
+      }
+      if (container.querySelectorAll('.note').length !== 0) {
+        simpleNotify('選擇中的文字不能包含其他便利貼');
+        return;
+      }
+    }
+
     // select words and is in version content
     if (text !== '' && content.contains(textNode)) {
       this.setState({
@@ -139,8 +153,7 @@ class Pack extends React.Component {
       this.dialog = document.querySelector('#note-dialog');
       this.dialog.showModal();
     } else {
-      const snackbarContainer = document.querySelector('#demo-toast-example');
-      snackbarContainer.MaterialSnackbar.showSnackbar({ message: '請選擇文章的文字' });
+      simpleNotify('請選擇文章的文字');
     }
   }
 
