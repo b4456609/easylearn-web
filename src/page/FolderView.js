@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PackCard from './components/PackCard';
+import Loading from './components/Loading.js';
 
 const FolderView = ({ pack, folderId, isFetch }) => {
   if (isFetch) {
     return (
       <div style={{ textAlign: 'center', padding: '40px' }}>
-        <div className="mdl-spinner mdl-js-spinner is-active" />
+        <Loading />
       </div>
     );
   }
