@@ -12,7 +12,7 @@ import {
 
 let initState = {
   initState: 'APP_LOGIN_SUCCESS',
-  packFetch: true,
+  packFetch: false,
   folderFetch: false,
 };
 
