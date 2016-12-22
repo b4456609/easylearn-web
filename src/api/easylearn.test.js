@@ -1,4 +1,4 @@
-import { auth, setURL } from './easylearn.js';
+import { auth, setURL, getPackApi } from './easylearn.js';
 const path = require('path');
 const Pact = require('pact');
 const wrapper = require('@pact-foundation/pact-node');
@@ -62,6 +62,36 @@ describe("Easylearn's API", () => {
 
     it('successfully verifies', (done) => {
       return auth('id', 'name')
+        .then(provider.verify)
+        .then(done, done);
+    });
+  });
+
+  describe('works1', () => {
+    beforeEach((done) => {
+      const interaction = {
+        state: 'get fb auth tokenfasdfs',
+        uponReceiving: 'a request for easdfaasylearn token',
+        withRequest: {
+          method: 'GET',
+          path: '/pack',
+          headers: { 'Accept': 'application/json, text/plain, */*' }
+        },
+        willRespondWith: {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+          body: EXPECTED_BODY
+        }
+      };
+      provider.addInteraction(interaction).then(done, done);
+    });
+
+    afterEach((done) => {
+      return provider.finalize().then(done, done);
+    });
+
+    it('successfully verifies', (done) => {
+      return getPackApi()
         .then(provider.verify)
         .then(done, done);
     });

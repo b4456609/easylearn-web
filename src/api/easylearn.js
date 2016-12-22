@@ -7,14 +7,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 let appToken = '';
 
-export function setURL(url) {
-  EASYLEARN_API_ROOT = url;
-}
-
-export function setToken(token) {
-  appToken = token;
-}
-
 const config = {
   baseURL: EASYLEARN_API_ROOT,
   responseType: 'json',
@@ -23,6 +15,15 @@ const config = {
     'X-Auth-Token': appToken
   }
 };
+
+export function setURL(url) {
+  EASYLEARN_API_ROOT = url;
+  config.baseURL = EASYLEARN_API_ROOT;
+}
+
+export function setToken(token) {
+  appToken = token;
+}
 
 export function auth(id, token) {
   return axios.post('auth', {
